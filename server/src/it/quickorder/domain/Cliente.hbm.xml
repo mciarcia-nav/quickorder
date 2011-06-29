@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="it.quickorder.domain">
+
+    <class name="Cliente" table="CLIENTI">
+        <id name="codiceFiscale" column="COD_FISCALE" type="string"/>
+        <property name="email" column="EMAIL" type="string" not-null="true" unique="true"/>
+  		<property name="nome" column="NOME" type="string" not-null="true"/>
+  		<property name="cognome" column="COGNOME" type="string" not-null="true"/>
+  		<property name="sesso" column="SESSO" type="character" not-null="true"/>
+  		<property name="dataNascita" column="DATA_NASCITA" type="timestamp" not-null="true"/>
+  		<property name="luogoNascita" column="LUOGO_NASCITA" type="string" not-null="true"/>
+        <property name="IMEI" column="IMEI" not-null="true" unique="true"/>
+        <property name="abilitato" column="ABILITAZIONE" not-null="true" type="boolean"/>
+    </class>
+
+</hibernate-mapping>
