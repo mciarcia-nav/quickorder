@@ -17,6 +17,8 @@ public class DeskManager extends DefaultDesktopManager
 	private JInternalFrame attivo;
 	private HashMap<Integer, OrdinazioneIFrame> ordinazioni;
 	
+	//prova
+	
 	public DeskManager(JDesktopPane jDesktop)
 	{
 		this.jDesktop = jDesktop;
