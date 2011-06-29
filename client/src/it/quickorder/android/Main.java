@@ -26,6 +26,7 @@ public class Main extends Base implements OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
+    	//prova
     	super.onCreate(savedInstanceState);
     	if (controllaWiFi())
     	{	
