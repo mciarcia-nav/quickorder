@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="it.quickorder.domain">
+ 	<class name="Ordinazione" table="ORDINAZIONI">
+  		<id name="id" type="long" column="ORDINAZIONE_ID">
+  			<generator class="native"/>
+  		</id>
+  		<many-to-one name="cliente" class="Cliente" column="FKID_CLIENTE" not-null="true"/>
+  		<property name="arrivo" type="timestamp" column="DATA" not-null="true"/>
+  		<set name="articoli" table="ORDINAZIONE_PRODOTTO" lazy="false">
+  			<key column="ORDINAZIONE_ID"/>
+  			<composite-element class="Articolo">
+				<property name="quantita" type="integer" column="QUANTITA"/>
+				<property name="subTotale" type="double" column="SUBTOTALE"/>
+				<property name="note" type="string" column="NOTE"/>
+				<many-to-one name="prodotto" class="Prodotto" column="PRODOTTO_ID"/>
+			</composite-element>
+  			
+  		</set>
+  	
+  	</class>
+</hibernate-mapping>

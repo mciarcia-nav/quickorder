@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="it.quickorder.domain.Prodotto" table="PRODOTTI">
+  		<id name="codice" type="string" column="CODICE"/>
+  		<property name="nome" column="NOME" type="string" not-null="true" unique="true"/>
+  		<property name="prezzo" column="PREZZO" type="double" not-null="true"/>
+  		<property name="tipologia" column="TIPOLOGIA" type="integer" not-null="true"/>
+  		<property name="descrizione" column="DESCRIZIONE" type="string" not-null="true"/>
+  		<property name="versione" column="VERSIONE" type="integer" not-null="true"/>
+  	</class>
+</hibernate-mapping>
