@@ -11,7 +11,6 @@ import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-
 public class DeskManager extends DefaultDesktopManager 
 {
 	private JDesktopPane jDesktop;
