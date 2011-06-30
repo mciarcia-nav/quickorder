@@ -3,6 +3,7 @@ package it.quickorder.android;
 import it.qwerty.android.R;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TabHost;
@@ -13,6 +14,7 @@ public class NuovaOrdinazione extends TabActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+		Resources res = getResources();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ordinazione);
 		TabHost tabhost = getTabHost();

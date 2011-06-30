@@ -26,7 +26,6 @@ public class Main extends Base implements OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
-    	//prova
     	super.onCreate(savedInstanceState);
     	if (controllaWiFi())
     	{	
@@ -49,20 +48,7 @@ public class Main extends Base implements OnClickListener
 	        {
 	        	this.launchActivity(Registrazione.class);
 	        }
-	            upgradeDB();
-	            
-	            //STAMPA PRODOTTI
-	            String query2 = "SELECT nome FROM prodotti";
-	            Cursor cursor2 = db.rawQuery(query2, null);
-	    		
-	            int i=1;
-	    		while(cursor2.moveToNext())
-	    		{
-	    			Log.i("Nome "+i+"° panino", cursor2.getString(0));
-	    			i++;
-	    		}
-	            
-	            
+	            //upgradeDB();           
 	        	db.close();
     	}
     	else
@@ -83,7 +69,7 @@ public class Main extends Base implements OnClickListener
 	public void onClick(View v) 
 	{
 		if (v.getId() == R.idButtons.nuovaOrdinazione)
-			this.launchActivity(SceltaPanino.class);
+			this.launchActivity(NuovaOrdinazione.class);
 		
 		if (v.getId() == R.idButtons.esci)
 			this.finish();
