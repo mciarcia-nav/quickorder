@@ -5,8 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Prodotto;
 import it.qwerty.android.R;
 import android.content.ContentValues;
@@ -22,6 +25,8 @@ import android.widget.Toast;
 
 public class Main extends Base implements OnClickListener
 {
+	private Cliente cliente;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -30,15 +35,30 @@ public class Main extends Base implements OnClickListener
     	if (controllaWiFi())
     	{	
 	        init(this);
-	        String query = "Select nome from user";
+	        String query = "SELECT * from user";
 	        Cursor cursor = db.rawQuery(query, null);
 	        if (cursor.getCount() != 0) //UTENTE REGISTRATO
 	        {	
 	        	setContentView(R.layout.main);
 	        	cursor.moveToFirst();
-	        	String nome = cursor.getString(0);
+	        	cliente = new Cliente();
+	        	cliente.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+	        	cliente.setIMEI(cursor.getString(cursor.getColumnIndex("imei")));
+	        	cliente.setCognome(cursor.getString(cursor.getColumnIndex("cognome")));
+	        	cliente.setCodiceFiscale(cursor.getString(cursor.getColumnIndex("cf")));
+	        	cliente.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+	        	cliente.setLuogoNascita(cursor.getString(cursor.getColumnIndex("luogoNascita")));
+	        	cliente.setSesso(cursor.getString(cursor.getColumnIndex("sesso")).charAt(0));
+	        	cliente.setAbilitato(cursor.getInt(cursor.getColumnIndex("abilitato")) == 1);
+	        	String data = cursor.getString(cursor.getColumnIndex("dataNascita"));
+	        	Date dataNascita = new Date();
+	        	dataNascita.setYear(Integer.parseInt(data.substring(0,4)) - 1900);
+	        	dataNascita.setMonth(Integer.parseInt(data.substring(5,7)));
+	        	dataNascita.setDate(Integer.parseInt(data.substring(8,10)));
+	        	cliente.setDataNascita(dataNascita);
+	        	Log.i("data", cliente.getDataNascita().toString());
 	        	TextView w = (TextView) findViewById(R.id.welcome);
-	        	w.setText("Benvenuto: "+nome);
+	        	w.setText("Benvenuto: "+ cliente.getNome());
 	        	Button nuovaOrdinazione = (Button) findViewById (R.idButtons.nuovaOrdinazione);
 	        	Button esci = (Button) findViewById(R.idButtons.esci);
 	        	nuovaOrdinazione.setOnClickListener(this);
