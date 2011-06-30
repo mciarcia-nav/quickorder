@@ -85,18 +85,16 @@ public class Registrazione extends Base implements OnClickListener
 				@Override
 				public void onClick(DialogInterface dialog, int which) 
 				{
-					//ProgressDialog comm = showProgress();
 					Socket socket = null;
 					String response = null;
 					try
 					{
 						socket = new Socket("192.168.1.2", 4446);
-						ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+						ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 						output.writeObject(nuovoCliente);
-						Log.i("CLIENTE","INVIATO");
+						output.flush();
 						response = (String) input.readObject();
-						Log.i("RESPONSE", response);
 					}
 					catch (Exception ex)
 					{
@@ -116,12 +114,19 @@ public class Registrazione extends Base implements OnClickListener
 							}
 					}
 					
-					//comm.dismiss();
-					if (response == null || response.equalsIgnoreCase("FAILED"))
+					if (response.equalsIgnoreCase("DUP_EMAIL"))
+					{
+						Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata è stata registrata nel database.", Toast.LENGTH_SHORT);
+						t.show();
+						return;
+					}
+					else if (response.equalsIgnoreCase("FAILED"))
 					{
 						Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
 						t.show();
+						return;
 					}
+							
 					ContentValues values = new ContentValues();	
 					values.put("imei", nuovoCliente.getIMEI());
 					values.put("nome", nuovoCliente.getNome());
@@ -133,23 +138,14 @@ public class Registrazione extends Base implements OnClickListener
 					values.put("luogoNascita", nuovoCliente.getLuogoNascita());
 					values.put("sesso", "" + nuovoCliente.getSesso());
 					values.put("abilitato",1);
+					db.insert("user", null, values);
+					db.close();
 					
-					long i = db.insert("user", null, values);
-					if (i == -1)
-					{
-						Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
-						t.show();
-					}
-					else
-					{	
-						Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
-						t.show();
-						main();
-			        	finish();
-					}	
-		        	db.close();
-		        	
-				}
+					Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
+					t.show();
+					main();
+		        	finish();
+		        }
 			});
 			alert.setButton2("Annulla", new DialogInterface.OnClickListener()
 			{
