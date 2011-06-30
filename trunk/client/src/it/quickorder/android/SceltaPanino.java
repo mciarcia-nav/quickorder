@@ -19,8 +19,6 @@ public class SceltaPanino extends Base implements OnClickListener
 {	
 	private int posizione=0;
 	private List<Prodotto> listaPanini;
-	private Socket socket;
-	
 	
 	@Override
 	  public void onCreate(Bundle savedInstanceState)  
@@ -33,8 +31,7 @@ public class SceltaPanino extends Base implements OnClickListener
             Button prev = (Button) findViewById(R.id.prev);
             next.setOnClickListener(this);
             prev.setOnClickListener(this);
-            db.close();
-		
+            db.close();		
     }
 
 
@@ -57,7 +54,6 @@ public class SceltaPanino extends Base implements OnClickListener
 				posizione = posizione -1;
 		}
 		String app = listaPanini.get(posizione).getNome();
-		Log.i("Nome Panino",app);
 		TextView t = (TextView) findViewById(R.id.twnomePanino);
 		t.setText(app);
 		
@@ -80,7 +76,6 @@ public class SceltaPanino extends Base implements OnClickListener
 			listaPanini.add(p);
 		}
 	}
-	
 }
 	 
 	

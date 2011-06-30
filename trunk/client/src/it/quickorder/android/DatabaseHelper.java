@@ -67,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		values.put("prezzo", 3.50);
 		values.put("versione", 0);
 		values.put("descrizione", "Un gustoso panino con pomodorini e mozzarella. Ideale per i mediterranei!");
+		db.insert("prodotti", null, values);
 		values.put("codice", "B004");
 		values.put("nome", "Acqua Naturale 0,5L");
 		values.put("tipologia", "1");
