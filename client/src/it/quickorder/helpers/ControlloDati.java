@@ -13,7 +13,7 @@ public class ControlloDati
 		int len;
 		Pattern pat;
 		Matcher match;
-		boolean[] risultato = new boolean[6];
+		boolean[] risultato = new boolean[7];
 		
 		// Nome
 		if (cliente.getNome() == null)
