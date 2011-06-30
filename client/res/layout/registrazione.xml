@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent" android:layout_height="match_parent">
     <TableLayout android:layout_width="match_parent"
                  android:layout_height="match_parent">
         <TableRow>
@@ -13,7 +12,10 @@
             <EditText android:id="@+id/nome"
                       android:layout_height="wrap_content"
                       android:layout_width="wrap_content"
-                      android:layout_weight="1"/>
+                      android:layout_weight="1" 
+                      android:layout_marginLeft="15px" 
+                      android:layout_marginRight="15px" 
+                      android:inputType="textPersonName"/>
         </TableRow>
         <TableRow>
             <TextView android:text="Cognome:"
@@ -24,7 +26,38 @@
             <EditText android:id="@+id/cognome"
                       android:layout_height="wrap_content"
                       android:layout_width="wrap_content"
-                      android:layout_weight="1"/>
+                      android:layout_weight="1" 
+					  android:layout_marginLeft="15px" 
+                      android:layout_marginRight="15px" 
+                      android:inputType="textPersonName"/>
+        </TableRow>
+        <TableRow>
+     	   <TextView  android:text="Sesso:"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"/>
+        </TableRow>
+        <TableRow android:gravity="center_horizontal">
+        	<TableLayout android:id="@+id/sesso" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        			<TableLayout android:layout_height="match_parent" android:id="@+id/tableLayout1" android:layout_width="wrap_content" android:layout_gravity="center_horizontal">
+        				<TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical|center_horizontal">
+        					<RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Maschio" android:id="@+id/m" android:layout_marginRight="10px" android:checked="true"></RadioButton>
+        					<RadioButton android:layout_width="wrap_content" android:text="Femmina" android:id="@+id/f" android:layout_marginLeft="10px" android:layout_height="wrap_content"></RadioButton>
+        				</TableRow>
+        				<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
+        				<TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
+        				<TableRow android:id="@+id/tableRow4" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
+        			</TableLayout>
+        	</TableLayout>
+        </TableRow>
+        <TableRow>
+        	<TextView android:text="Data di Nascita:"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"/>
+        </TableRow>
+        <TableRow android:gravity="center_horizontal">
+        	<DatePicker android:id="@+id/data"
+        				android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"/>
         </TableRow>
      	<TableRow>
      	   <TextView android:text="Luogo di Nascita:"
@@ -35,28 +68,10 @@
             <EditText android:id="@+id/luogo"
                       android:layout_height="wrap_content"
                       android:layout_width="wrap_content"
-                      android:layout_weight="1"/>
-        </TableRow>
-        <TableRow>
-        	<TextView android:text="Data di Nascita:"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"/>
-        </TableRow>
-        <TableRow>
-        	<DatePicker android:id="@+id/data"
-        				android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"/>
-        </TableRow>
-        <TableRow>
-     	   <TextView  android:text="Sesso:"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"/>
-        </TableRow>
-        <TableRow>
-        	<RadioGroup android:id="@+id/sesso" android:layout_width="wrap_content" android:layout_height="wrap_content">
-        			<RadioButton android:id="@+id/m" android:text="M" android:layout_height="wrap_content" android:layout_width="wrap_content" android:checked="true"></RadioButton>
-        			<RadioButton android:id="@+id/f" android:text="F" android:layout_height="wrap_content" android:layout_width="wrap_content"></RadioButton>
-        	</RadioGroup>
+                      android:layout_marginLeft="15px" 
+                      android:layout_marginRight="15px" 
+                      android:layout_weight="1"
+                      android:inputType="textPersonName" android:hint="Inserisci il tuo luogo di nascita.."/>/>
         </TableRow>
         <TableRow>
      	   <TextView android:text="Codice Fiscale:"
@@ -66,8 +81,10 @@
         <TableRow>
             <EditText android:id="@+id/cf"
                       android:layout_height="wrap_content"
-                      android:layout_width="wrap_content"
-                      android:layout_weight="1"/>
+                      android:layout_weight="1" 
+                      android:layout_marginLeft="15px" 
+                      android:layout_marginRight="15px"
+                      android:capitalize="characters" android:layout_width="match_parent" android:maxLength="16" android:hint="Inserisci il tuo codice fiscale.."/>
         </TableRow>
         <TableRow>
      	   <TextView android:text="E-Mail:"
@@ -78,11 +95,14 @@
             <EditText android:id="@+id/mail"
                       android:layout_height="wrap_content"
                       android:layout_width="wrap_content"
-                      android:layout_weight="1"/>
+                      android:layout_marginLeft="15px" 
+                      android:layout_marginRight="15px" 
+                      android:layout_weight="1" android:inputType="textEmailAddress" android:hint="Inserisci il tuo indirizzo di posta elettronica.."/>
         </TableRow>
-        <TableRow>
+        <TableRow android:gravity="center_horizontal">
         	<Button android:id="@+id/registra" android:text="Registra"  android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"/>    
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="30px"/>    
         </TableRow>
     </TableLayout>
     
