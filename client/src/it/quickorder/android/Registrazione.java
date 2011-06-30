@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -84,11 +85,7 @@ public class Registrazione extends Base implements OnClickListener
 				@Override
 				public void onClick(DialogInterface dialog, int which) 
 				{
-					ProgressDialog comm = new ProgressDialog(getApplicationContext());
-					comm.setCancelable(false);
-					comm.setMessage("Registrazione col server in corso..");
-					comm.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					comm.show();
+					//ProgressDialog comm = showProgress();
 					Socket socket = null;
 					String response = null;
 					try
@@ -97,10 +94,13 @@ public class Registrazione extends Base implements OnClickListener
 						ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 						output.writeObject(nuovoCliente);
-						response = (String) input.readObject();						
+						Log.i("CLIENTE","INVIATO");
+						response = (String) input.readObject();
+						Log.i("RESPONSE", response);
 					}
 					catch (Exception ex)
 					{
+						ex.printStackTrace();
 						Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
 						t.show();
 					}
@@ -116,6 +116,7 @@ public class Registrazione extends Base implements OnClickListener
 							}
 					}
 					
+					//comm.dismiss();
 					if (response == null || response.equalsIgnoreCase("FAILED"))
 					{
 						Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
@@ -202,8 +203,9 @@ public class Registrazione extends Base implements OnClickListener
 		c.setIMEI(randomImei());
 		Date dataNascita = new Date();
 		dataNascita.setDate(dataForm.getDayOfMonth());
-		dataNascita.setMonth(dataForm.getMonth());
-		dataNascita.setYear(dataForm.getYear());
+		dataNascita.setMonth(dataForm.getMonth()-1);
+		dataNascita.setYear(dataForm.getYear()-1900);
+		Log.i("date",dataNascita.toString());
 		c.setDataNascita(dataNascita);
 		return c;
 	}
@@ -218,5 +220,12 @@ public class Registrazione extends Base implements OnClickListener
 		}
 			
 		return res;
+	}
+	
+	private ProgressDialog showProgress()
+	{
+		ProgressDialog comm = ProgressDialog.show(Registrazione.this, "", 
+				"Registrazione col server in corso..", true, false);
+		return comm;
 	}
 }
