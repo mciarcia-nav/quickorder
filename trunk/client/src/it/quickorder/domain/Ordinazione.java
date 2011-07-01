@@ -111,4 +111,29 @@ public class Ordinazione implements Serializable
 		this.articoli = articoli;
 	}
 	
+	public boolean containsProdotto(Prodotto p)
+	{
+		Iterator<Articolo> pp = articoli.iterator();
+		Articolo a = null;
+		while (pp.hasNext())
+		{
+			a = pp.next();
+			if (a.getProdotto().equals(p))
+				return true;
+		}
+		return false;
+	}
+	
+	public Articolo getArticolo(Prodotto p)
+	{
+		Iterator<Articolo> pp = articoli.iterator();
+		Articolo a = null;
+		while (pp.hasNext())
+		{
+			a = pp.next();
+			if (a.getProdotto().equals(p))
+				return a;
+		}
+		return null;
+	}
 }

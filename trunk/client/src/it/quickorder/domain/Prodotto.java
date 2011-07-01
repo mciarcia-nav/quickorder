@@ -67,6 +67,14 @@ public class Prodotto implements Serializable
 	public void setPrezzo(double prezzo) 
 	{
 		this.prezzo = prezzo;
-	}	
+	}
+	
+	public boolean equals(Object object)
+	{
+		if (!(object instanceof Prodotto))
+			return false;
+		Prodotto another = (Prodotto) object;
+		return another.getCodice().equalsIgnoreCase(codice);
+	}
 	
 }

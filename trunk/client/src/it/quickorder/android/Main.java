@@ -63,13 +63,13 @@ public class Main extends Base implements OnClickListener
 	        	Button esci = (Button) findViewById(R.idButtons.esci);
 	        	nuovaOrdinazione.setOnClickListener(this);
 	            esci.setOnClickListener(this);
+	            db.close();
 	        }
 	        else  //REGISTRAZIONE
 	        {
-	        	this.launchActivity(Registrazione.class);
-	        }
-	            //upgradeDB();           
 	        	db.close();
+	        	this.launchActivity(Registrazione.class);
+	        }           	
     	}
     	else
     	{
