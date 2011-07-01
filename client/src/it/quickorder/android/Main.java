@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -111,7 +110,7 @@ public class Main extends Base implements OnClickListener
 		Log.i("versione", Integer.toString(max_versione));
 		try 
 		{
-			Socket socket = new Socket("192.168.1.2", 4445);
+			Socket socket = new Socket(SRV_ADDRESS, UPD_PORT);
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			out.writeInt(max_versione);
 			out.flush();

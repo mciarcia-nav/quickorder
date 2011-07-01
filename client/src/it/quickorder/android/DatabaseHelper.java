@@ -42,39 +42,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		sql2 += "descrizione TEXT NOT NULL";
 		sql2 += ")";
 		db.execSQL(sql2);
-		popolaDB(db);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) 
 	{
 		
-	}
-
-	public void popolaDB(SQLiteDatabase db)
-	{
-		ContentValues values = new ContentValues();
-		values.put("codice", "P002");
-		values.put("nome", "Crudino");
-		values.put("tipologia", "0");
-		values.put("prezzo", 3.00);
-		values.put("versione", 0);
-		values.put("descrizione", "Un gustoso panino con prosciutto crudo e formaggio. Adatto per tutti i palati!");
-		db.insert("prodotti", null, values);
-		values.put("codice", "P003");
-		values.put("nome", "Caprese");
-		values.put("tipologia", "0");
-		values.put("prezzo", 3.50);
-		values.put("versione", 0);
-		values.put("descrizione", "Un gustoso panino con pomodorini e mozzarella. Ideale per i mediterranei!");
-		db.insert("prodotti", null, values);
-		values.put("codice", "B004");
-		values.put("nome", "Acqua Naturale 0,5L");
-		values.put("tipologia", "1");
-		values.put("prezzo", 0.80);
-		values.put("versione", 0);
-		values.put("descrizione", "E' acqua!");
-		db.insert("prodotti", null, values);
 	}
 	
 }
