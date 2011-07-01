@@ -38,7 +38,8 @@ public class Registrazione extends Base implements OnClickListener
 	private EditText luogoForm;
 	private EditText cfForm;
 	private EditText mailForm;
-	private RadioButton sessoForm;
+	private RadioButton sessoFormM;
+	private RadioButton sessoFormF;
 	private DatePicker dataForm;
 	private Button registra;
 	
@@ -54,9 +55,8 @@ public class Registrazione extends Base implements OnClickListener
        luogoForm = (EditText) findViewById(R.id.luogo);
        mailForm = (EditText) findViewById(R.id.mail);
        cfForm = (EditText) findViewById(R.id.cf);
-       sessoForm = (RadioButton) findViewById(R.id.m);
-       if (!sessoForm.isChecked())
-    	   sessoForm = (RadioButton) findViewById(R.id.f);
+       sessoFormM = (RadioButton) findViewById(R.id.m);
+       sessoFormF = (RadioButton) findViewById(R.id.f);
        dataForm = (DatePicker) findViewById(R.id.data);
        registra = (Button) findViewById(R.id.registra);
        registra.setOnClickListener(this);
@@ -195,7 +195,10 @@ public class Registrazione extends Base implements OnClickListener
 		c.setCodiceFiscale(cfForm.getText().toString());
 		c.setEmail(mailForm.getText().toString());
 		c.setLuogoNascita(luogoForm.getText().toString());
-		c.setSesso(sessoForm.getText().charAt(0));
+		if (sessoFormM.isChecked())
+			c.setSesso(sessoFormM.getText().charAt(0));
+		else if (sessoFormF.isChecked())
+			c.setSesso(sessoFormF.getText().charAt(0));
 		c.setIMEI(randomImei());
 		Date dataNascita = new Date();
 		dataNascita.setDate(dataForm.getDayOfMonth());
