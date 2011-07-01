@@ -75,7 +75,6 @@ public class StackPanel extends JPanel
 		btn.setVerticalTextPosition(SwingConstants.BOTTOM);
 		btn.setHorizontalTextPosition(SwingConstants.CENTER);		
 		add(btn);
-		System.out.println(layoutArea.height);
 		if (layoutArea.height >= 56)
 			icoOrdinazione = new ImageIcon(getClass().getResource(Main.URL_IMAGES + "ordinazione.png"));
 		else

@@ -1,5 +1,7 @@
 package it.quickorder.gui;
 
+import it.quickorder.domain.Articolo;
+import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 import it.quickorder.helpers.HibernateUtil;
@@ -36,7 +38,7 @@ import org.hibernate.SessionFactory;
 public class Main extends JFrame 
 {
 	// Percorso per le immagini
-	public static String URL_IMAGES = "/quickorder/gui/images/";
+	public static String URL_IMAGES = "/it/quickorder/images/";
 	
 	protected Dimension SIZE;
 	private JPanel jContentPane;
@@ -85,23 +87,30 @@ public class Main extends JFrame
 			{
 				Ordinazione ord = new Ordinazione();
 				Date nuovo = new Date(System.currentTimeMillis());
-/*				ord.setArrivo(nuovo);
+      			ord.setArrivo(nuovo);
 				ord.setId(count++);
-				ord.setCliente("Mario Gallo");
+				Cliente c = new Cliente();
+				c.setNome("mario");
+				c.setCognome("Gallo");
+				ord.setCliente(c);
 				ord.setNumeroTavolo(5);
 				stackFrame.aggiungiOrdinazione(ord);
 				Prodotto p = new Prodotto();
 				p.setNome("Panino con salsiccia e patatine");
 				p.setPrezzo(3.50);
-				p.setQuantita(2);
-				p.setSubtotale(7);
-				ord.aggiungiProdotto(p);
+				Articolo a = new Articolo();
+				a.setQuantita(2);
+				a.setSubTotale(7);
+				a.setProdotto(p);
+				ord.aggiungiArticolo(a);
 				p = new Prodotto();
 				p.setNome("Coca-Cola");
 				p.setPrezzo(1.50);
-				p.setQuantita(2);
-				p.setSubtotale(3);
-				ord.aggiungiProdotto(p);*/
+				a = new Articolo();
+				a.setQuantita(2);
+				a.setSubTotale(3);
+				a.setProdotto(p);
+				ord.aggiungiArticolo(a);
 				
 			}
 			
@@ -214,14 +223,14 @@ public class Main extends JFrame
 		new Thread(new SignupServer(4446)).start();
 		
 			
-//		SwingUtilities.invokeLater(new Runnable()
-//		{
-//			public void run()
-//			{
-//				new Main().setVisible(true);
-//				
-//			}
-//		});
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				new Main().setVisible(true);
+				
+			}
+		});
 	}
 	
 	
