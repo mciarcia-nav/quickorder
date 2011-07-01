@@ -48,7 +48,7 @@ public class Registrazione extends Base implements OnClickListener
     {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.registrazione);
-       init(this);
+       init(this,"write");
        nomeForm = (EditText) findViewById(R.id.nome);
        cognomeForm = (EditText) findViewById(R.id.cognome);
        luogoForm = (EditText) findViewById(R.id.luogo);

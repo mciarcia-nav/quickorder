@@ -4,6 +4,7 @@ import it.quickorder.domain.Ordinazione;
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class Base extends Activity 
 {
@@ -14,16 +15,25 @@ public class Base extends Activity
 	
 	public DatabaseHelper dbhelper;
 	public SQLiteDatabase db;
-	public Ordinazione ordinazione;
 	
-	public void init(Context c)
+	public void init(Context c, String mode)
 	{
-		dbhelper = new DatabaseHelper(c);
-        db = dbhelper.getWritableDatabase();
+		Log.i("DB","CREO DATABASE");
+		if (dbhelper == null)
+			dbhelper = new DatabaseHelper(c);
+		if (mode.equals("write"))
+			db = dbhelper.getWritableDatabase();
+		else
+			db = dbhelper.getReadableDatabase();
+		Log.i("DB","CREATO DATABASE");
 	}
 	
-	public void nuovaOrdinazione()
+	public void close()
 	{
-		ordinazione = new Ordinazione();
+		Log.i("DB","CHIUDO DATABASE");
+		db.close();
+		dbhelper.close();
+		Log.i("DB","DATABASE CHIUSO");
+		
 	}
 }

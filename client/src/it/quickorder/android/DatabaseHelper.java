@@ -42,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		sql2 += "descrizione TEXT NOT NULL";
 		sql2 += ")";
 		db.execSQL(sql2);
+		db.close();
 	}
 
 	@Override

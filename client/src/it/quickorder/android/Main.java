@@ -27,13 +27,37 @@ public class Main extends Base implements OnClickListener
 	private Cliente cliente;
 	
     /** Called when the activity is first created. */
-    @Override
+	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		close();
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		close();
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		close();
+	}
+	
+	
+	
+	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
+    
     	super.onCreate(savedInstanceState);
     	if (controllaWiFi())
     	{	
-	        init(this);
+	        init(this,"read");
 	        String query = "SELECT * from user";
 	        Cursor cursor = db.rawQuery(query, null);
 	        if (cursor.getCount() != 0) //UTENTE REGISTRATO
@@ -62,13 +86,13 @@ public class Main extends Base implements OnClickListener
 	        	Button esci = (Button) findViewById(R.idButtons.esci);
 	        	nuovaOrdinazione.setOnClickListener(this);
 	            esci.setOnClickListener(this);
-	            db.close();
 	        }
 	        else  //REGISTRAZIONE
 	        {
-	        	db.close();
+	        	close();
 	        	this.launchActivity(Registrazione.class);
 	        }           	
+	        close();
     	}
     	else
     	{
