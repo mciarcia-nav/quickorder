@@ -89,7 +89,7 @@ public class Registrazione extends Base implements OnClickListener
 					String response = null;
 					try
 					{
-						socket = new Socket("192.168.1.2", 4446);
+						socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
 						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 						ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 						output.writeObject(nuovoCliente);
