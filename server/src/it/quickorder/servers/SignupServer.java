@@ -1,20 +1,21 @@
 package it.quickorder.servers;
 
-import it.quickorder.domain.Prodotto;
+import it.quickorder.domain.Cliente;
 import it.quickorder.helpers.HibernateUtil;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
-import org.hibernate.Query;
+import org.hibernate.HibernateException;
+import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
+import org.hibernate.exception.ConstraintViolationException;
 
-public class UpdateServer implements Runnable 
+public class SignupServer implements Runnable 
 {
 	private ServerSocket srvSocket;
 	private int port;
 	
-	public UpdateServer(int port)
+	public SignupServer(int port)
 	{
 		this.port = port;
 	}
@@ -37,8 +38,8 @@ public class UpdateServer implements Runnable
 			try 
 			{
 				socketClient = srvSocket.accept();
-				System.out.println("Richiesta di aggiornamento da client: " + socketClient.getInetAddress().getHostAddress());
-				Runnable runnable = new UpdateRequestThreadHandler(socketClient);
+				System.out.println("Richiesta di registrazione da client: " + socketClient.getInetAddress().getHostAddress());
+				Runnable runnable = new RegRequestThreadHandler(socketClient);
 				Thread nuovoThread = new Thread(runnable);
 				nuovoThread.start();
 			} catch (IOException e) 
@@ -50,11 +51,11 @@ public class UpdateServer implements Runnable
 	}
 
 }
-class UpdateRequestThreadHandler implements Runnable
+class RegRequestThreadHandler implements Runnable
 {
 	private Socket socket;
 	
-	public UpdateRequestThreadHandler(Socket socket)
+	public RegRequestThreadHandler(Socket socket)
 	{
 		this.socket = socket;
 	}
@@ -69,18 +70,30 @@ class UpdateRequestThreadHandler implements Runnable
 				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 				
-				// Ricevo la versione del database del client.
-				int versione = input.readInt();
+				// Ricevo il bean del nuovo cliente da registrare.
+				Cliente nuovoCliente = (Cliente) input.readObject();
 				Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-				session.beginTransaction();
-				// Recupero i prodotti che sono stati aggiornati.
-				Query query = session.createQuery("from Prodotto where versione > :var");
-				query.setInteger("var", versione);
-				@SuppressWarnings("unchecked")
-				List<Prodotto> risultati = (List<Prodotto>) query.list();
-				// Invio dei prodotti al client.
-				output.writeObject(risultati);
-				output.flush();
+				String result;
+				try
+				{
+					Transaction t = session.beginTransaction();
+					session.save(nuovoCliente);
+					t.commit();
+					result = "OK";
+				}
+				catch (ConstraintViolationException ex)
+				{
+					result = "DUP_EMAIL";
+					
+				}
+				catch (HibernateException ex2)
+				{
+					result = "FAILED";
+				}
+				// Invio l'esito dell'operazione al client.
+				output.writeObject(result);
+				output.flush();	
+				
 			}
 			finally
 			{
@@ -90,6 +103,10 @@ class UpdateRequestThreadHandler implements Runnable
 		catch (IOException ex)
 		{
 			ex.printStackTrace();
+		}
+		catch (ClassNotFoundException ex2)
+		{
+			ex2.printStackTrace();
 		}
 	}
 }

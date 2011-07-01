@@ -3,6 +3,7 @@ package it.quickorder.gui;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 import it.quickorder.helpers.HibernateUtil;
+import it.quickorder.servers.SignupServer;
 import it.quickorder.servers.UpdateServer;
 
 import java.awt.BorderLayout;
@@ -209,12 +210,8 @@ public class Main extends JFrame
 			e.printStackTrace();
 		} 
 		
-		SessionFactory sf = HibernateUtil.getSessionFactory();
-		sf.getCurrentSession().beginTransaction();
-		System.out.println(sf.getCurrentSession().createSQLQuery("SELECT MAX(versione) from PRODOTTI").list().get(0));
-		ArrayList<Prodotto> prodotti = (ArrayList<Prodotto>) sf.getCurrentSession().createQuery("from Prodotto").list();
-		System.out.println(prodotti.size());
 		new Thread(new UpdateServer(4445)).start();
+		new Thread(new SignupServer(4446)).start();
 		
 			
 //		SwingUtilities.invokeLater(new Runnable()
