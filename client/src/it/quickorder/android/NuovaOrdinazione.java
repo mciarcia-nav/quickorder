@@ -1,5 +1,6 @@
 package it.quickorder.android;
 
+import it.quickorder.domain.Ordinazione;
 import it.qwerty.android.R;
 import android.app.TabActivity;
 import android.content.Intent;
@@ -11,11 +12,17 @@ import android.widget.TabHost.TabSpec;
 
 public class NuovaOrdinazione extends TabActivity
 {
+	
+	private Ordinazione ordinazione;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		Resources res = getResources();
 		super.onCreate(savedInstanceState);
+		ordinazione = new Ordinazione();
+		
+		
 		setContentView(R.layout.ordinazione);
 		TabHost tabhost = getTabHost();
 		Log.i("dopo tab", "si");
@@ -29,5 +36,19 @@ public class NuovaOrdinazione extends TabActivity
 		tabhost.addTab(sceltaBibita);
 		tabhost.addTab(riepilogo);
 		tabhost.setCurrentTab(0);
+		
+		
 	}
+
+	public Ordinazione getOrdinazione() 
+	{
+		return ordinazione;
+	}
+
+	public void setOrdinazione(Ordinazione ordinazione) 
+	{
+		this.ordinazione = ordinazione;
+	}
+	
+	
 }

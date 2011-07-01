@@ -11,7 +11,7 @@
         		android:id="@+id/precedente" 
         		android:layout_height="wrap_content" 
         		android:layout_width="wrap_content" 
-        		android:layout_alignParentLeft="false" 
+        		android:layout_alignParentLeft="true" 
         		android:layout_centerInParent="true"/>
     </RelativeLayout>
     <RelativeLayout android:layout_height="200px" 
@@ -25,8 +25,7 @@
                 android:layout_height="wrap_content" 
                 android:layout_width="wrap_content"/>
     </RelativeLayout>
-      <ImageView android:src="@drawable/icon" 
-      			 android:id="@+id/imagePanino" 
+      <ImageView android:id="@+id/imagePanino" 
       			 android:layout_height="100px" 
       			 android:layout_width="100px" 
       			 android:layout_alignParentTop="true" android:layout_centerInParent="true" android:layout_marginTop="20dip"/>
@@ -43,14 +42,13 @@
       			android:gravity="center"  
       			android:text="(DESCRIZIONE)" 
       			android:layout_height="wrap_content" 
-      			android:layout_width="wrap_content" 
       			android:layout_below="@+id/nomePanino" 
       			android:layout_alignLeft="@+id/nomePanino" 
-      			android:layout_alignRight="@+id/nomePanino">
+      			android:layout_alignRight="@+id/nomePanino" android:layout_width="match_parent">
       </TextView>
       <TextView android:gravity="center" android:id="@+id/quantita" android:text="0" android:layout_height="wrap_content" android:layout_width="wrap_content" android:paddingTop="20dip" android:layout_below="@+id/descrizione" android:layout_alignLeft="@+id/descrizione" android:layout_alignRight="@+id/descrizione"></TextView>
-      <Button android:text="-" android:id="@+id/paninoMinus" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/descrizione" android:layout_alignRight="@+id/descrizione"></Button>
-      <Button android:text="+" android:id="@+id/paninoPlus" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/descrizione" android:layout_alignLeft="@+id/descrizione"></Button>
+      <Button android:text="+" android:id="@+id/paninoPlus" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/descrizione" android:layout_alignRight="@+id/descrizione"></Button>
+      <Button android:text="-" android:id="@+id/paninoMinus" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/descrizione" android:layout_alignLeft="@+id/descrizione"></Button>
       <TextView android:id="@+id/textView1" 
       			android:text="Quantità: " 
       			android:layout_height="wrap_content" 
@@ -67,5 +65,5 @@
       			android:layout_alignLeft="@+id/textView1" 
       			android:layout_alignRight="@+id/textView1"
       			android:paddingTop="20dip">
-      		</TextView>
+      </TextView>
 </RelativeLayout>
