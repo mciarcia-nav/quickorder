@@ -57,7 +57,7 @@ public class SplashScreen extends Base
 	
 	private void upgradeDB()
 	{
-		init(this);
+		init(this,"write");
 		String query = "SELECT MAX(versione) FROM prodotti";
 		Cursor cursor = db.rawQuery(query, null);
 		cursor.moveToFirst();

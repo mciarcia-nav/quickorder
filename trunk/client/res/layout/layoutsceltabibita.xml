@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <RelativeLayout android:id="@+id/relativeLayout1" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <ImageButton android:layout_width="wrap_content" android:background="@android:color/transparent" android:src="@drawable/arrow_left_double" android:adjustViewBounds="true" android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:id="@+id/prevB" android:layout_centerVertical="true" android:layout_alignParentTop="true" android:layout_marginTop="50px"></ImageButton>
+        <ImageButton android:layout_width="wrap_content" android:background="@android:color/transparent" android:src="@drawable/arrow_right_double" android:adjustViewBounds="true" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:id="@+id/nextB" android:layout_centerVertical="true" android:layout_centerInParent="true" android:layout_alignParentTop="true" android:layout_marginTop="50px"></ImageButton>
+        <ImageView android:layout_width="wrap_content" android:id="@+id/immagine" android:src="@drawable/bicchiere" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:adjustViewBounds="true" android:layout_alignParentTop="true" android:layout_marginTop="20px"></ImageView>
+    </RelativeLayout>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge" android:text="TextView" android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@+id/nome"></TextView>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:text="TextView" android:layout_gravity="center_horizontal" android:id="@+id/prezzo" android:layout_marginBottom="10px" android:layout_marginTop="10px"></TextView>
+    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <RelativeLayout android:id="@+id/relativeLayout2" android:layout_width="wrap_content" android:layout_height="match_parent">
+        </RelativeLayout>
+    </LinearLayout>
+    <RelativeLayout android:id="@+id/relativeLayout3" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="wrap_content" android:id="@+id/labelQuantita" android:text="0" android:layout_height="wrap_content" android:layout_alignParentTop="true" 
+        android:layout_centerHorizontal="true" android:layout_marginLeft="10px" android:layout_marginRight="10px" android:layout_centerVertical="true"></TextView>
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toLeftOf="@+id/labelQuantita" 
+        android:layout_alignTop="@+id/labelQuantita" android:layout_alignBottom="@+id/labelQuantita" android:id="@+id/minus" android:src="@drawable/minus" android:adjustViewBounds="true"></ImageButton>
+        <TextView android:layout_width="wrap_content" android:id="@+id/quantita" android:textAppearance="?android:attr/textAppearanceMedium" android:text="Quantità :" android:layout_height="wrap_content" 
+        android:layout_toLeftOf="@+id/minus" android:layout_alignTop="@+id/minus" android:layout_alignBottom="@+id/minus" android:layout_centerVertical="true" android:layout_alignParentTop="true"></TextView>
+        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toRightOf="@+id/labelQuantita" 
+        android:layout_alignTop="@+id/labelQuantita" android:layout_alignBottom="@+id/labelQuantita" android:id="@+id/plus" android:src="@drawable/plus" android:adjustViewBounds="true"></ImageButton>
+    </RelativeLayout>
+    <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:adjustViewBounds="true" android:src="@drawable/shopping_cart_add" android:id="@+id/aggiungi" android:layout_margin="10px"></ImageButton>
+    <TextView android:textAppearance="?android:attr/textAppearanceSmall" android:text="TextView" android:layout_width="match_parent" android:id="@+id/descrizione" android:layout_marginTop="10px" android:editable="false" android:layout_margin="5px" android:gravity="center" android:layout_height="wrap_content"></TextView>
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/relativeLayout4">
+        <TextView android:layout_height="wrap_content" android:text="TextView" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:id="@+id/labelTotale"></TextView>
+        <ImageView android:layout_height="wrap_content" android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_toLeftOf="@+id/labelTotale" android:layout_alignTop="@+id/labelTotale" android:layout_alignBottom="@+id/labelTotale" android:src="@drawable/money"></ImageView>
+    </RelativeLayout>
+    
+</LinearLayout>

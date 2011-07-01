@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -38,14 +40,32 @@ public class SceltaPanino extends Base implements OnClickListener
 	private Ordinazione ordinazione;
 	
 	@Override
+	public void onDestroy()
+	{
+		super.onDestroy();
+		close();
+	}
+	
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		close();
+	}
+	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		close();
+	}
+	
+	@Override
 	  public void onCreate(Bundle savedInstanceState)  
 	  {
 			super.onCreate(savedInstanceState);
-			init(this);
-            caricaDatiPanini();
 			
 			setContentView(R.layout.layoutsceltapanino);
-            
             next = (ImageButton) findViewById(R.id.next);
             prev = (ImageButton) findViewById(R.id.prev);
             aggiungi = (ImageButton) findViewById(R.id.aggiungi);
@@ -67,12 +87,13 @@ public class SceltaPanino extends Base implements OnClickListener
             quantitaMinus.setOnClickListener(this);
             quantitaPlus.setOnClickListener(this);
             aggiungi.setOnClickListener(this);
-            this.nuovaOrdinazione();
             ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
-            
+            init(this,"read");
+            caricaDatiPanini();
             posizione = 0;
             aggiornaInformazioniPanino(posizione);
             labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
+            close();
     }
 
 
@@ -143,6 +164,10 @@ public class SceltaPanino extends Base implements OnClickListener
 			quantita.setText("" + ordinazione.getArticolo(corrente).getQuantita());
 		else
 			quantita.setText("0");
+		String app = corrente.getNome().toLowerCase();
+		int idImage = getResources().getIdentifier(app, "drawable", "it.qwerty.android");
+		Log.i("IDPANINO",Integer.toString(idImage));
+		image.setImageResource(idImage);
 	}
 }
 	 
