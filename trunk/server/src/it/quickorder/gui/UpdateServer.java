@@ -1,4 +1,4 @@
-package it.quickorder.servers;
+package it.quickorder.gui;
 
 import it.quickorder.domain.Prodotto;
 import it.quickorder.helpers.HibernateUtil;
