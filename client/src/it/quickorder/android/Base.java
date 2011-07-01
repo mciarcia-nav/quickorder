@@ -18,22 +18,17 @@ public class Base extends Activity
 	
 	public void init(Context c, String mode)
 	{
-		Log.i("DB","CREO DATABASE");
 		if (dbhelper == null)
 			dbhelper = new DatabaseHelper(c);
 		if (mode.equals("write"))
 			db = dbhelper.getWritableDatabase();
 		else
 			db = dbhelper.getReadableDatabase();
-		Log.i("DB","CREATO DATABASE");
 	}
 	
 	public void close()
 	{
-		Log.i("DB","CHIUDO DATABASE");
 		db.close();
 		dbhelper.close();
-		Log.i("DB","DATABASE CHIUSO");
-		
 	}
 }
