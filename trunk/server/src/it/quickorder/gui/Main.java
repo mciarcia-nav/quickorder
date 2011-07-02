@@ -5,6 +5,7 @@ import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 import it.quickorder.helpers.HibernateUtil;
+import it.quickorder.servers.OrdersServer;
 import it.quickorder.servers.SignupServer;
 import it.quickorder.servers.UpdateServer;
 
@@ -203,6 +204,12 @@ public class Main extends JFrame
 		
 	}
 	
+	private static final int ORDERS_PORT = 4444;
+	private static final int UPD_PORT = 4445;
+	private static final int SIGNUP_PORT = 4446;
+	
+	
+	
 	public static void main(String[] args)
 	{
 		try 
@@ -219,9 +226,10 @@ public class Main extends JFrame
 			e.printStackTrace();
 		} 
 		
-		new Thread(new UpdateServer(4445)).start();
-		new Thread(new SignupServer(4446)).start();
-		
+		new Thread(new UpdateServer(UPD_PORT)).start();
+		new Thread(new SignupServer(SIGNUP_PORT)).start();
+		OrdersServer ordServer = new OrdersServer(ORDERS_PORT);
+		new Thread(ordServer).start();
 			
 		SwingUtilities.invokeLater(new Runnable()
 		{

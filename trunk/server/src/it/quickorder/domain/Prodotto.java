@@ -9,21 +9,21 @@ public class Prodotto implements Serializable
 	private double prezzo;
 	public static final int PANINO = 0, BEVANDA = 1;
 
-	public int getVersione() 
-	{
-		return versione;
-	}
-
-	public void setVersione(int versione) 
-	{
-		this.versione = versione;
-	}
-
 	public String getDescrizione() 
 	{
 		return descrizione;
 	}
 
+	public int getVersione()
+	{
+		return versione;
+	}
+	
+	public void setVersione(int versione)
+	{
+		this.versione = versione;
+	}
+	
 	public void setDescrizione(String descrizione) 
 	{
 		this.descrizione = descrizione;
@@ -67,6 +67,14 @@ public class Prodotto implements Serializable
 	public void setPrezzo(double prezzo) 
 	{
 		this.prezzo = prezzo;
-	}	
+	}
+	
+	public boolean equals(Object object)
+	{
+		if (!(object instanceof Prodotto))
+			return false;
+		Prodotto another = (Prodotto) object;
+		return another.getCodice().equalsIgnoreCase(codice);
+	}
 	
 }
