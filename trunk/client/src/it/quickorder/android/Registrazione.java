@@ -4,23 +4,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
-
 import it.quickorder.domain.Cliente;
 import it.quickorder.helpers.ControlloDati;
 import it.qwerty.android.R;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,7 +44,6 @@ public class Registrazione extends Base implements OnClickListener
     {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.registrazione);
-       init(this,"write");
        nomeForm = (EditText) findViewById(R.id.nome);
        cognomeForm = (EditText) findViewById(R.id.cognome);
        luogoForm = (EditText) findViewById(R.id.luogo);
@@ -126,24 +120,12 @@ public class Registrazione extends Base implements OnClickListener
 						t.show();
 						return;
 					}
-							
-					ContentValues values = new ContentValues();	
-					values.put("imei", nuovoCliente.getIMEI());
-					values.put("nome", nuovoCliente.getNome());
-					values.put("cognome", nuovoCliente.getCognome());
-					values.put("cf", nuovoCliente.getCodiceFiscale());
-					values.put("email", nuovoCliente.getEmail());
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-					values.put("dataNascita", dateFormat.format(nuovoCliente.getDataNascita()));
-					values.put("luogoNascita", nuovoCliente.getLuogoNascita());
-					values.put("sesso", "" + nuovoCliente.getSesso());
-					values.put("abilitato",1);
-					db.insert("user", null, values);
-					db.close();
+					
+					dbAdapter.registraCliente(nuovoCliente);
 					
 					Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
 					t.show();
-					main();
+					main(nuovoCliente);
 		        	finish();
 		        }
 			});
@@ -181,9 +163,11 @@ public class Registrazione extends Base implements OnClickListener
 		}		
 	}
 	
-	public void main()
+	private void main(Cliente cliente)
 	{
-		Intent i = new Intent(this, Main.class);
+		Intent i = new Intent(this, NuovaOrdinazione.class);
+		String pkg = getPackageName();
+		i.putExtra(pkg + ".cliente", cliente);
 		startActivity(i);
 	}
 	
@@ -219,12 +203,5 @@ public class Registrazione extends Base implements OnClickListener
 		}
 			
 		return res;
-	}
-	
-	private ProgressDialog showProgress()
-	{
-		ProgressDialog comm = ProgressDialog.show(Registrazione.this, "", 
-				"Registrazione col server in corso..", true, false);
-		return comm;
 	}
 }
