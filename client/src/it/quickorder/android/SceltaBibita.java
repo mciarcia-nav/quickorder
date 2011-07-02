@@ -37,21 +37,18 @@ public class SceltaBibita extends Base implements OnClickListener
 	public void onDestroy()
 	{
 		super.onDestroy();
-		close();
 	}
 	
 	@Override
 	public void onStop()
 	{
 		super.onStop();
-		close();
 	}
 	
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		close();
 	}
 	
 	@Override
@@ -80,30 +77,10 @@ public class SceltaBibita extends Base implements OnClickListener
         quantitaPlusBibita.setOnClickListener(this);
         aggiungiBibita.setOnClickListener(this);
         ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
-        init(this,"read");
-        caricaDatiBibite();
+        listaBibite = dbAdapter.caricaDatiProdotti(Prodotto.BEVANDA);
         posizione = 0;
         aggiornaInformazioniBibita(posizione);
         labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
-        close();
-	}
-	
-	private void caricaDatiBibite()
-	{
-		listaBibite = new ArrayList<Prodotto>();
-		String selection = "tipologia = ?";
-		String[] selectionArgs = { "1" };
-		Cursor cursor = db.query("prodotti", null, selection, selectionArgs, null, null, null);
-		while(cursor.moveToNext())
-		{
-			Prodotto p = new Prodotto();
-			p.setCodice(cursor.getString(0));
-			p.setNome(cursor.getString(1));
-			p.setTipologia(0);
-			p.setPrezzo(Double.parseDouble(cursor.getString(3)));
-			p.setDescrizione(cursor.getString(cursor.getColumnIndex("descrizione")));
-			listaBibite.add(p);
-		}
 	}
 	
 	private void aggiornaInformazioniBibita(int posizioneLista)

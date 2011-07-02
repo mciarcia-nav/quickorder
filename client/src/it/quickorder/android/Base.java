@@ -1,34 +1,28 @@
 package it.quickorder.android;
 
-import it.quickorder.domain.Ordinazione;
+import it.quickorder.helpers.DBAdapter;
 import android.app.Activity;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.os.Bundle;
 
 public class Base extends Activity 
 {
 	public static final String SRV_ADDRESS = "10.0.2.2";
 	public static final int UPD_PORT = 4445;
 	public static final int SIGNUP_PORT = 4446;
+	protected DBAdapter dbAdapter;
 	
-	
-	public DatabaseHelper dbhelper;
-	public SQLiteDatabase db;
-	
-	public void init(Context c, String mode)
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
 	{
-		if (dbhelper == null)
-			dbhelper = new DatabaseHelper(c);
-		if (mode.equals("write"))
-			db = dbhelper.getWritableDatabase();
-		else
-			db = dbhelper.getReadableDatabase();
+		super.onCreate(savedInstanceState);
+		dbAdapter = new DBAdapter(this);
+		dbAdapter.open();
 	}
 	
-	public void close()
+	@Override
+	protected void onDestroy() 
 	{
-		db.close();
-		dbhelper.close();
+		super.onDestroy();
+		dbAdapter.close();
 	}
 }

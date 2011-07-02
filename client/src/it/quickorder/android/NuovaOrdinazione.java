@@ -1,10 +1,10 @@
 package it.quickorder.android;
 
+import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.qwerty.android.R;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TabHost;
@@ -12,16 +12,17 @@ import android.widget.TabHost.TabSpec;
 
 public class NuovaOrdinazione extends TabActivity
 {
-	
+	private Cliente cliente;
 	private Ordinazione ordinazione;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		Resources res = getResources();
 		super.onCreate(savedInstanceState);
+		String pkg = getPackageName();
+		cliente = (Cliente) getIntent().getSerializableExtra(pkg + ".cliente");
 		ordinazione = new Ordinazione();
-		
+		ordinazione.setCliente(cliente);
 		
 		setContentView(R.layout.ordinazione);
 		TabHost tabhost = getTabHost();

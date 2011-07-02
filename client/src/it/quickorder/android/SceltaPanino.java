@@ -4,20 +4,11 @@ import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 import it.qwerty.android.R;
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
-
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,21 +34,18 @@ public class SceltaPanino extends Base implements OnClickListener
 	public void onDestroy()
 	{
 		super.onDestroy();
-		close();
 	}
 	
 	@Override
 	public void onStop()
 	{
 		super.onStop();
-		close();
 	}
 	
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		close();
 	}
 	
 	@Override
@@ -88,12 +76,10 @@ public class SceltaPanino extends Base implements OnClickListener
             quantitaPlus.setOnClickListener(this);
             aggiungi.setOnClickListener(this);
             ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
-            init(this,"read");
-            caricaDatiPanini();
+            listaPanini = dbAdapter.caricaDatiProdotti(Prodotto.PANINO);
             posizione = 0;
             aggiornaInformazioniPanino(posizione);
             labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
-            close();
     }
 
 
@@ -136,25 +122,7 @@ public class SceltaPanino extends Base implements OnClickListener
 			labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));		
 		}
 	}
-	
-	private void caricaDatiPanini()
-	{
-		listaPanini = new ArrayList<Prodotto>();
-		String selection = "tipologia = ?";
-		String[] selectionArgs = { "0" };
-		Cursor cursor = db.query("prodotti", null, selection, selectionArgs, null, null, null);
-		while(cursor.moveToNext())
-		{
-			Prodotto p = new Prodotto();
-			p.setCodice(cursor.getString(0));
-			p.setNome(cursor.getString(1));
-			p.setTipologia(0);
-			p.setPrezzo(Double.parseDouble(cursor.getString(3)));
-			p.setDescrizione(cursor.getString(cursor.getColumnIndex("descrizione")));
-			listaPanini.add(p);
-		}
-	}
-	
+		
 	private void aggiornaInformazioniPanino(int posizioneLista)
 	{
 		Prodotto corrente = listaPanini.get(posizioneLista);
@@ -162,9 +130,15 @@ public class SceltaPanino extends Base implements OnClickListener
 		descrizionePanino.setText(corrente.getDescrizione());
 		prezzoPanino.setText("Prezzo: € "+Double.toString(corrente.getPrezzo()));
 		if (ordinazione.containsProdotto(corrente))
+		{
+			aggiungi.setImageResource(R.drawable.refresh);
 			quantita.setText("" + ordinazione.getArticolo(corrente).getQuantita());
+		}
 		else
+		{
+			aggiungi.setImageResource(R.drawable.shopping_cart_add);
 			quantita.setText("0");
+		}
 		String app = corrente.getNome().toLowerCase();
 		int idImage = getResources().getIdentifier(app, "drawable", "it.qwerty.android");
 		Log.i("IDPANINO",Integer.toString(idImage));
