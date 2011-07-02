@@ -1,27 +1,27 @@
 package it.quickorder.servers;
 
-import it.quickorder.domain.Cliente;
-import it.quickorder.helpers.HibernateUtil;
-import java.io.*;
+import it.quickorder.domain.Ordinazione;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
-import org.hibernate.exception.ConstraintViolationException;
-
-public class SignupServer implements Runnable 
+public class OrdersServer implements Runnable 
 {
 	private ServerSocket srvSocket;
 	private int port;
 	private SimpleDateFormat formato;
+	private List<Ordinazione> ordinazioni;
 	
-	public SignupServer(int port)
+	public OrdersServer(int port)
 	{
 		this.port = port;
+		ordinazioni = new ArrayList<Ordinazione>(100);
 		formato = new SimpleDateFormat("hh:mm.ss");
 	}
 	
@@ -44,8 +44,8 @@ public class SignupServer implements Runnable
 			{
 				socketClient = srvSocket.accept();
 				Date corrente = new Date(System.currentTimeMillis());
-				System.out.println("[" + formato.format(corrente) + "] - Richiesta di registrazione da client: " + socketClient.getInetAddress().getHostAddress());
-				Runnable runnable = new RegRequestThreadHandler(socketClient);
+				System.out.println("[" + formato.format(corrente) + "] - Richiesta di ordinazione da client: " + socketClient.getInetAddress().getHostAddress());
+				Runnable runnable = new OrderRequestThreadHandler(socketClient, ordinazioni);
 				Thread nuovoThread = new Thread(runnable);
 				nuovoThread.start();
 			} catch (IOException e) 
@@ -57,13 +57,15 @@ public class SignupServer implements Runnable
 	}
 
 }
-class RegRequestThreadHandler implements Runnable
+class OrderRequestThreadHandler implements Runnable
 {
 	private Socket socket;
+	private List<Ordinazione> ordinazioni;
 	
-	public RegRequestThreadHandler(Socket socket)
+	public OrderRequestThreadHandler(Socket socket, List<Ordinazione> ordinazioni)
 	{
 		this.socket = socket;
+		this.ordinazioni = ordinazioni;
 	}
 
 	@Override
@@ -71,39 +73,31 @@ class RegRequestThreadHandler implements Runnable
 	{
 		try
 		{
+			Ordinazione nuova = null;
 			try
 			{
 				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 				
-				// Ricevo il bean del nuovo cliente da registrare.
-				Cliente nuovoCliente = (Cliente) input.readObject();
-				Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-				String result;
-				try
-				{
-					Transaction t = session.beginTransaction();
-					session.save(nuovoCliente);
-					t.commit();
-					result = "OK";
-				}
-				catch (ConstraintViolationException ex)
-				{
-					result = "DUP_EMAIL";
-					
-				}
-				catch (HibernateException ex2)
-				{
-					result = "FAILED";
-				}
+				// Ricevo il bean della nuova ordinazione effettuata dal client.
+				nuova = (Ordinazione) input.readObject();
+				
 				// Invio l'esito dell'operazione al client.
-				output.writeObject(result);
+				output.writeInt(0);
 				output.flush();	
 				
 			}
 			finally
 			{
 				socket.close();
+			}
+			if (nuova == null)
+				return;
+			nuova.setArrivo(new Date(System.currentTimeMillis()));
+			
+			synchronized (ordinazioni) 
+			{	
+				ordinazioni.add(nuova);
 			}
 		}
 		catch (IOException ex)
@@ -116,4 +110,3 @@ class RegRequestThreadHandler implements Runnable
 		}
 	}
 }
-

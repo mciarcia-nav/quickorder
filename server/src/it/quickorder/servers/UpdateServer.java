@@ -5,6 +5,8 @@ import it.quickorder.helpers.HibernateUtil;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.classic.Session;
@@ -13,10 +15,12 @@ public class UpdateServer implements Runnable
 {
 	private ServerSocket srvSocket;
 	private int port;
+	private SimpleDateFormat formato;
 	
 	public UpdateServer(int port)
 	{
 		this.port = port;
+		formato = new SimpleDateFormat("hh:mm.ss");
 	}
 	
 	
@@ -37,7 +41,8 @@ public class UpdateServer implements Runnable
 			try 
 			{
 				socketClient = srvSocket.accept();
-				System.out.println("Richiesta di aggiornamento da client: " + socketClient.getInetAddress().getHostAddress());
+				Date corrente = new Date(System.currentTimeMillis());
+				System.out.println("[" + formato.format(corrente) + "] - Richiesta di aggiornamento da client: " + socketClient.getInetAddress().getHostAddress());
 				Runnable runnable = new UpdateRequestThreadHandler(socketClient);
 				Thread nuovoThread = new Thread(runnable);
 				nuovoThread.start();
