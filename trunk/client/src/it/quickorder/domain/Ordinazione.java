@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 public class Ordinazione implements Serializable 
 {
+	private static final long serialVersionUID = 4936994990728437519L;
 	private int id, numeroTavolo, numeroProdotti;
 	private Cliente cliente;
 	private Date arrivo;
@@ -67,7 +68,7 @@ public class Ordinazione implements Serializable
 		numeroProdotti += a.getQuantita();
 	}
 	
-	public void rimuoviArticolo(String codice)
+	public void rimuoviArticolo(Prodotto p)
 	{
 		Iterator<Articolo> pp = articoli.iterator();
 		boolean trovato = false;
@@ -75,7 +76,7 @@ public class Ordinazione implements Serializable
 		while (!trovato && pp.hasNext())
 		{
 			a = pp.next();
-			if (a.getProdotto().getCodice().equalsIgnoreCase(codice))
+			if (a.getProdotto().equals(p))
 			{
 				totale -= a.getSubTotale();
 				numeroProdotti -= a.getQuantita();
