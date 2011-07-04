@@ -77,7 +77,14 @@ public class DeskManager extends DefaultDesktopManager
 		ordinazioniAttive++;
 		
 		int id = ordinazione.getId();
-		if (ordinazioni.isEmpty())
+		if (ordinazioni.containsKey(id))
+		{
+			
+			OrdinazioneIFrame nuova = ordinazioni.get(id);
+			deiconifyFrame(nuova);
+			activateFrame(nuova);
+		}
+		else
 		{
 			OrdinazioneIFrame o = new OrdinazioneIFrame(ordinazione);
 			ordinazioni.put(id, o);
@@ -85,24 +92,6 @@ public class DeskManager extends DefaultDesktopManager
 			o.setSize(frameSize);
 			o.setLocation(frameLoc);
 			o.setVisible(true);
-		}
-		else
-		{
-			if (ordinazioni.containsKey(id))
-			{
-				
-				OrdinazioneIFrame nuova = ordinazioni.get(id);
-				activateFrame(nuova);
-			}
-			else
-			{
-				OrdinazioneIFrame o = new OrdinazioneIFrame(ordinazione);
-				ordinazioni.put(id, o);
-				jDesktop.add(o, Integer.MAX_VALUE);
-				o.setSize(frameSize);
-				o.setLocation(frameLoc);
-				o.setVisible(true);
-			}
 		}
 	}
 }
