@@ -13,16 +13,20 @@ import javax.swing.JInternalFrame;
 
 public class DeskManager extends DefaultDesktopManager 
 {
+	private static final long serialVersionUID = 6182103251037333895L;
 	private JDesktopPane jDesktop;
 	private JInternalFrame attivo;
+	private int ordinazioniAttive, ordinazioniMassime;
 	private HashMap<Integer, OrdinazioneIFrame> ordinazioni;
 	
-	//prova
+	private static final int SCOSTAMENTO_ORIZZONTALE = 15, SCOSTAMENTO_VERTICALE = 30;
 	
-	public DeskManager(JDesktopPane jDesktop)
+	public DeskManager(JDesktopPane jDesktop, int numeroOrdinazioni)
 	{
 		this.jDesktop = jDesktop;
-		ordinazioni = new HashMap<Integer, OrdinazioneIFrame>(10);
+		ordinazioniAttive = 0;
+		ordinazioniMassime = numeroOrdinazioni;
+		ordinazioni = new HashMap<Integer, OrdinazioneIFrame>(ordinazioniMassime);
 	}
 	
 	public void dragFrame(JComponent pComponent, int pX, int pY)
@@ -31,14 +35,17 @@ public class DeskManager extends DefaultDesktopManager
 			return;
 		if (pComponent instanceof StackIFrame)
 		{
-			Point corrente = pComponent.getLocation();
+			StackIFrame stack = (StackIFrame) pComponent;
+			Point corrente = stack.getLocation();
 			if (pX < corrente.x)
 			{
-				super.dragFrame(pComponent, 20, corrente.y);
+				Point left = stack.getLocation(StackIFrame.LEFT);
+				super.dragFrame(pComponent, left.x, left.y);
 			}
 			else
 			{
-				super.dragFrame(pComponent, jDesktop.getSize().width - 20 - pComponent.getSize().width, corrente.y);
+				Point right = stack.getLocation(StackIFrame.RIGHT);
+				super.dragFrame(pComponent, right.x, right.y);
 				
 			}
 		}
@@ -46,18 +53,28 @@ public class DeskManager extends DefaultDesktopManager
 
 	public void openOrdinazione(Ordinazione ordinazione) 
 	{
-		JComponent stack = (JComponent) jDesktop.getComponent(0);
+		StackIFrame stack = (StackIFrame) jDesktop.getComponent(0);
 		Point stackLoc = stack.getLocation();
 		Dimension stackSize = stack.getSize();
 		Dimension deskSize = jDesktop.getSize();
-		
 		Dimension frameSize = new Dimension();
-		frameSize.width = deskSize.width - stackSize.width - 20 - ((int)(deskSize.width * 0.1));
-		frameSize.height = (int) (stackSize.height * 0.8);
+		
+		frameSize.width = deskSize.width - stackSize.width - 80 - SCOSTAMENTO_ORIZZONTALE * 5;
+		frameSize.height = (int) (stackSize.height * 0.75) - SCOSTAMENTO_VERTICALE * 5;
 		
 		Point frameLoc = new Point();
-		frameLoc.y = stackLoc.y + (int) ((stackSize.height - frameSize.height) / 2);
-		frameLoc.x = 20 + ((int)(deskSize.width * 0.05));
+		if (stack.getLocation().x == 30)
+		{
+			frameLoc.x = 50 + stack.getWidth() + (15 * ordinazioniAttive);
+		}
+		else
+		{
+			frameLoc.x = 30 + 15 * ordinazioniAttive;
+		}
+		frameLoc.y = stackLoc.y + (int) ((stackSize.height - frameSize.height) / 4) + 30 * ordinazioniAttive;
+		
+		
+		ordinazioniAttive++;
 		
 		int id = ordinazione.getId();
 		if (ordinazioni.isEmpty())
@@ -68,29 +85,23 @@ public class DeskManager extends DefaultDesktopManager
 			o.setSize(frameSize);
 			o.setLocation(frameLoc);
 			o.setVisible(true);
-			attivo = o;
 		}
 		else
 		{
 			if (ordinazioni.containsKey(id))
 			{
-				iconifyFrame(attivo);
-				attivo = ordinazioni.get(id);
-				activateFrame(attivo);
+				
+				OrdinazioneIFrame nuova = ordinazioni.get(id);
+				activateFrame(nuova);
 			}
 			else
 			{
-				if (attivo != null)
-				{
-					iconifyFrame(attivo);
-				}
 				OrdinazioneIFrame o = new OrdinazioneIFrame(ordinazione);
 				ordinazioni.put(id, o);
 				jDesktop.add(o, Integer.MAX_VALUE);
 				o.setSize(frameSize);
 				o.setLocation(frameLoc);
 				o.setVisible(true);
-				attivo = o;
 			}
 		}
 	}

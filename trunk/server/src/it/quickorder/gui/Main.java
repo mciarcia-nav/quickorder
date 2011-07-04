@@ -1,53 +1,29 @@
 package it.quickorder.gui;
 
-import it.quickorder.domain.Articolo;
-import it.quickorder.domain.Cliente;
-import it.quickorder.domain.Ordinazione;
-import it.quickorder.domain.Prodotto;
-import it.quickorder.helpers.HibernateUtil;
+import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.servers.OrdersServer;
 import it.quickorder.servers.SignupServer;
 import it.quickorder.servers.UpdateServer;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.peer.FontPeer;
-import java.rmi.server.UID;
-import java.util.ArrayList;
-import java.util.Date;
-
-import javax.swing.DefaultDesktopManager;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.hibernate.SessionFactory;
-
+import java.awt.*;
+import javax.swing.*;
 
 public class Main extends JFrame 
 {
+	private static final long serialVersionUID = -571519118389440334L;
+
 	// Percorso per le immagini
 	public static String URL_IMAGES = "/it/quickorder/images/";
-	
+	private static final int NUMERO_PANNELLI = 10;
 	protected Dimension SIZE;
 	private JPanel jContentPane;
 	private JDesktopPane jDesktopPane;
 	private JLabel sfondo;
 	private StackIFrame stackFrame;
 	protected static Font plainFont, bigFont;
-	private int count;
+	private static StackOrdinazioni stack;
+	private OrdersServer orderServer;
+	private SignupServer signupServer;
+	private UpdateServer updateServer;
 	
 	{
 		inizializzaFonts();
@@ -57,70 +33,39 @@ public class Main extends JFrame
 	public Main()
 	{
 		super("QuickOrder");
-
+		
+		stack = new StackOrdinazioni();
+		orderServer = new OrdersServer(ORDERS_PORT, stack);
+		signupServer = new SignupServer(SIGNUP_PORT);
+		updateServer = new UpdateServer(UPD_PORT);
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(screenSize);
-		
-		this.setUndecorated(true);
-		
-		// Setta l'icona per il frame.
-		//setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(Home.URL_IMAGES + "etouricon.png")));
-		
-		// Setta la grandezza del frame e la grandezza minima.
+		setUndecorated(true);
 		setSize(screenSize);
 		setMinimumSize(screenSize);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Disegna l'interfaccia a partire dal content pane.
-		setContentPane(getJContentPane());
+		jContentPane = new JPanel();
+		jContentPane.setLayout(new BorderLayout());
+		sfondo = new JLabel();
+		setBackgroundImage();
+		jDesktopPane = new JDesktopPane();		
+		jDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+		jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane, NUMERO_PANNELLI));
+		jDesktopPane.add(sfondo, Integer.MIN_VALUE);
+		jContentPane.add(jDesktopPane);
+		stackFrame = new StackIFrame(jDesktopPane, NUMERO_PANNELLI);
 		
-		JInternalFrame a = new JInternalFrame("Prova");
-		a.setLayout(new BorderLayout());
-		a.setContentPane(new JPanel());
-		JButton prova = new JButton("PROVA");
-		a.getContentPane().add(prova);
-		count = 1;
-		prova.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) 
-			{
-				Ordinazione ord = new Ordinazione();
-				Date nuovo = new Date(System.currentTimeMillis());
-      			ord.setArrivo(nuovo);
-				ord.setId(count++);
-				Cliente c = new Cliente();
-				c.setNome("mario");
-				c.setCognome("Gallo");
-				ord.setCliente(c);
-				ord.setNumeroTavolo(5);
-				stackFrame.aggiungiOrdinazione(ord);
-				Prodotto p = new Prodotto();
-				p.setNome("Panino con salsiccia e patatine");
-				p.setPrezzo(3.50);
-				Articolo a = new Articolo();
-				a.setQuantita(2);
-				a.setSubTotale(7);
-				a.setProdotto(p);
-				ord.aggiungiArticolo(a);
-				p = new Prodotto();
-				p.setNome("Coca-Cola");
-				p.setPrezzo(1.50);
-				a = new Articolo();
-				a.setQuantita(2);
-				a.setSubTotale(3);
-				a.setProdotto(p);
-				ord.aggiungiArticolo(a);
-				
-			}
-			
-		});
-		a.setSize(200,200);
-		a.setLocation(10, 10);
-		jDesktopPane.add(a,Integer.MAX_VALUE);
-		a.setVisible(true);
-		
+		setContentPane(jContentPane);
+	}
+	
+	public void avviaServer()
+	{
+		new Thread(orderServer).start();
+		new Thread(signupServer).start();
+		new Thread(updateServer).start();
 	}
 	
 	private static void inizializzaFonts() 
@@ -149,33 +94,6 @@ public class Main extends JFrame
 		return false;
 	}
 
-	private JPanel getJContentPane()
-	{
-		if (jContentPane == null)
-		{
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-			jContentPane.add(getJDesktopPane());
-		}
-		return jContentPane;
-	}
-
-	private JDesktopPane getJDesktopPane()
-	{
-		if (jDesktopPane == null)
-		{
-			sfondo = new JLabel();
-			setBackgroundImage();
-			jDesktopPane = new JDesktopPane();		
-			jDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
-			jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane));
-			jDesktopPane.add(sfondo, Integer.MIN_VALUE);
-			
-			
-		}
-		return jDesktopPane;
-	}
-
 	private void setBackgroundImage()
 	{
 		ImageIcon nuova = new ImageIcon(getClass().getResource(URL_IMAGES + "sfondo.png"));
@@ -198,8 +116,10 @@ public class Main extends JFrame
 	public void setVisible(boolean bool)
 	{
 		super.setVisible(true);
-		stackFrame = new StackIFrame(jDesktopPane);
+		
 		jDesktopPane.add(stackFrame, Integer.MAX_VALUE);
+		stack.aggiungiListener(stackFrame);
+		stackFrame.costruisciInterfaccia();
 		stackFrame.setVisible(true);
 		
 	}
@@ -226,17 +146,13 @@ public class Main extends JFrame
 			e.printStackTrace();
 		} 
 		
-		new Thread(new UpdateServer(UPD_PORT)).start();
-		new Thread(new SignupServer(SIGNUP_PORT)).start();
-		OrdersServer ordServer = new OrdersServer(ORDERS_PORT);
-		new Thread(ordServer).start();
-			
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
-				new Main().setVisible(true);
-				
+				Main main = new Main();
+				main.setVisible(true);
+				main.avviaServer();
 			}
 		});
 	}

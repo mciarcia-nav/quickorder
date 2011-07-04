@@ -83,6 +83,7 @@ public class StackPanel extends JPanel
 		btn.setBorder(BorderFactory.createLoweredBevelBorder());
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btn.setPreferredSize(new Dimension(layoutArea.width, layoutArea.height));
+		btn.setText("< 1 min");
 		btn.setLocation(layoutArea.x, layoutArea.y);
 		btn.addActionListener(new ActionListener()
 		{

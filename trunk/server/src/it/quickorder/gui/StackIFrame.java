@@ -1,21 +1,21 @@
 package it.quickorder.gui;
 
+import it.quickorder.control.OrdinazioniListener;
 import it.quickorder.domain.Ordinazione;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.*;
 
-public class StackIFrame extends JInternalFrame 
+public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 {
 	
-	/**
-	 * 
-	 */
+	public static final int LEFT = 0, RIGHT = 1;
 	private static final long serialVersionUID = 7374022043737716673L;
 	private Dimension size;
 	private Point location;
@@ -24,40 +24,85 @@ public class StackIFrame extends JInternalFrame
 	public static Color giallo_scuro = new Color(255,204,51);
 	private JPanel contentPane;
 	
-	public StackIFrame(JDesktopPane jDesktop)
+	
+	private JDesktopPane desktop;
+	private int dimY, numeroPannelli;
+	
+	public StackIFrame(JDesktopPane desktop, int numeroPannelli)
 	{
-		Dimension deskSize = jDesktop.getSize();
-		int dimY = (int) Math.floor(deskSize.height / 12);
-		size = new Dimension();
-		size.height = dimY * 10 + 13;
-		size.width = 140;
-		setResizable(false);
-		setSize(size);
-		location = new Point();
-		location.x = deskSize.width - size.width - 30;
-		location.y = (int) (deskSize.height - size.height) / 2;
-		setLocation(location);
-		contentPane = new JPanel(new GridLayout(10,1));
-		pannelli = new ArrayList<StackPanel>(10);
-		DeskManager desk = (DeskManager) jDesktop.getDesktopManager();
-		for (int i = 0; i < 10; i++)
+		this.desktop = desktop;
+		this.numeroPannelli = numeroPannelli;
+		pannelli = new ArrayList<StackPanel>(numeroPannelli);
+		contentPane = new JPanel(new GridLayout(numeroPannelli,1));
+		setContentPane(contentPane);
+		
+	}
+	
+	public void costruisciInterfaccia()
+	{
+		Dimension deskSize = desktop.getSize();
+		costruisciGUI(deskSize);
+		posiziona(deskSize, RIGHT);
+
+	}
+	
+	private void costruisciGUI(Dimension deskSize)
+	{
+		
+		dimY = (int) Math.floor(deskSize.height / (numeroPannelli + 2));
+		DeskManager desk = (DeskManager) desktop.getDesktopManager();
+		for (int i = 0; i < numeroPannelli; i++)
 		{
 			StackPanel nuovo = new StackPanel(desk);
 			nuovo.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 			contentPane.add(nuovo);
 			pannelli.add(nuovo);
 		}
-		setContentPane(contentPane);	
+		size = new Dimension();
+		size.height = dimY * 10 + 13;
+		size.width = 140;
+		setResizable(false);
+		setSize(size);
+		startThreadTempi();
+	}
+	
+	private void posiziona(Dimension deskSize, int type)
+	{
+		location = new Point();
+		location.y = (int) (deskSize.height - size.height) / 2;
+		if (type == LEFT)
+		{			
+			location.x = 30;	
+		}
+		else if (type == RIGHT)
+		{
+			location.x = deskSize.width - size.width - 30;
+		}
+		setLocation(location);
+	}
+	
+	public Point getLocation(int type)
+	{
+		Point toReturn = new Point();
+		if (type == LEFT)
+		{			
+			toReturn.x = 30;	
+		}
+		else if (type == RIGHT)
+		{
+			toReturn.x = desktop.getWidth() - size.width - 30;
+		}
+		toReturn.y = location.y;
+		return toReturn;
 	}
 	
 	public void aggiungiOrdinazione(Ordinazione ordinazione)
 	{
-		for (StackPanel o : pannelli)
+		for (int index = 0; index < pannelli.size(); index++)
 		{
-			if (!o.hasOrdinazione())
+			if (! (pannelli.get(index).hasOrdinazione()))
 			{
-				o.setOrdinazione(ordinazione);
-				startThreadTempi();
+				pannelli.get(index).setOrdinazione(ordinazione);
 				return;
 			}
 		}
@@ -67,57 +112,68 @@ public class StackIFrame extends JInternalFrame
 	{
 		Thread tempi = new Thread(new Runnable()
 		{
-
 			@Override
 			public void run() 
 			{
 				while(true)
 				{
-					for (StackPanel o : pannelli)
+					int index = 0;
+					StackPanel corrente = pannelli.get(index);
+					while (index < pannelli.size() && corrente.hasOrdinazione())
 					{
-						if (o.hasOrdinazione())
+						Ordinazione ord = corrente.getOrdinazione();
+						Date d = ord.getArrivo();
+						int minuti = (int) (System.currentTimeMillis() - d.getTime()) / 60000;
+						if (minuti == 0)
 						{
-							Ordinazione ord = o.getOrdinazione();
-							Date d = ord.getArrivo();
-							int minuti = (int) (System.currentTimeMillis() - d.getTime()) / 60000;
-							if (minuti == 0)
-							{
-								o.getBtn().setForeground(verde_scuro);
-								o.getBtn().setText("< 1 min");
-							}
-							else
-							{
-								if (minuti < 10)
-								{
-									o.getBtn().setForeground(verde_scuro);
-								}
-								else if (minuti >= 10 && minuti < 15)
-								{
-									o.getBtn().setForeground(giallo_scuro);
-								}
-								else
-								{
-									o.getBtn().setForeground(Color.RED);
-								}
-								o.getBtn().setText("" + minuti + " min");
-							}
+							corrente.getBtn().setForeground(verde_scuro);
+							corrente.getBtn().setText("< 1 min");
 						}
 						else
 						{
-							break;
+							if (minuti < 10)
+							{
+								corrente.getBtn().setForeground(verde_scuro);
+							}
+							else if (minuti >= 10 && minuti < 15)
+							{
+								corrente.getBtn().setForeground(giallo_scuro);
+							}
+							else
+							{
+								corrente.getBtn().setForeground(Color.RED);
+							}
+							corrente.getBtn().setText("" + minuti + " min");
 						}
+						
+						index++;
+						if (index < pannelli.size())
+							corrente = pannelli.get(index);
 					}
-					try {
+					try 
+					{
 						Thread.sleep(10000);
-					} catch (InterruptedException e) 
+					} 
+					catch (InterruptedException e) 
 					{
 						e.printStackTrace();
 					}
 				}
-				
-			}
-			
+			}		
 		});
 		tempi.start();
+	}
+	
+	@Override
+	public void ordinazioneRicevuta(Event evt) 
+	{
+		for (int index = 0; index < pannelli.size(); index++)
+		{
+			if (! (pannelli.get(index).hasOrdinazione()))
+			{
+				pannelli.get(index).setOrdinazione((Ordinazione)evt.arg);
+				return;
+			}
+		}	
 	}
 }
