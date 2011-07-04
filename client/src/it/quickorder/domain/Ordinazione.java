@@ -68,6 +68,11 @@ public class Ordinazione implements Serializable
 		numeroProdotti += a.getQuantita();
 	}
 	
+	public void rimuoviSingoloProdotto()
+	{
+		numeroProdotti -=1;
+	}
+	
 	public void rimuoviArticolo(Prodotto p)
 	{
 		Iterator<Articolo> pp = articoli.iterator();
