@@ -1,5 +1,6 @@
 package it.quickorder.servers;
 
+import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.domain.Ordinazione;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,26 +9,24 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
 
 public class OrdersServer implements Runnable 
 {
 	private ServerSocket srvSocket;
 	private int port;
 	private SimpleDateFormat formato;
-	private List<Ordinazione> ordinazioni;
-	
-	public OrdersServer(int port)
+	private StackOrdinazioni stack;
+		
+	public OrdersServer(int port, StackOrdinazioni stack) 
 	{
+		this.stack = stack;
 		this.port = port;
-		ordinazioni = new ArrayList<Ordinazione>(100);
 		formato = new SimpleDateFormat("hh:mm.ss");
 	}
-	
-	
+
+
 	@Override
-	public void run() 
+	public void run()
 	{
 		try 
 		{
@@ -45,7 +44,7 @@ public class OrdersServer implements Runnable
 				socketClient = srvSocket.accept();
 				Date corrente = new Date(System.currentTimeMillis());
 				System.out.println("[" + formato.format(corrente) + "] - Richiesta di ordinazione da client: " + socketClient.getInetAddress().getHostAddress());
-				Runnable runnable = new OrderRequestThreadHandler(socketClient, ordinazioni);
+				Runnable runnable = new OrderRequestThreadHandler(socketClient, stack);
 				Thread nuovoThread = new Thread(runnable);
 				nuovoThread.start();
 			} catch (IOException e) 
@@ -60,12 +59,12 @@ public class OrdersServer implements Runnable
 class OrderRequestThreadHandler implements Runnable
 {
 	private Socket socket;
-	private List<Ordinazione> ordinazioni;
+	private StackOrdinazioni stack;
 	
-	public OrderRequestThreadHandler(Socket socket, List<Ordinazione> ordinazioni)
+	public OrderRequestThreadHandler(Socket socket, StackOrdinazioni stack)
 	{
 		this.socket = socket;
-		this.ordinazioni = ordinazioni;
+		this.stack = stack;
 	}
 
 	@Override
@@ -93,12 +92,8 @@ class OrderRequestThreadHandler implements Runnable
 			}
 			if (nuova == null)
 				return;
-			nuova.setArrivo(new Date(System.currentTimeMillis()));
-			
-			synchronized (ordinazioni) 
-			{	
-				ordinazioni.add(nuova);
-			}
+					
+			stack.aggiungiOrdinazione(nuova);
 		}
 		catch (IOException ex)
 		{

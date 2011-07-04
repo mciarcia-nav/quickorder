@@ -35,7 +35,7 @@ public class OrdinazioneIFrame extends JInternalFrame
 		// Pannello dati
 		JPanel dati = new JPanel(new GridLayout(1,3));
 		dati.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		JLabel nomeCliente = new JLabel("   " + ord.getCliente());
+		JLabel nomeCliente = new JLabel("   " + ord.getCliente().getNome() + " " + ord.getCliente().getCognome());
 		nomeCliente.setFont(Main.plainFont);
 		ImageIcon icoCliente = new ImageIcon(getClass().getResource(Main.URL_IMAGES + "customers48.png"));
 		nomeCliente.setIcon(icoCliente);
