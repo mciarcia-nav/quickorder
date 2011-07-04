@@ -9,6 +9,7 @@ import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.android.R;
 import android.R.attr;
+import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.InputType;
@@ -165,6 +166,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		text = new TextView(this);
 		text.setText("Riepilogo Ordinazione");
+		text.setPadding(0,0,0,30);
 		text.setTextAppearance(this, android.R.attr.textAppearanceLarge);
 		row.addView(text);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -209,6 +211,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			cancella.setImageResource(R.drawable.delete);
 			cancella.setOnClickListener(this);
 			cancella.setId(200+i);
+			cancella.setBackgroundColor(android.R.color.transparent);
 			row.addView(cancella);
 			tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		}
@@ -217,10 +220,12 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row = new TableRow(this);
 		text = new TextView(this);
 		text.setText("Totale da pagare: ");
+		text.setPadding(0, 30, 0, 30);
 		//text.setLayoutParams(lp);
 		row.addView(text);
 		text = new TextView(this);
 		text.setText(Double.toString(ordinazione.getTotale())+"€");
+		text.setPadding(0, 30, 0, 30);
 		//text.setLayoutParams(lp);
 		row.addView(text);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -245,6 +250,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row = new TableRow(this);
 		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		row.addView(inviaOrdinazione);
+		row.setPadding(0, 30, 0, 0);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 		//ADD TABLE TO SCROLL

@@ -118,6 +118,7 @@ public class SceltaPanino extends Base implements OnClickListener
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
 			ordinazione.aggiungiArticolo(nuovo);
+			quantita.setText("0");
 			labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));		
 		}
 	}

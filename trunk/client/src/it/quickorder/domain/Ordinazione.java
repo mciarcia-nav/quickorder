@@ -64,8 +64,8 @@ public class Ordinazione implements Serializable
 	public void aggiungiArticolo(Articolo a)
 	{
 		totale += a.getSubTotale();
+		numeroProdotti += a.getQuantita();	
 		articoli.add(a);
-		numeroProdotti += a.getQuantita();
 	}
 	
 	public void rimuoviSingoloProdotto()
