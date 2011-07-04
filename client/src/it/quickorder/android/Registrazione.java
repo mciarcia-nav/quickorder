@@ -53,12 +53,15 @@ public class Registrazione extends Base implements OnClickListener
        dataForm = (DatePicker) findViewById(R.id.data);
        registra = (Button) findViewById(R.id.registra);
        registra.setOnClickListener(this);
+       sessoFormM.setOnClickListener(this);
+       sessoFormF.setOnClickListener(this);
        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-       imei = telephonyManager.getDeviceId();
-       if (imei.equals(null))
+       //imei = telephonyManager.getDeviceId();
+       imei = this.randomImei();
+       /*if (imei.equals(null))
        {
     	   imei = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
-       }
+       }*/
     }
 	
 	@Override
@@ -66,100 +69,112 @@ public class Registrazione extends Base implements OnClickListener
 	{
 		final Cliente nuovoCliente = creaBeanCliente();
 		boolean[] check = ControlloDati.checkBeanCliente(nuovoCliente);
-		
-		// Dati Corretti
-		if (check[0])
-		{
-			final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
-			alert.setTitle("Conferma");
-			alert.setMessage("Sei sicuro di voler confermare i dati?");
-			alert.setButton("Conferma", new DialogInterface.OnClickListener() 
-			{		
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
-				{
-					Socket socket = null;
-					String response = null;
-					try
-					{
-						socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
-						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-						ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-						output.writeObject(nuovoCliente);
-						output.flush();
-						response = (String) input.readObject();
-					}
-					catch (Exception ex)
-					{
-						ex.printStackTrace();
-						Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
-						t.show();
-					}
-					finally
-					{
-						if (socket != null)
-							try 
-							{
-								socket.close();
-							} catch (IOException e) 
-							{
-								e.printStackTrace();
-							}
-					}
-					
-					if (response.equalsIgnoreCase("DUP_EMAIL"))
-					{
-						Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata è stata registrata nel database.", Toast.LENGTH_SHORT);
-						t.show();
-						return;
-					}
-					else if (response.equalsIgnoreCase("FAILED"))
-					{
-						Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
-						t.show();
-						return;
-					}
-					
-					dbAdapter.registraCliente(nuovoCliente);
-					
-					Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
-					t.show();
-					main(nuovoCliente);
-		        	finish();
-		        }
-			});
-			alert.setButton2("Annulla", new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
-				{
-					alert.dismiss();
-				}
-			});
-			alert.show();
+		if (v.getId() == sessoFormM.getId())
+		{	
+			sessoFormM.setChecked(true);
+			sessoFormF.setChecked(false);
 		}
-		// Dati non corretti
-		else
-		{
-			String messaggio = "Campi non validi! Correggi i campi:";
-			if (!check[1])
-				messaggio += "Nome, ";
-			if (!check[2])
-				messaggio += "Cognome, ";
-			if (!check[3])
-				messaggio += "Data di Nascita, ";
-			if (!check[4])
-				messaggio += "Luogo di Nascita, ";
-			if (!check[5])
-				messaggio += "E-Mail, ";
-			if (!check[6])
-				messaggio += "Codice Fiscale, ";
-			
-			messaggio = messaggio.substring(0, messaggio.length() - 2);
-			messaggio += ".";
-			Toast t = Toast.makeText(this.getApplicationContext(), messaggio, Toast.LENGTH_SHORT);
-        	t.show();
-		}		
+		else if (v.getId() == sessoFormF.getId())
+		{	
+			sessoFormM.setChecked(false);
+			sessoFormF.setChecked(true);
+		}
+		else if (v.getId() == registra.getId())
+		{	
+			// Dati Corretti
+			if (check[0])
+			{
+				final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
+				alert.setTitle("Conferma");
+				alert.setMessage("Sei sicuro di voler confermare i dati?");
+				alert.setButton("Conferma", new DialogInterface.OnClickListener() 
+				{		
+					@Override
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						Socket socket = null;
+						String response = null;
+						try
+						{
+							socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
+							ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+							ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+							output.writeObject(nuovoCliente);
+							output.flush();
+							response = (String) input.readObject();
+						}
+						catch (Exception ex)
+						{
+							ex.printStackTrace();
+							Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
+							t.show();
+						}
+						finally
+						{
+							if (socket != null)
+								try 
+								{
+									socket.close();
+								} catch (IOException e) 
+								{
+									e.printStackTrace();
+								}
+						}
+						
+						if (response.equalsIgnoreCase("DUP_EMAIL"))
+						{
+							Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata è stata registrata nel database.", Toast.LENGTH_SHORT);
+							t.show();
+							return;
+						}
+						else if (response.equalsIgnoreCase("FAILED"))
+						{
+							Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
+							t.show();
+							return;
+						}
+						
+						dbAdapter.registraCliente(nuovoCliente);
+						
+						Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
+						t.show();
+						main(nuovoCliente);
+			        	finish();
+			        }
+				});
+				alert.setButton2("Annulla", new DialogInterface.OnClickListener()
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						alert.dismiss();
+					}
+				});
+				alert.show();
+			}
+			// Dati non corretti
+			else
+			{
+				String messaggio = "Campi non validi! Correggi i campi:";
+				if (!check[1])
+					messaggio += "Nome, ";
+				if (!check[2])
+					messaggio += "Cognome, ";
+				if (!check[3])
+					messaggio += "Data di Nascita, ";
+				if (!check[4])
+					messaggio += "Luogo di Nascita, ";
+				if (!check[5])
+					messaggio += "E-Mail, ";
+				if (!check[6])
+					messaggio += "Codice Fiscale, ";
+				
+				messaggio = messaggio.substring(0, messaggio.length() - 2);
+				messaggio += ".";
+				Toast t = Toast.makeText(this.getApplicationContext(), messaggio, Toast.LENGTH_SHORT);
+	        	t.show();
+			}
+		}
 	}
 	
 	private void main(Cliente cliente)
