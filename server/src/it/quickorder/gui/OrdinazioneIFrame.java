@@ -13,18 +13,22 @@ import java.awt.Insets;
 import java.text.DateFormat;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 
-public class OrdinazioneIFrame extends JInternalFrame
+public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameListener
 {
 	private JPanel jContentPane;
 	private ScrollableTable prodotti;
 	private JLabel labelTotale;
+	private boolean emessoScontrino;
 	
 	public OrdinazioneIFrame (Ordinazione ord)
 	{
 		super("Ordinazione #" + ord.getId());
 		setClosable(true);
+		emessoScontrino = false;
 		
 		// Content Pane
 		setLayout(new BorderLayout());
@@ -153,6 +157,57 @@ public class OrdinazioneIFrame extends JInternalFrame
 		
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		getContentPane().add(jContentPane, BorderLayout.CENTER);
+		
+	}
+
+	@Override
+	public void internalFrameActivated(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void internalFrameClosed(InternalFrameEvent e) 
+	{
+		if (!emessoScontrino)
+		{
+			DeskManager desk = (DeskManager) e.getInternalFrame().getDesktopPane().getDesktopManager();
+			desk.iconifyFrame(e.getInternalFrame());
+		}
+		else
+		{
+			super.setVisible(false);
+			super.dispose();
+		}
+	}
+
+	@Override
+	public void internalFrameClosing(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void internalFrameDeactivated(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void internalFrameDeiconified(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void internalFrameIconified(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void internalFrameOpened(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 }
