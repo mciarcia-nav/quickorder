@@ -5,6 +5,7 @@ import it.quickorder.helpers.HibernateUtil;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +23,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
 import org.hibernate.*;
+import org.hibernate.type.descriptor.sql.BitTypeDescriptor;
 
 @SuppressWarnings("serial")
 public class ClientiIFrame extends JInternalFrame
@@ -54,6 +56,7 @@ public class ClientiIFrame extends JInternalFrame
 		clienti.setSelectionBackground(Color.white);
 		clienti.setAutoscrolls(true);
 		clienti.setShowVerticalLines(false);
+		clienti.setDefaultRenderer(Object.class, new ClienteCellRenderer());
         jContentPane.add(clienti.getTableHeader(), BorderLayout.NORTH);
 		jContentPane.add(clienti, BorderLayout.CENTER);
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -78,4 +81,14 @@ public class ClientiIFrame extends JInternalFrame
         return query.list();
 	}
 	
+}
+
+class ClienteCellRenderer extends DefaultTableCellRenderer
+{ 
+	public Component getTableCellRendererComponent(JTable table,Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	{ 
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
+		setHorizontalAlignment(CENTER);
+		return this;
+	} 
 }
