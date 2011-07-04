@@ -157,6 +157,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		scroll.removeAllViews();
 		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		tl = new TableLayout(this);
+		tl.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		listaArticoli = ordinazione.getArticoli();
 		
 		//TITOLO
