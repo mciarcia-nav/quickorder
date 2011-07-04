@@ -56,6 +56,7 @@ public class SceltaPanino extends Base implements OnClickListener
             next = (ImageButton) findViewById(R.id.next);
             prev = (ImageButton) findViewById(R.id.prev);
             aggiungi = (ImageButton) findViewById(R.id.aggiungi);
+            aggiungi.setEnabled(false);
             quantitaMinus = (ImageButton) findViewById(R.id.minus);
             quantitaMinus.setEnabled(false);
             labelTotale = (TextView) findViewById(R.id.labelTotale);
@@ -100,14 +101,20 @@ public class SceltaPanino extends Base implements OnClickListener
 			int q = Integer.parseInt(quantita.getText().toString()) +  1;
 			quantita.setText("" + q);
 			if (q == 1)
+			{
 				quantitaMinus.setEnabled(true);
+				aggiungi.setEnabled(true);
+			}
 		}
 		else if (v.getId() == R.id.minus) // RIMOUVI PANINO
 		{
 			int q = Integer.parseInt(quantita.getText().toString()) - 1;
 			quantita.setText("" + q);
 			if (q == 0)
-				quantitaMinus.setEnabled(false);		
+			{
+				quantitaMinus.setEnabled(false);
+				aggiungi.setEnabled(false);
+			}
 		}
 		else if (v.getId() == R.id.aggiungi)
 		{
@@ -118,8 +125,8 @@ public class SceltaPanino extends Base implements OnClickListener
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
 			ordinazione.aggiungiArticolo(nuovo);
-			quantita.setText("0");
-			labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));		
+			labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
+			aggiungi.setImageResource(R.drawable.refresh);
 		}
 	}
 		
@@ -133,11 +140,15 @@ public class SceltaPanino extends Base implements OnClickListener
 		{
 			aggiungi.setImageResource(R.drawable.refresh);
 			quantita.setText("" + ordinazione.getArticolo(corrente).getQuantita());
+			aggiungi.setEnabled(true);
+			quantitaMinus.setEnabled(true);
 		}
 		else
 		{
 			aggiungi.setImageResource(R.drawable.shopping_cart_add);
 			quantita.setText("0");
+			aggiungi.setEnabled(false);
+			quantitaMinus.setEnabled(false);
 		}
 		String app = corrente.getNome().toLowerCase();
 		int idImage = getResources().getIdentifier(app, "drawable", "it.qwerty.android");

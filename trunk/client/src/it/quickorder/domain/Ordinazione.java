@@ -63,9 +63,17 @@ public class Ordinazione implements Serializable
 	
 	public void aggiungiArticolo(Articolo a)
 	{
+		Articolo corrente = getArticolo(a.getProdotto());
+		if (corrente != null)
+		{
+			totale -= corrente.getSubTotale();
+			articoli.remove(corrente);
+			numeroProdotti -= corrente.getQuantita();
+		}
 		totale += a.getSubTotale();
 		numeroProdotti += a.getQuantita();	
 		articoli.add(a);
+
 	}
 	
 	public void rimuoviSingoloProdotto()
