@@ -24,6 +24,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 public class Riepilogo extends Base implements OnClickListener, OnItemSelectedListener
 {
 	private Button inviaOrdinazione;
+	private ImageButton cancella;
 	private Ordinazione ordinazione;
 	private ScrollView scroll;
 	private ArrayList<Articolo> listaArticoli;
@@ -50,20 +52,35 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		super.onResume();
 		scroll = (ScrollView) findViewById(R.id.riepilogoSroll);
 		scroll.removeAllViews();
-		creaTabella();
+		if (ordinazione.getArticoli().size()==0)
+		{
+			Log.i("dove","if");
+			vuoto();
+		}
+		else
+		{
+			Log.i("dove","else");
+			creaTabella();
+		}
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.riepilogo);
-		
+		setContentView(R.layout.riepilogo);	
 		scroll = (ScrollView) findViewById(R.id.riepilogoSroll);
-		ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione(); 
-		creaTabella();
+		ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
+		Log.i("ordinazione",Integer.toString(ordinazione.getArticoli().size()));
+		if (ordinazione.getArticoli().size()==0)
+		{		
+			vuoto();
+		}
+		else
+		{
+			creaTabella();
+		}
 	}
-
 	
 	@Override
 	public void onClick(View v) 
@@ -100,11 +117,44 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			}
 			
 		}
+		else //BOTTONE CANCELLA
+		{
+			int posizione = v.getId() - 200;
+			ArrayList<Articolo> listaArticoli = ordinazione.getArticoli();
+			Articolo a = listaArticoli.get(posizione);
+			double totale = ordinazione.getTotale();
+			double prezzoSingolo = a.getProdotto().getPrezzo();
+			double subTotale = a.getSubTotale();
+			int quantita = a.getQuantita();
+			Log.i("quantita", Integer.toString(quantita));
+			if (quantita == 1)
+			{
+				Log.i("rimouvi", "tutto");
+				ordinazione.rimuoviArticolo(a.getProdotto());
+			}	
+			else
+			{
+				Log.i("rimuovi","singolo");
+				ordinazione.getArticoli().get(posizione).setQuantita(quantita-1);
+				ordinazione.getArticoli().get(posizione).setSubTotale(subTotale - prezzoSingolo);
+				ordinazione.setTotale(totale-prezzoSingolo);
+				ordinazione.rimuoviSingoloProdotto();
+			}
+			if (ordinazione.getArticoli().size()==0)
+			{
+				vuoto();
+			}
+			else
+			{
+				creaTabella();
+			}
+		}
 		
 	}
 	
 	private void creaTabella()
 	{
+		scroll.removeAllViews();
 		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		tl = new TableLayout(this);
 		listaArticoli = ordinazione.getArticoli();
@@ -154,6 +204,11 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			text.setText(Double.toString(listaArticoli.get(i).getSubTotale())+"€");
 			//text.setLayoutParams(lp);
 			row.addView(text);
+			cancella = new ImageButton(this);
+			cancella.setImageResource(R.drawable.delete);
+			cancella.setOnClickListener(this);
+			cancella.setId(200+i);
+			row.addView(cancella);
 			tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		}
 		
@@ -203,6 +258,20 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,tavoli);
 		spinner.setAdapter(adapter);
 		
+	}
+	
+	private void vuoto()
+	{
+		scroll.removeAllViews();
+		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		tl = new TableLayout(this);
+		row = new TableRow(this);
+		row.setGravity(Gravity.CENTER_HORIZONTAL);
+		text = new TextView(this);
+		text.setText("Nessun prodotto selezionato");
+		row.addView(text);
+		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		scroll.addView(tl);
 	}
 
 	@Override
