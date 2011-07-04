@@ -40,10 +40,10 @@
         	<TableLayout android:id="@+id/sesso" android:layout_width="wrap_content" android:layout_height="wrap_content">
         			<TableLayout android:layout_height="match_parent" android:id="@+id/tableLayout1" android:layout_width="wrap_content" android:layout_gravity="center_horizontal">
         				<TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical|center_horizontal">
-        					<RadioGroup android:id="@+id/radioGroup1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="fill_horizontal|fill_vertical">
+        					
         					<RadioButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="Maschio" android:id="@+id/m" android:layout_marginRight="10px" android:checked="true"></RadioButton>
         					<RadioButton android:layout_width="wrap_content" android:text="Femmina" android:layout_height="wrap_content" android:layout_marginLeft="10px" android:id="@+id/f"></RadioButton>
-        					</RadioGroup>
+        					
         				</TableRow>
         				<TableRow android:id="@+id/tableRow2" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
         				<TableRow android:id="@+id/tableRow3" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
