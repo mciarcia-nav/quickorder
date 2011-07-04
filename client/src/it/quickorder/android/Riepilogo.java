@@ -3,9 +3,7 @@ package it.quickorder.android;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
 import it.quickorder.domain.Ordinazione;
-import it.qwerty.android.R;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;

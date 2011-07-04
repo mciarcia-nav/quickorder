@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.List;
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Prodotto;
-import it.qwerty.android.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

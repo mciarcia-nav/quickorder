@@ -2,7 +2,6 @@ package it.quickorder.android;
 
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
-import it.qwerty.android.R;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
