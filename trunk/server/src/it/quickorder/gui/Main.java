@@ -5,6 +5,9 @@ import it.quickorder.servers.OrdersServer;
 import it.quickorder.servers.SignupServer;
 import it.quickorder.servers.UpdateServer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 public class Main extends JFrame 
@@ -19,6 +22,7 @@ public class Main extends JFrame
 	private JDesktopPane jDesktopPane;
 	private JLabel sfondo;
 	private StackIFrame stackFrame;
+	private ClientiIFrame clientiFrame;
 	protected static Font plainFont, bigFont;
 	private static StackOrdinazioni stack;
 	private OrdersServer orderServer;
@@ -38,8 +42,10 @@ public class Main extends JFrame
 		orderServer = new OrdersServer(ORDERS_PORT, stack);
 		signupServer = new SignupServer(SIGNUP_PORT);
 		updateServer = new UpdateServer(UPD_PORT);
+		clientiFrame = new ClientiIFrame();
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		// Hai messo due volte setSize
 		setSize(screenSize);
 		setUndecorated(true);
 		setSize(screenSize);
@@ -59,6 +65,24 @@ public class Main extends JFrame
 		stackFrame = new StackIFrame(jDesktopPane, NUMERO_PANNELLI);
 		
 		setContentPane(jContentPane);
+		JButton gestioneClientiButton = new JButton("Gestione Clienti");
+		gestioneClientiButton.setSize(180, 70);
+		gestioneClientiButton.addActionListener(new ActionListener() 
+		{			
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				if(!clientiFrame.isVisible())
+				{
+					clientiFrame.setVisible(true);
+					clientiFrame.moveToFront();
+				}
+			}
+		});
+
+		jDesktopPane.add(clientiFrame);
+		jContentPane.add(gestioneClientiButton, BorderLayout.SOUTH);
+				
 	}
 	
 	public void avviaServer()
