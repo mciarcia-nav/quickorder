@@ -1,15 +1,10 @@
 package it.quickorder.android;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
-import it.qwerty.android.R;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;

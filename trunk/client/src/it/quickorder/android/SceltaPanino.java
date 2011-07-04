@@ -3,7 +3,6 @@ package it.quickorder.android;
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
-import it.qwerty.android.R;
 import java.util.List;
 import android.os.Bundle;
 import android.util.Log;

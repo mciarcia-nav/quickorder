@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.Random;
 import it.quickorder.domain.Cliente;
 import it.quickorder.helpers.ControlloDati;
-import it.qwerty.android.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

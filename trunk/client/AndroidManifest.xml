@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="it.qwerty.android"
+      package="it.quickorder.android"
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="3" />
@@ -11,17 +11,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
  
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name="it.quickorder.android.SplashScreen" android:label="@string/app_name">
+        <activity android:name="SplashScreen" android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
-        <activity android:name="it.quickorder.android.SceltaPanino" android:label="@string/app_name"/>
-		<activity android:name="it.quickorder.android.Registrazione" android:label="@string/app_name"/>
-		<activity android:name="it.quickorder.android.NuovaOrdinazione" android:label="@string/app_name"/>
-		<activity android:name="it.quickorder.android.SceltaBibita" android:label="@string/app_name"/>
-		<activity android:name="it.quickorder.android.Riepilogo" android:label="@string/app_name"/>
+        <activity android:name="SceltaPanino" android:label="@string/app_name"/>
+		<activity android:name="Registrazione" android:label="@string/app_name"/>
+		<activity android:name="NuovaOrdinazione" android:label="@string/app_name"/>
+		<activity android:name="SceltaBibita" android:label="@string/app_name"/>
+		<activity android:name="Riepilogo" android:label="@string/app_name"/>
     </application>
 </manifest>
