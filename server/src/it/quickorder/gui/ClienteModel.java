@@ -9,10 +9,14 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.hibernate.type.descriptor.sql.BitTypeDescriptor;
+
+import antlr.collections.impl.BitSet;
+
 public class ClienteModel extends AbstractTableModel 
 {
-	private static final String[] headers = {"Codice Fiscale", "Indirizzo e-mail", "Nome", "Cognome", "Sesso", "Data di Nascita", "Luogo di nascita", "IMEI"};
-	private static final Class[] columnClasses = { String.class, String.class, String.class, String.class, Character.class, Date.class, String.class, String.class};
+	private static final String[] headers = {"Codice Fiscale", "Indirizzo e-mail", "Nome", "Cognome", "Sesso", "Data di Nascita", "Luogo di nascita", "IMEI", "Stato Abilitazione"};
+	private static final Class[] columnClasses = { String.class, String.class, String.class, String.class, Character.class, Date.class, String.class, String.class, BitTypeDescriptor.class};
 	private ArrayList<Object[]> data;
 	
 	public ClienteModel()
@@ -66,6 +70,10 @@ public class ClienteModel extends AbstractTableModel
         	aRow[5] = c.getDataNascita();
         	aRow[6] = c.getLuogoNascita();
         	aRow[7] = c.getIMEI();
+        	if(c.isAbilitato())
+        		aRow[8] = "ABILITATO";
+        	else
+        		aRow[8] = "NON ABILITATO";
         	
         	data.add(aRow);
         }
