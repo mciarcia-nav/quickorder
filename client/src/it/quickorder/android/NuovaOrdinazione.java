@@ -5,7 +5,6 @@ import it.quickorder.domain.Ordinazione;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -25,7 +24,6 @@ public class NuovaOrdinazione extends TabActivity
 		
 		setContentView(R.layout.ordinazione);
 		TabHost tabhost = getTabHost();
-		Log.i("dopo tab", "si");
 		TabSpec sceltaPanino = tabhost.newTabSpec("panino");
 		TabSpec sceltaBibita = tabhost.newTabSpec("bibita");
 		TabSpec riepilogo = tabhost.newTabSpec("riepilogo");
