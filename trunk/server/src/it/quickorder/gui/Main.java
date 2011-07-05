@@ -28,7 +28,9 @@ public class Main extends JFrame
 	private OrdersServer orderServer;
 	private SignupServer signupServer;
 	private UpdateServer updateServer;
-	
+	private JInternalFrame notificaRegistrazione;
+	private JInternalFrame gestioneClienti;
+	private JButton btnGestioneClienti, btnNotificheRegistrazione;
 	{
 		inizializzaFonts();
 	}
@@ -62,12 +64,46 @@ public class Main extends JFrame
 		jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane, NUMERO_PANNELLI));
 		jDesktopPane.add(sfondo, Integer.MIN_VALUE);
 		jContentPane.add(jDesktopPane);
+		
 		stackFrame = new StackIFrame(jDesktopPane, NUMERO_PANNELLI);
+
+		
+		notificaRegistrazione = new TransparentJInternalFrame();
+		
+		btnNotificheRegistrazione = new NotificaButton(8);
+		btnNotificheRegistrazione.setText("Richieste di Registrazione");
+		btnNotificheRegistrazione.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "notifica32.png")));
+		btnNotificheRegistrazione.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNotificheRegistrazione.setBackground(Color.WHITE);
+		btnNotificheRegistrazione.addActionListener(new  ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				((NotificaButton) e.getSource()).aggiungiNotifica();
+				
+			}
+		});
+		notificaRegistrazione.add(btnNotificheRegistrazione);
+		notificaRegistrazione.pack();
+		jDesktopPane.add(notificaRegistrazione);
+		notificaRegistrazione.setVisible(true);
+		
+		gestioneClienti = new TransparentJInternalFrame();
+		
+		btnGestioneClienti = new JButton("Gestione Clienti");
+		btnGestioneClienti.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers.png")));
+		btnGestioneClienti.setBackground(Color.WHITE);
+		btnGestioneClienti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		gestioneClienti.add(btnGestioneClienti);
+		gestioneClienti.pack();
+		
+		jDesktopPane.add(gestioneClienti);
+		gestioneClienti.setVisible(true);
 		
 		setContentPane(jContentPane);
-		JButton gestioneClientiButton = new JButton("Gestione Clienti");
-		gestioneClientiButton.setSize(180, 70);
-		gestioneClientiButton.addActionListener(new ActionListener() 
+
+		btnGestioneClienti.addActionListener(new ActionListener() 
 		{			
 			@Override
 			public void actionPerformed(ActionEvent e) 
@@ -81,7 +117,6 @@ public class Main extends JFrame
 		});
 
 		jDesktopPane.add(clientiFrame);
-		jContentPane.add(gestioneClientiButton, BorderLayout.SOUTH);
 				
 	}
 	
@@ -139,12 +174,12 @@ public class Main extends JFrame
 	
 	public void setVisible(boolean bool)
 	{
-		super.setVisible(true);
-		
+		super.setVisible(true);	
 		jDesktopPane.add(stackFrame, Integer.MAX_VALUE);
 		stack.aggiungiListener(stackFrame);
 		stackFrame.costruisciInterfaccia();
 		stackFrame.setVisible(true);
+		posizionaFrames();
 		
 	}
 	
@@ -156,11 +191,12 @@ public class Main extends JFrame
 	
 	public static void main(String[] args)
 	{
+		/*
 		try 
 		{
 			
 			//String classe = "javax.swing.plaf.mac.MacLookAndFeel"; //MAC
-			String classe = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel"; //WIN
+			//String classe = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel"; //WIN
 			//String classe = "com.sun.java.swing.plaf.motif.MotifLookAndFeel"; //MOTIF
 			UIManager.setLookAndFeel(classe);
 			
@@ -168,7 +204,7 @@ public class Main extends JFrame
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		} */
 		
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -181,5 +217,29 @@ public class Main extends JFrame
 		});
 	}
 	
+	private void posizionaFrames()
+	{
+		Dimension size1, size2, max;
+		size1 = btnGestioneClienti.getSize();
+		size2 = btnNotificheRegistrazione.getSize();
+		max = new Dimension(Math.max(size1.width, size2.width + 10), Math.max(size2.height,size1.height));
+		btnGestioneClienti.setPreferredSize(max);
+		btnNotificheRegistrazione.setPreferredSize(max);
+		gestioneClienti.pack();
+		notificaRegistrazione.pack();
+		
+		Point stackLoc = stackFrame.getLocation();
+		Point gestioneClientiLoc = new Point();
+		gestioneClientiLoc.x = 30;
+		int space = jDesktopPane.getHeight() - stackLoc.y - stackFrame.getHeight() - gestioneClienti.getHeight();
+		gestioneClientiLoc.y = stackLoc.y + stackFrame.getHeight() + (int) space/2;
+		gestioneClienti.setLocation(gestioneClientiLoc);
+		Point notificheLoc = new Point();
+		notificheLoc.x = 30 + gestioneClienti.getWidth() + 20;
+		notificheLoc.y = gestioneClientiLoc.y;
+		notificaRegistrazione.setLocation(notificheLoc);
+		
+		
+	}
 	
 }
