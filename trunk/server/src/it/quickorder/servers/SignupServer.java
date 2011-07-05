@@ -1,28 +1,24 @@
 package it.quickorder.servers;
 
-import it.quickorder.domain.Cliente;
-import it.quickorder.helpers.HibernateUtil;
+import it.quickorder.control.CodaNotifiche;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
-import org.hibernate.exception.ConstraintViolationException;
-
 public class SignupServer implements Runnable 
 {
 	private ServerSocket srvSocket;
 	private int port;
 	private SimpleDateFormat formato;
+	private CodaNotifiche coda;
 	
-	public SignupServer(int port)
+	public SignupServer(int port, CodaNotifiche coda)
 	{
 		this.port = port;
 		formato = new SimpleDateFormat("hh:mm.ss");
+		this.coda = coda;
 	}
 	
 	
@@ -45,7 +41,7 @@ public class SignupServer implements Runnable
 				socketClient = srvSocket.accept();
 				Date corrente = new Date(System.currentTimeMillis());
 				System.out.println("[" + formato.format(corrente) + "] - Richiesta di registrazione da client: " + socketClient.getInetAddress().getHostAddress());
-				Runnable runnable = new RegRequestThreadHandler(socketClient);
+				Runnable runnable = new RegRequestThreadHandler(socketClient, coda);
 				Thread nuovoThread = new Thread(runnable);
 				nuovoThread.start();
 			} catch (IOException e) 
@@ -57,63 +53,3 @@ public class SignupServer implements Runnable
 	}
 
 }
-class RegRequestThreadHandler implements Runnable
-{
-	private Socket socket;
-	
-	public RegRequestThreadHandler(Socket socket)
-	{
-		this.socket = socket;
-	}
-
-	@Override
-	public void run() 
-	{
-		try
-		{
-			try
-			{
-				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-				
-				// Ricevo il bean del nuovo cliente da registrare.
-				Cliente nuovoCliente = (Cliente) input.readObject();
-				Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-				String result;
-				try
-				{
-					Transaction t = session.beginTransaction();
-					session.save(nuovoCliente);
-					t.commit();
-					result = "OK";
-				}
-				catch (ConstraintViolationException ex)
-				{
-					result = "DUP_EMAIL";
-					
-				}
-				catch (HibernateException ex2)
-				{
-					result = "FAILED";
-				}
-				// Invio l'esito dell'operazione al client.
-				output.writeObject(result);
-				output.flush();	
-				
-			}
-			finally
-			{
-				socket.close();
-			}
-		}
-		catch (IOException ex)
-		{
-			ex.printStackTrace();
-		}
-		catch (ClassNotFoundException ex2)
-		{
-			ex2.printStackTrace();
-		}
-	}
-}
-
