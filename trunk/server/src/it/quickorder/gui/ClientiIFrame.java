@@ -15,10 +15,12 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
@@ -49,6 +51,10 @@ public class ClientiIFrame extends JInternalFrame
 		clienti.setRowHeight(32);
 		clienti.setAutoCreateColumnsFromModel(true);
 		
+		// Impostazione dei Renderer
+		clienti.setDefaultRenderer(Object.class, new ClienteCellRenderer());
+		clienti.setDefaultRenderer(Character.class, new SessoTableCellRenderer());
+		clienti.setDefaultRenderer(Boolean.class, new AbilitazioneTableCellRenderer());
 		//Selezione della riga e non della singola cella
 		clienti.setColumnSelectionAllowed(false);
 		clienti.setRowSelectionAllowed(true);
@@ -56,7 +62,6 @@ public class ClientiIFrame extends JInternalFrame
 		clienti.setSelectionBackground(Color.white);
 		clienti.setAutoscrolls(true);
 		clienti.setShowVerticalLines(false);
-		clienti.setDefaultRenderer(Object.class, new ClienteCellRenderer());
         jContentPane.add(clienti.getTableHeader(), BorderLayout.NORTH);
 		jContentPane.add(clienti, BorderLayout.CENTER);
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -87,8 +92,9 @@ class ClienteCellRenderer extends DefaultTableCellRenderer
 { 
 	public Component getTableCellRendererComponent(JTable table,Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{ 
-		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
-		setHorizontalAlignment(CENTER);
-		return this;
+		Component pComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); 
+		if (pComponent instanceof JLabel)
+			((JLabel) pComponent).setHorizontalAlignment(SwingConstants.CENTER);
+		return pComponent;
 	} 
 }
