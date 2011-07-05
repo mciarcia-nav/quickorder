@@ -1,17 +1,29 @@
 package it.quickorder.gui;
 
+import it.quickorder.control.NotificheListener;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+import it.quickorder.domain.Notifica;
 
 @SuppressWarnings("serial")
-public class NotificaButton extends JButton 
+public class NotificaButton extends JButton implements NotificheListener, ActionListener
 {
-	int numeroNotifiche, raggio;
+	private int numeroNotifiche, raggio;
+	private java.util.List<Notifica> notifiche;
+	private JDesktopPane desktop;
+	private NotificheIFrame notificheFrame;
 	
-	public NotificaButton(int raggio)
+	public NotificaButton(JDesktopPane desktop, int raggio)
 	{
 		numeroNotifiche = 0;
 		this.raggio = raggio;
+		this.desktop = desktop;
+		notifiche = new ArrayList<Notifica>();
+		notificheFrame = null;
+		addActionListener(this);
 	}
 	
 	@Override
@@ -42,10 +54,59 @@ public class NotificaButton extends JButton
 			gg.drawString("" + numeroNotifiche, oval.x + 3,  oval.y + oval.height - 2);
 		
 	}
-	
-	public void aggiungiNotifica()
+
+	@Override
+	public void notificaRicevuta(Event event) 
 	{
-		numeroNotifiche++;
+		synchronized (notifiche) 
+		{
+			numeroNotifiche++;
+			notifiche.add((Notifica) event.arg);
+		}
+		repaint();
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) 
+	{
+		if (notificheFrame != null)
+		{
+			desktop.getDesktopManager().closeFrame(notificheFrame);
+			notificheFrame.dispose();
+			notificheFrame = null;
+			return;
+		}
+		synchronized (notifiche)
+		{
+			if (numeroNotifiche > 0)
+			{
+				NotificheIFrame nuovo = new NotificheIFrame(notifiche);
+				desktop.add(nuovo, Integer.MAX_VALUE);
+				nuovo.addNotificheListener(this);
+				nuovo.setVisible(true);
+				Dimension size = nuovo.getSize();
+				Dimension sizeButton = getSize();
+				Point location = getLocationOnScreen();
+				Point p = new Point();
+				p.x = location.x + (int) (sizeButton.width / 2) - (int)(size.width / 2);
+				p.y = location.y - 20 - size.height;	
+				nuovo.setLocation(p);
+				notificheFrame = nuovo;
+			}
+		}
+	}
+
+	@Override
+	public void notificaGestita(Event event) 
+	{
+		synchronized (notifiche) 
+		{
+			notifiche.remove((Notifica)event.arg);
+			numeroNotifiche--;
+			if (event.id == -1)
+				notificheFrame = null;
+		}
 		repaint();
 	}
 }

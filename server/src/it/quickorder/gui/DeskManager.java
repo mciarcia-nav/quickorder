@@ -29,6 +29,13 @@ public class DeskManager extends DefaultDesktopManager
 		ordinazioni = new HashMap<Integer, OrdinazioneIFrame>(ordinazioniMassime);
 	}
 	
+	@Override
+	public void closeFrame(JInternalFrame f) 
+	{
+		super.closeFrame(f);
+		jDesktop.repaint();
+	}
+
 	public void dragFrame(JComponent pComponent, int pX, int pY)
 	{
 		if (!(pComponent instanceof JInternalFrame))
@@ -88,7 +95,7 @@ public class DeskManager extends DefaultDesktopManager
 		{
 			OrdinazioneIFrame o = new OrdinazioneIFrame(ordinazione);
 			ordinazioni.put(id, o);
-			jDesktop.add(o, Integer.MAX_VALUE);
+			jDesktop.add(o, Integer.MAX_VALUE - 1);
 			o.setSize(frameSize);
 			o.setLocation(frameLoc);
 			o.setVisible(true);

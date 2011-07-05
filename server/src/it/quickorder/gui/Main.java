@@ -1,5 +1,6 @@
 package it.quickorder.gui;
 
+import it.quickorder.control.CodaNotifiche;
 import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.servers.OrdersServer;
 import it.quickorder.servers.SignupServer;
@@ -15,7 +16,7 @@ public class Main extends JFrame
 	private static final long serialVersionUID = -571519118389440334L;
 
 	// Percorso per le immagini
-	public static String URL_IMAGES = "/it/quickorder/images/";
+	public static String URL_IMAGES = "/it/quickorder/gui/images/";
 	private static final int NUMERO_PANNELLI = 10;
 	protected Dimension SIZE;
 	private JPanel jContentPane;
@@ -25,12 +26,14 @@ public class Main extends JFrame
 	private ClientiIFrame clientiFrame;
 	protected static Font plainFont, bigFont;
 	private static StackOrdinazioni stack;
+	private static CodaNotifiche codaNotifiche;
 	private OrdersServer orderServer;
 	private SignupServer signupServer;
 	private UpdateServer updateServer;
 	private JInternalFrame notificaRegistrazione;
 	private JInternalFrame gestioneClienti;
-	private JButton btnGestioneClienti, btnNotificheRegistrazione;
+	private JButton btnGestioneClienti;
+	private NotificaButton btnNotificheRegistrazione;
 	{
 		inizializzaFonts();
 	}
@@ -41,8 +44,9 @@ public class Main extends JFrame
 		super("QuickOrder");
 		
 		stack = new StackOrdinazioni();
+		codaNotifiche = new CodaNotifiche();
 		orderServer = new OrdersServer(ORDERS_PORT, stack);
-		signupServer = new SignupServer(SIGNUP_PORT);
+		signupServer = new SignupServer(SIGNUP_PORT, codaNotifiche);
 		updateServer = new UpdateServer(UPD_PORT);
 		clientiFrame = new ClientiIFrame();
 		
@@ -70,23 +74,15 @@ public class Main extends JFrame
 		
 		notificaRegistrazione = new TransparentJInternalFrame();
 		
-		btnNotificheRegistrazione = new NotificaButton(8);
+		btnNotificheRegistrazione = new NotificaButton(jDesktopPane,8);
 		btnNotificheRegistrazione.setText("Richieste di Registrazione");
 		btnNotificheRegistrazione.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "notifica32.png")));
 		btnNotificheRegistrazione.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNotificheRegistrazione.setBackground(Color.WHITE);
-		btnNotificheRegistrazione.addActionListener(new  ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				((NotificaButton) e.getSource()).aggiungiNotifica();
-				
-			}
-		});
+		codaNotifiche.aggiungiListener(btnNotificheRegistrazione);
 		notificaRegistrazione.add(btnNotificheRegistrazione);
 		notificaRegistrazione.pack();
-		jDesktopPane.add(notificaRegistrazione);
+		jDesktopPane.add(notificaRegistrazione, Integer.MAX_VALUE - 1);
 		notificaRegistrazione.setVisible(true);
 		
 		gestioneClienti = new TransparentJInternalFrame();
@@ -98,7 +94,7 @@ public class Main extends JFrame
 		gestioneClienti.add(btnGestioneClienti);
 		gestioneClienti.pack();
 		
-		jDesktopPane.add(gestioneClienti);
+		jDesktopPane.add(gestioneClienti, Integer.MAX_VALUE - 1);
 		gestioneClienti.setVisible(true);
 		
 		setContentPane(jContentPane);
@@ -175,7 +171,7 @@ public class Main extends JFrame
 	public void setVisible(boolean bool)
 	{
 		super.setVisible(true);	
-		jDesktopPane.add(stackFrame, Integer.MAX_VALUE);
+		jDesktopPane.add(stackFrame, Integer.MAX_VALUE - 1);
 		stack.aggiungiListener(stackFrame);
 		stackFrame.costruisciInterfaccia();
 		stackFrame.setVisible(true);
