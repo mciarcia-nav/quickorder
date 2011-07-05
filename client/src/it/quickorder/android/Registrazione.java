@@ -9,12 +9,12 @@ import java.util.Random;
 import it.quickorder.domain.Cliente;
 import it.quickorder.helpers.ControlloDati;
 import android.app.AlertDialog;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,9 +24,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-public class Registrazione extends Base implements OnClickListener
+public class Registrazione extends Base implements OnClickListener, Runnable
 {
-	private String imei;
 	private EditText nomeForm;
 	private EditText cognomeForm;
 	private EditText luogoForm;
@@ -36,7 +35,8 @@ public class Registrazione extends Base implements OnClickListener
 	private RadioButton sessoFormF;
 	private DatePicker dataForm;
 	private Button registra;
-	
+	private Cliente nuovoCliente;
+	private ProgressDialog progress;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -55,9 +55,8 @@ public class Registrazione extends Base implements OnClickListener
        registra.setOnClickListener(this);
        sessoFormM.setOnClickListener(this);
        sessoFormF.setOnClickListener(this);
-       TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+       //TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
        //imei = telephonyManager.getDeviceId();
-       imei = this.randomImei();
        /*if (imei.equals(null))
        {
     	   imei = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
@@ -67,7 +66,7 @@ public class Registrazione extends Base implements OnClickListener
 	@Override
 	public void onClick(View v)
 	{
-		final Cliente nuovoCliente = creaBeanCliente();
+		nuovoCliente = creaBeanCliente();
 		boolean[] check = ControlloDati.checkBeanCliente(nuovoCliente);
 		if (v.getId() == sessoFormM.getId())
 		{	
@@ -92,54 +91,10 @@ public class Registrazione extends Base implements OnClickListener
 					@Override
 					public void onClick(DialogInterface dialog, int which) 
 					{
-						Socket socket = null;
-						String response = null;
-						try
-						{
-							socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
-							ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-							ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-							output.writeObject(nuovoCliente);
-							output.flush();
-							response = (String) input.readObject();
-						}
-						catch (Exception ex)
-						{
-							ex.printStackTrace();
-							Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
-							t.show();
-						}
-						finally
-						{
-							if (socket != null)
-								try 
-								{
-									socket.close();
-								} catch (IOException e) 
-								{
-									e.printStackTrace();
-								}
-						}
+						progress = ProgressDialog.show(Registrazione.this, "", "Invio dei dati al server in corso..",true,true);
+						progress.show();
 						
-						if (response.equalsIgnoreCase("DUP_EMAIL"))
-						{
-							Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata è stata registrata nel database.", Toast.LENGTH_SHORT);
-							t.show();
-							return;
-						}
-						else if (response.equalsIgnoreCase("FAILED"))
-						{
-							Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
-							t.show();
-							return;
-						}
-						
-						dbAdapter.registraCliente(nuovoCliente);
-						
-						Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
-						t.show();
-						main(nuovoCliente);
-			        	finish();
+						new Thread(Registrazione.this).start();
 			        }
 				});
 				alert.setButton2("Annulla", new DialogInterface.OnClickListener()
@@ -209,13 +164,117 @@ public class Registrazione extends Base implements OnClickListener
 	
 	private String randomImei()
 	{
-		Random rand=new Random();
+		Random rand = new Random(System.currentTimeMillis());
 		String res="";
-		for (int i=0; i<17;i++)
+		for (int i=1; i<=18;i++)
 		{
-			res += String.valueOf(rand.nextInt(9));	
+			if (i == 7 || i == 10 || i == 17)
+				res += "-";
+			else
+				res += "" + rand.nextInt(9);	
 		}
 			
 		return res;
+	}
+	
+	private Handler handler = new Handler() 
+	{
+        @Override
+        public void handleMessage(Message msg) 
+        {
+                String message = (String) msg.obj;
+                if (message.equalsIgnoreCase("DUP_EMAIL"))
+				{
+                	progress.dismiss();
+					Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata è stata registrata nel database.", Toast.LENGTH_SHORT);
+					t.show();
+					return;
+				}
+                else if (message.equalsIgnoreCase("DUP_CF"))
+				{
+                	progress.dismiss();
+					Toast t = Toast.makeText(getApplicationContext(), "Un utente col medesimo codice fiscale è già registrato al sistema.", Toast.LENGTH_SHORT);
+					t.show();
+					return;
+				}
+				else if (message.equalsIgnoreCase("FAILED"))
+				{
+					progress.dismiss();
+					Toast t = Toast.makeText(getApplicationContext(), "Errore nel completamento della registrazione.", Toast.LENGTH_SHORT);
+					t.show();
+					return;
+				}
+				else if (message.equalsIgnoreCase("OK"))
+				{
+					progress.setMessage("In attesa dell'abilitazione...");
+				}
+				else if (message.equalsIgnoreCase("ABILITATO"))
+				{
+					//dbAdapter.registraCliente(nuovoCliente);
+					progress.dismiss();
+					Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
+					t.show();
+					main(nuovoCliente);
+		        	finish();
+				}
+				else if (message.equalsIgnoreCase("DISABILITATO"))
+				{
+					progress.dismiss();
+					Toast t = Toast.makeText(getApplicationContext(), "Il cliente non è stato abilitato. Correggere i dati o parlare col cassiere.", Toast.LENGTH_SHORT);
+					t.show();
+					return;
+				}
+        }
+};
+
+
+	@Override
+	public void run() 
+	{
+		Socket socket = null;
+		String response = null;
+		try
+		{
+			socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
+			ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+			output.writeObject(nuovoCliente);
+			output.flush();
+			response = (String) input.readObject();
+			Message msg = handler.obtainMessage();
+			msg.obj = response;
+			handler.sendMessage(msg);
+			if (!response.equalsIgnoreCase("OK"))
+				return;
+			Thread.sleep(10000);
+			int abilitazione = input.readInt();
+			msg = handler.obtainMessage();
+			if (abilitazione == 0)
+			{
+				msg.obj = new String("DISABILITATO");
+			}
+			else if (abilitazione == 1)
+			{
+				msg.obj = new String("ABILITATO");
+			}
+			Thread.sleep(1000);
+			handler.sendMessage(msg);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			if (socket != null)
+				try 
+				{
+					socket.close();
+				} catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
+		}
+		
 	}
 }
