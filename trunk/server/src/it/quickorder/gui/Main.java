@@ -64,10 +64,12 @@ public class Main extends JFrame
 		sfondo = new JLabel();
 		setBackgroundImage();
 		jDesktopPane = new JDesktopPane();		
+		jDesktopPane.setBackground(new Color(165,18,64));
 		jDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 		jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane, NUMERO_PANNELLI));
 		jDesktopPane.add(sfondo, Integer.MIN_VALUE);
 		jContentPane.add(jDesktopPane);
+		
 		
 		stackFrame = new StackIFrame(jDesktopPane, NUMERO_PANNELLI);
 
@@ -151,12 +153,12 @@ public class Main extends JFrame
 
 	private void setBackgroundImage()
 	{
-		ImageIcon nuova = new ImageIcon(getClass().getResource(URL_IMAGES + "sfondo.png"));
+		ImageIcon nuova = new ImageIcon(getClass().getResource(URL_IMAGES + "logo.png"));
 		sfondo.setIcon(nuova);
 		sfondo.setSize(nuova.getIconWidth(), nuova.getIconHeight());
 		if (jDesktopPane == null)
 		{
-			sfondo.setLocation(0, 0);
+			sfondo.setLocation(100, 100);
 		}
 		else
 		{
