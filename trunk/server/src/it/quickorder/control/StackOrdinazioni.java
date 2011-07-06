@@ -33,20 +33,24 @@ public class StackOrdinazioni
 	
 	public synchronized void rimuoviOrdinazione(Ordinazione ord)
 	{
+		boolean trovato = false;
 		synchronized (ordinazioni) 
 		{
 			Iterator<Ordinazione> oo = ordinazioni.iterator();
-			boolean trovato = false;
-			Ordinazione o = null;
 			while (!trovato && oo.hasNext())
 			{
-				o = oo.next();
+				Ordinazione o = oo.next();
 				if (o.equals(ord))
+				{
 					trovato = true;
+				}
 			}
-			if (o != null)
-				ordinazioni.remove(o);
+			if (trovato)
+				ordinazioni.remove(ord);
 		}
+		if (trovato)
+			for (OrdinazioniListener l : listeners)
+				l.ordinazioneRimossa(new Event(null, 0, ord));
 	}
 	
 	public void aggiungiListener(OrdinazioniListener listener)

@@ -1,5 +1,6 @@
-package it.quickorder.gui;
+package it.quickorder.gui.table;
 
+import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 
@@ -10,10 +11,12 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 
+@SuppressWarnings("serial")
 public class OrdinazioneModel extends AbstractTableModel
 {
-	private static final String[] headers = { "Prodotto", "Quantità", "Prezzo","Subtotale"};
-	private static final Class[] columnClasses = { String.class, Integer.class, Double.class,Double.class};
+	private static final String[] headers = { "Prodotto", "Tipologia","Prezzo","Quantità","Subtotale", "Note"};
+	@SuppressWarnings("rawtypes")
+	private static final Class[] columnClasses = { String.class, Integer.class, Double.class, Integer.class,Double.class, String.class};
 	private ArrayList<Object[]> data;
 	
 	public OrdinazioneModel()
@@ -44,6 +47,12 @@ public class OrdinazioneModel extends AbstractTableModel
 		return headers[pColumn];
 	}
 	
+	@Override
+	public Class<?> getColumnClass(int columnIndex) 
+	{
+		return columnClasses[columnIndex];
+	}
+	
 	public boolean isCellEditable(int pRow, int pColumn)
 	{
 		return false;
@@ -60,18 +69,19 @@ public class OrdinazioneModel extends AbstractTableModel
 		{
 			throw new IllegalArgumentException("Il bean fornito non può essere null!");
 		}
-	/*	Iterator<Prodotto> pp = ord.getProdotti().iterator();
-		while(pp.hasNext())
+		Iterator<Articolo> aa = ord.getArticoli().iterator();
+		while (aa.hasNext())
 		{
-			Prodotto p = pp.next();
+			Articolo a = aa.next();
 			Object[] aRow = new Object[headers.length];
-			aRow[0] = p.getNome();
-			aRow[1] = p.getQuantita();
-			aRow[2] = p.getPrezzo();
-			aRow[3] = p.getSubtotale();
+			aRow[0] = a.getProdotto().getNome();
+			aRow[1] = a.getProdotto().getTipologia();
+			aRow[2] = a.getProdotto().getPrezzo();
+			aRow[3] = a.getQuantita();
+			aRow[4] = a.getSubTotale();
+			aRow[5] = a.getNote();
 			data.add(aRow);
-		}*/
-		
+		}
 	}
 	
 }

@@ -1,6 +1,10 @@
 package it.quickorder.gui;
 
 import it.quickorder.domain.Cliente;
+import it.quickorder.gui.table.AbilitazioneTableCellRenderer;
+import it.quickorder.gui.table.ClienteModel;
+import it.quickorder.gui.table.ScrollableTable;
+import it.quickorder.gui.table.SessoTableCellRenderer;
 import it.quickorder.helpers.HibernateUtil;
 
 import java.awt.BorderLayout;

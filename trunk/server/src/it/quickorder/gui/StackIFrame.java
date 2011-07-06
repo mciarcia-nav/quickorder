@@ -22,14 +22,14 @@ public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 	private ArrayList<StackPanel> pannelli;
 	public static Color verde_scuro = new Color(51,153,102);
 	public static Color giallo_scuro = new Color(255,204,51);
-	private JPanel contentPane;
-	
-	
+	private JPanel contentPane;	
 	private JDesktopPane desktop;
 	private int dimY, numeroPannelli;
 	
 	public StackIFrame(JDesktopPane desktop, int numeroPannelli)
 	{
+		setTitle("Ordinazioni");
+		setFrameIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "ordinazione24.png")));
 		this.desktop = desktop;
 		this.numeroPannelli = numeroPannelli;
 		pannelli = new ArrayList<StackPanel>(numeroPannelli);
@@ -175,5 +175,24 @@ public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 				return;
 			}
 		}	
+	}
+
+	@Override
+	public void ordinazioneRimossa(Event event) 
+	{
+		Ordinazione rimossa = (Ordinazione) event.arg;
+		for (int index = 0; index < pannelli.size(); index++)
+		{
+			StackPanel corrente = pannelli.get(index);
+			if (corrente.hasOrdinazione() && corrente.getOrdinazione().equals(rimossa))
+			{
+				contentPane.remove(corrente);
+				contentPane.add(corrente);
+				contentPane.doLayout();
+				corrente.rimuoviOrdinazione();
+				return;
+			}
+		}	
+		
 	}
 }

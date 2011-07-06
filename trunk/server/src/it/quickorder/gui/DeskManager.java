@@ -1,9 +1,11 @@
 package it.quickorder.gui;
 
+import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.domain.Ordinazione;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.beans.PropertyVetoException;
 import java.util.HashMap;
 
 import javax.swing.DefaultDesktopManager;
@@ -15,18 +17,44 @@ public class DeskManager extends DefaultDesktopManager
 {
 	private static final long serialVersionUID = 6182103251037333895L;
 	private JDesktopPane jDesktop;
-	private JInternalFrame attivo;
 	private int ordinazioniAttive, ordinazioniMassime;
 	private HashMap<Integer, OrdinazioneIFrame> ordinazioni;
-	
+	private StackOrdinazioni stackOrdinazioni;
 	private static final int SCOSTAMENTO_ORIZZONTALE = 15, SCOSTAMENTO_VERTICALE = 30;
 	
-	public DeskManager(JDesktopPane jDesktop, int numeroOrdinazioni)
+	public DeskManager(JDesktopPane jDesktop, StackOrdinazioni stack,int numeroOrdinazioni)
 	{
+		this.stackOrdinazioni = stack;
 		this.jDesktop = jDesktop;
 		ordinazioniAttive = 0;
 		ordinazioniMassime = numeroOrdinazioni;
 		ordinazioni = new HashMap<Integer, OrdinazioneIFrame>(ordinazioniMassime);
+	}
+	
+	public void activateFrame(JInternalFrame frame)
+	{
+		try
+		{
+			if (frame.isIcon())
+			{
+				frame.setIcon(false);
+			}
+			frame.setSelected(true);
+			frame.setVisible(true);
+			super.activateFrame(frame);
+		}
+		catch (PropertyVetoException e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+	
+	@Override
+	public void iconifyFrame(JInternalFrame f) 
+	{
+		jDesktop.remove(f);
+
 	}
 	
 	@Override
@@ -88,17 +116,25 @@ public class DeskManager extends DefaultDesktopManager
 		{
 			
 			OrdinazioneIFrame nuova = ordinazioni.get(id);
-			deiconifyFrame(nuova);
+			jDesktop.add(nuova, Integer.MAX_VALUE - 1);
 			activateFrame(nuova);
+			System.out.println("ECCOMI");
 		}
 		else
 		{
-			OrdinazioneIFrame o = new OrdinazioneIFrame(ordinazione);
+			OrdinazioneIFrame o = new OrdinazioneIFrame(stackOrdinazioni, ordinazione);
 			ordinazioni.put(id, o);
+			o.setDesktop(jDesktop);
 			jDesktop.add(o, Integer.MAX_VALUE - 1);
 			o.setSize(frameSize);
 			o.setLocation(frameLoc);
 			o.setVisible(true);
 		}
+	}
+	
+	public void rimuoviOrdinazione(Ordinazione ordinazione)
+	{
+		if (ordinazioni.containsKey(ordinazione.getId()))
+			ordinazioni.remove(ordinazione.getId());
 	}
 }

@@ -1,4 +1,4 @@
-package it.quickorder.gui;
+package it.quickorder.gui.table;
 
 import it.quickorder.domain.Cliente;
 
