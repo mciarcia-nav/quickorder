@@ -13,29 +13,19 @@ import java.util.Date;
 public class OrdersServer implements Runnable 
 {
 	private ServerSocket srvSocket;
-	private int port;
 	private SimpleDateFormat formato;
 	private StackOrdinazioni stack;
 		
-	public OrdersServer(int port, StackOrdinazioni stack) 
+	public OrdersServer(int port, StackOrdinazioni stack) throws IOException 
 	{
 		this.stack = stack;
-		this.port = port;
 		formato = new SimpleDateFormat("hh:mm.ss");
+		srvSocket = new ServerSocket(port);
 	}
-
 
 	@Override
 	public void run()
 	{
-		try 
-		{
-			srvSocket = new ServerSocket(port);
-		} catch (IOException e1) 
-		{
-			e1.printStackTrace();
-			return;
-		}
 		while(true)
 		{
 			Socket socketClient = null;

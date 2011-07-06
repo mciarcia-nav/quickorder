@@ -14,27 +14,17 @@ import org.hibernate.classic.Session;
 public class UpdateServer implements Runnable 
 {
 	private ServerSocket srvSocket;
-	private int port;
 	private SimpleDateFormat formato;
 	
-	public UpdateServer(int port)
+	public UpdateServer(int port) throws IOException
 	{
-		this.port = port;
 		formato = new SimpleDateFormat("hh:mm.ss");
+		srvSocket = new ServerSocket(port);
 	}
-	
 	
 	@Override
 	public void run() 
 	{
-		try 
-		{
-			srvSocket = new ServerSocket(port);
-		} catch (IOException e1) 
-		{
-			e1.printStackTrace();
-			return;
-		}
 		while(true)
 		{
 			Socket socketClient = null;

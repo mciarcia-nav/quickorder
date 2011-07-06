@@ -14,9 +14,9 @@ public class SignupServer implements Runnable
 	private SimpleDateFormat formato;
 	private CodaNotifiche coda;
 	
-	public SignupServer(int port, CodaNotifiche coda)
+	public SignupServer(int port, CodaNotifiche coda) throws IOException
 	{
-		this.port = port;
+		srvSocket = new ServerSocket(port);
 		formato = new SimpleDateFormat("hh:mm.ss");
 		this.coda = coda;
 	}
