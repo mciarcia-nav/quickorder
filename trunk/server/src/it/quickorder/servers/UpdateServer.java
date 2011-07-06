@@ -1,13 +1,20 @@
 package it.quickorder.servers;
 
+import it.quickorder.domain.Aggiornamento;
 import it.quickorder.domain.Prodotto;
 import it.quickorder.helpers.HibernateUtil;
+
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
 import org.hibernate.Query;
 import org.hibernate.classic.Session;
 
@@ -70,11 +77,28 @@ class UpdateRequestThreadHandler implements Runnable
 				session.beginTransaction();
 				// Recupero i prodotti che sono stati aggiornati.
 				Query query = session.createQuery("from Prodotto where versione > :var");
-				query.setInteger("var", versione);
+				query.setInteger("var", 0);//versione);
 				@SuppressWarnings("unchecked")
 				List<Prodotto> risultati = (List<Prodotto>) query.list();
+				
+				List<Aggiornamento> aggiornamenti = new ArrayList<Aggiornamento>(risultati.size());
+				for (Prodotto p : risultati)
+				{
+					Aggiornamento nuovo = new Aggiornamento();
+					nuovo.setProdotto(p);
+					BufferedImage img;
+					if (p.getTipologia() == 0)
+						img = ImageIO.read(new File(".\\immagini\\" + p.getCodice() + ".jpg"));
+					else
+						img = ImageIO.read(new File(".\\immagini\\P0001.jpg"));
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(img, "jpg", baos);
+					nuovo.setImage(baos.toByteArray());
+					aggiornamenti.add(nuovo);
+				}
+				
 				// Invio dei prodotti al client.
-				output.writeObject(risultati);
+				output.writeObject(aggiornamenti);
 				output.flush();
 			}
 			finally

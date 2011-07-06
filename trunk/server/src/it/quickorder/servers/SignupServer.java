@@ -10,7 +10,6 @@ import java.util.Date;
 public class SignupServer implements Runnable 
 {
 	private ServerSocket srvSocket;
-	private int port;
 	private SimpleDateFormat formato;
 	private CodaNotifiche coda;
 	
@@ -21,18 +20,9 @@ public class SignupServer implements Runnable
 		this.coda = coda;
 	}
 	
-	
 	@Override
 	public void run() 
 	{
-		try 
-		{
-			srvSocket = new ServerSocket(port);
-		} catch (IOException e1) 
-		{
-			e1.printStackTrace();
-			return;
-		}
 		while(true)
 		{
 			Socket socketClient = null;
