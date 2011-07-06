@@ -25,8 +25,8 @@ public class Main extends JFrame
 	private StackIFrame stackFrame;
 	private ClientiIFrame clientiFrame;
 	protected static Font plainFont, bigFont;
-	private static StackOrdinazioni stack;
-	private static CodaNotifiche codaNotifiche;
+	private StackOrdinazioni stack;
+	private CodaNotifiche codaNotifiche;
 	private OrdersServer orderServer;
 	private SignupServer signupServer;
 	private UpdateServer updateServer;
@@ -42,7 +42,6 @@ public class Main extends JFrame
 	public Main()
 	{
 		super("QuickOrder");
-		
 		stack = new StackOrdinazioni();
 		codaNotifiche = new CodaNotifiche();
 		orderServer = new OrdersServer(ORDERS_PORT, stack);
@@ -66,7 +65,7 @@ public class Main extends JFrame
 		jDesktopPane = new JDesktopPane();		
 		jDesktopPane.setBackground(new Color(165,18,64));
 		jDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
-		jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane, NUMERO_PANNELLI));
+		jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane, stack, NUMERO_PANNELLI));
 		jDesktopPane.add(sfondo, Integer.MIN_VALUE);
 		jContentPane.add(jDesktopPane);
 		

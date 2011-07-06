@@ -7,7 +7,7 @@
  *
  * � 2007 eTour Project - Copyright by SE@SA Lab - DMI � University of Salerno
  */
-package it.quickorder.gui;
+package it.quickorder.gui.table;
 
 import java.awt.*;
 import javax.swing.JTable;

@@ -17,7 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-
+@SuppressWarnings("serial")
 public class StackPanel extends JPanel 
 {
 	
@@ -91,8 +91,7 @@ public class StackPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				deskManager.openOrdinazione(getOrdinazione());
-				
+				deskManager.openOrdinazione(getOrdinazione());			
 			}
 			
 		});
@@ -101,6 +100,13 @@ public class StackPanel extends JPanel
 	public Ordinazione getOrdinazione()
 	{
 		return ordinazione;
+	}
+	
+	public void rimuoviOrdinazione()
+	{
+		ordinazione = null;
+		remove(btn);
+		repaint();
 	}
 	
 	public boolean hasOrdinazione()
