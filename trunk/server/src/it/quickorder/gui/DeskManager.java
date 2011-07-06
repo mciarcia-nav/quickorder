@@ -94,8 +94,8 @@ public class DeskManager extends DefaultDesktopManager
 		Dimension deskSize = jDesktop.getSize();
 		Dimension frameSize = new Dimension();
 		
-		frameSize.width = deskSize.width - stackSize.width - 80 - SCOSTAMENTO_ORIZZONTALE * 5;
-		frameSize.height = (int) (stackSize.height * 0.75) - SCOSTAMENTO_VERTICALE * 5;
+		frameSize.width = deskSize.width - stackSize.width - 80 - SCOSTAMENTO_ORIZZONTALE * 5 - (int) (deskSize.width * 0.1);
+		frameSize.height = (int) (stackSize.height * 0.75) - SCOSTAMENTO_VERTICALE * 5; 
 		
 		Point frameLoc = new Point();
 		if (stack.getLocation().x == 30)
@@ -118,7 +118,6 @@ public class DeskManager extends DefaultDesktopManager
 			OrdinazioneIFrame nuova = ordinazioni.get(id);
 			jDesktop.add(nuova, Integer.MAX_VALUE - 1);
 			activateFrame(nuova);
-			System.out.println("ECCOMI");
 		}
 		else
 		{

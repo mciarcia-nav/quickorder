@@ -38,7 +38,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
 
 @SuppressWarnings("serial")
-public class ClientiIFrame extends JInternalFrame
+public class ClientiIFrame extends JInternalFrame implements ActionListener
 {
 	private ScrollableTable clienti;
 	private JPanel jContentPane;
@@ -89,27 +89,31 @@ public class ClientiIFrame extends JInternalFrame
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		getContentPane().add(jContentPane, BorderLayout.CENTER);
 		abilitaButton = new JButton("Abilita", new ImageIcon(URL_IMAGES+"yes.png"));
+		abilitaButton.addActionListener(this);
 	    disabilitaButton = new JButton("Disabilita", new ImageIcon(URL_IMAGES+"no.png"));
+	    disabilitaButton.addActionListener(this);
 	    eliminaButton = new JButton("Elimina", new ImageIcon(URL_IMAGES+"delete.png"));
-	    
-	    toolbar.add(eliminaButton, 0);
+	    eliminaButton.addActionListener(this);
+	    toolbar.add(abilitaButton);
+	    toolbar.add(disabilitaButton);
+	    toolbar.add(eliminaButton);
 		clienti.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
 			public void valueChanged(ListSelectionEvent e)
 			{
 				int selectedRow = clienti.getSelectedRow();
-	    		 clienteSelezionato = clientiTableModel.recuperaCliente(selectedRow);
-	    		 if(clienteSelezionato.isAbilitato())
-	    		 {
-	    			 disabilitaButton.addActionListener(new DisabilitaListener(clienteSelezionato));
-	    			 toolbar.add(disabilitaButton, 1);
-	    		 }
-	    		 else
-	    		 {
-	    			 abilitaButton.addActionListener(new AbilitaListener(clienteSelezionato));
-	    			 toolbar.add(abilitaButton, 1);
-	    		 }
+	    		clienteSelezionato = clientiTableModel.recuperaCliente(selectedRow);
+	    		if(clienteSelezionato.isAbilitato())
+	    		{
+	    			disabilitaButton.setEnabled(true);
+	    			abilitaButton.setEnabled(false);;
+	    		}
+	    		else
+	    		{
+	    			disabilitaButton.setEnabled(false);
+	    			abilitaButton.setEnabled(true);
+	    		}
 			}
 		});
 		
@@ -126,6 +130,20 @@ public class ClientiIFrame extends JInternalFrame
 	    setVisible(false);
 		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent evt) 
+	{
+		if (evt.getSource().equals(abilitaButton))
+		{
+			
+		}
+		else if (evt.getSource().equals(disabilitaButton))
+		{
+			
+		}
+		
+	}
 	
 }
 
@@ -140,40 +158,4 @@ class ClienteCellRenderer extends DefaultTableCellRenderer
 	} 
 }
 
-class AbilitaListener implements ActionListener
-{
-	private Cliente clienteSelezionato;
-	private DataRecovery dataRecovery;
-	
-	public AbilitaListener(Cliente clienteSelezionato)
-	{
-		this.clienteSelezionato = clienteSelezionato;
-		dataRecovery = new DataRecoveryImpl();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) 
-	{
-		dataRecovery.abilitaCliente(clienteSelezionato);
-	}
-	
-}
 
-class DisabilitaListener implements ActionListener
-{
-	private Cliente clienteSelezionato;
-	private DataRecovery dataRecovery;
-	
-	public DisabilitaListener(Cliente clienteSelezionato)
-	{
-		this.clienteSelezionato = clienteSelezionato;
-		dataRecovery = new DataRecoveryImpl();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) 
-	{
-		dataRecovery.disabilitaCliente(clienteSelezionato);
-	}
-	
-}
