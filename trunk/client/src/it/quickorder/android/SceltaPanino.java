@@ -4,6 +4,9 @@ import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 import java.util.List;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 
 public class SceltaPanino extends Base implements OnClickListener
 {	
+	private static final String imagesPath = "/data/data/it.quickorder.android/files/";
 	private int posizione;
 	private List<Prodotto> listaPanini;
 	private ImageButton next;
@@ -52,7 +56,6 @@ public class SceltaPanino extends Base implements OnClickListener
 	  public void onCreate(Bundle savedInstanceState)  
 	  {
 			super.onCreate(savedInstanceState);
-			
 			setContentView(R.layout.layoutsceltapanino);
             next = (ImageButton) findViewById(R.id.next);
             prev = (ImageButton) findViewById(R.id.prev);
@@ -151,10 +154,9 @@ public class SceltaPanino extends Base implements OnClickListener
 			aggiungi.setEnabled(false);
 			quantitaMinus.setEnabled(false);
 		}
-		String app = corrente.getNome().toLowerCase();
-		int idImage = getResources().getIdentifier(app, "drawable", "it.qwerty.android");
-		Log.i("IDPANINO",Integer.toString(idImage));
-		image.setImageResource(idImage);
+		
+		Bitmap bm = BitmapFactory.decodeFile(imagesPath + corrente.getCodice() + ".jpg");
+		image.setImageBitmap(bm);
 	}
 }
 	 

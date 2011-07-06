@@ -1,11 +1,16 @@
 package it.quickorder.android;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+
+import it.quickorder.domain.Aggiornamento;
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Prodotto;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,7 +92,7 @@ public class SplashScreen extends Base
 		progressBar1.setMax(100);
 		Thread background = new Thread (new Runnable() 
 		{
-	           @SuppressWarnings("unchecked")
+	        @SuppressWarnings("unchecked")
 			public void run() 
 	           {
 	               try 
@@ -101,7 +106,7 @@ public class SplashScreen extends Base
 		           	   
 		           	   Thread.sleep(500);
 		           	   int versione = dbAdapter.getMaxVersioneProdotti();
-		           	   List<Prodotto> risultati = null;
+		           	   List<Aggiornamento> risultati = null;
 		           	   Socket socket = null;
 		           	   try
 		           	   {
@@ -110,7 +115,7 @@ public class SplashScreen extends Base
 			           	   out.writeInt(versione);
 			           	   out.flush();
 			           	   ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			           	   risultati = (List<Prodotto>) in.readObject();
+			           	   risultati = (List<Aggiornamento>) in.readObject();
 			           	   socket.close();
 		           	   }
 		           	   catch(Exception ex)
@@ -121,9 +126,19 @@ public class SplashScreen extends Base
 					   {
 						   progressHandler.sendMessage(progressHandler.obtainMessage(0,6,risultati.size()));
 						   int i = 1;
-						   for(Prodotto p : risultati)
+						   for(Aggiornamento p : risultati)
 						   {
-								dbAdapter.aggiungiProdotto(p);
+								dbAdapter.aggiungiProdotto(p.getProdotto());
+								try
+								{
+									FileOutputStream fos = openFileOutput(p.getProdotto().getCodice() + ".jpg", Context.MODE_PRIVATE);
+									fos.write(p.getImage());
+									fos.close();
+								}
+								catch (IOException ex)
+								{
+									ex.printStackTrace();
+								}
 								progressHandler.sendMessage(progressHandler.obtainMessage(0,2,i));
 								i++;
 								Thread.sleep(500);
