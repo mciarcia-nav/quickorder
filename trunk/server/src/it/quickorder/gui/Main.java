@@ -8,6 +8,7 @@ import it.quickorder.servers.UpdateServer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -18,6 +19,12 @@ public class Main extends JFrame
 	// Percorso per le immagini
 	public static String URL_IMAGES = "/it/quickorder/gui/images/";
 	private static final int NUMERO_PANNELLI = 10;
+	
+	// Porte di ascolto per i server.
+	private static final int ORDERS_PORT = 4444;
+	private static final int UPD_PORT = 4445;
+	private static final int SIGNUP_PORT = 4446;
+	
 	protected Dimension SIZE;
 	private JPanel jContentPane;
 	private JDesktopPane jDesktopPane;
@@ -39,29 +46,30 @@ public class Main extends JFrame
 	}
 	
 	
-	public Main()
+	public Main() throws IOException
 	{
 		super("QuickOrder");
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setUndecorated(true);
+		setSize(screenSize);
+		setMinimumSize(screenSize);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Creazione oggetti di gestione.
 		stack = new StackOrdinazioni();
 		codaNotifiche = new CodaNotifiche();
 		orderServer = new OrdersServer(ORDERS_PORT, stack);
 		signupServer = new SignupServer(SIGNUP_PORT, codaNotifiche);
 		updateServer = new UpdateServer(UPD_PORT);
 		clientiFrame = new ClientiIFrame();
-		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		// Hai messo due volte setSize
-		setSize(screenSize);
-		setUndecorated(true);
-		setSize(screenSize);
-		setMinimumSize(screenSize);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+			
 		// Disegna l'interfaccia a partire dal content pane.
 		jContentPane = new JPanel();
 		jContentPane.setLayout(new BorderLayout());
 		sfondo = new JLabel();
 		setBackgroundImage();
+		
+		// Creazione del desktop pane.
 		jDesktopPane = new JDesktopPane();		
 		jDesktopPane.setBackground(new Color(165,18,64));
 		jDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
@@ -69,12 +77,11 @@ public class Main extends JFrame
 		jDesktopPane.add(sfondo, Integer.MIN_VALUE);
 		jContentPane.add(jDesktopPane);
 		
-		
+		// Creazione dello stack frame.
 		stackFrame = new StackIFrame(jDesktopPane, NUMERO_PANNELLI);
 
-		
+		// Creazione del bottone per la gestione delle notifiche di registrazione.
 		notificaRegistrazione = new TransparentJInternalFrame();
-		
 		btnNotificheRegistrazione = new NotificaButton(jDesktopPane,8);
 		btnNotificheRegistrazione.setText("Richieste di Registrazione");
 		btnNotificheRegistrazione.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "notifica32.png")));
@@ -86,19 +93,16 @@ public class Main extends JFrame
 		jDesktopPane.add(notificaRegistrazione, Integer.MAX_VALUE - 1);
 		notificaRegistrazione.setVisible(true);
 		
+		// Creazione del bottone per la gestione clienti.
 		gestioneClienti = new TransparentJInternalFrame();
-		
 		btnGestioneClienti = new JButton("Gestione Clienti");
 		btnGestioneClienti.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers.png")));
 		btnGestioneClienti.setBackground(Color.WHITE);
 		btnGestioneClienti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		gestioneClienti.add(btnGestioneClienti);
 		gestioneClienti.pack();
-		
 		jDesktopPane.add(gestioneClienti, Integer.MAX_VALUE - 1);
 		gestioneClienti.setVisible(true);
-		
-		setContentPane(jContentPane);
 
 		btnGestioneClienti.addActionListener(new ActionListener() 
 		{			
@@ -114,7 +118,7 @@ public class Main extends JFrame
 		});
 
 		jDesktopPane.add(clientiFrame);
-				
+		setContentPane(jContentPane);		
 	}
 	
 	public void avviaServer()
@@ -179,13 +183,7 @@ public class Main extends JFrame
 		posizionaFrames();
 		
 	}
-	
-	private static final int ORDERS_PORT = 4444;
-	private static final int UPD_PORT = 4445;
-	private static final int SIGNUP_PORT = 4446;
-	
-	
-	
+		
 	public static void main(String[] args)
 	{
 		/*
@@ -199,7 +197,6 @@ public class Main extends JFrame
 			
 		} catch (Exception e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} */
 		
@@ -207,7 +204,16 @@ public class Main extends JFrame
 		{
 			public void run()
 			{
-				Main main = new Main();
+				Main main = null;
+				try 
+				{
+					main = new Main();
+				} 
+				catch (IOException e) 
+				{
+					System.err.append("Impossibile avviare uno o più server. L'applicazione non può essere avviata.");
+					System.exit(-1);
+				}
 				main.setVisible(true);
 				main.avviaServer();
 			}
