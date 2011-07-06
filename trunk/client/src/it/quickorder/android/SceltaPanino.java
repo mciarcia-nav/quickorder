@@ -45,6 +45,7 @@ public class SceltaPanino extends Base implements OnClickListener
 	public void onResume()
 	{
 		super.onResume();
+		labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
 	}
 	
 	@Override

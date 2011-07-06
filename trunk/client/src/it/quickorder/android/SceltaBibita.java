@@ -44,6 +44,7 @@ public class SceltaBibita extends Base implements OnClickListener
 	public void onResume()
 	{
 		super.onResume();
+		labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
 	}
 	
 	@Override
@@ -106,21 +107,21 @@ public class SceltaBibita extends Base implements OnClickListener
 			posizione = (posizione + listaBibite.size() - 1) % listaBibite.size();
 			aggiornaInformazioniBibita(posizione);
 		}
-		else if (v.getId() == R.id.plus) // AGGIUNGI PANINO
+		else if (v.getId() == R.id.plusBibita) // AGGIUNGI PANINO
 		{
 			int q = Integer.parseInt(quantitaBibita.getText().toString()) +  1;
 			quantitaBibita.setText("" + q);
 			if (q == 1)
 				quantitaMinusBibita.setEnabled(true);
 		}
-		else if (v.getId() == R.id.minus) // RIMOUVI PANINO
+		else if (v.getId() == R.id.minusBibita) // RIMOUVI PANINO
 		{
 			int q = Integer.parseInt(quantitaBibita.getText().toString()) - 1;
 			quantitaBibita.setText("" + q);
 			if (q == 0)
 				quantitaMinusBibita.setEnabled(false);		
 		}
-		else if (v.getId() == R.id.aggiungi)
+		else if (v.getId() == R.id.aggiungiBibita)
 		{
 			Articolo nuovo = new Articolo();
 			int q = Integer.parseInt(quantitaBibita.getText().toString());
@@ -129,7 +130,8 @@ public class SceltaBibita extends Base implements OnClickListener
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
 			ordinazione.aggiungiArticolo(nuovo);
-			labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));		
+			labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
+			aggiungiBibita.setImageResource(R.drawable.refresh);
 		}
 		
 	}

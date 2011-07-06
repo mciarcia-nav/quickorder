@@ -52,7 +52,6 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	{
 		super.onResume();
 		scroll = (ScrollView) findViewById(R.id.riepilogoSroll);
-		scroll.removeAllViews();
 		if (ordinazione.getArticoli().size()==0)
 		{
 			Log.i("dove","if");
@@ -167,7 +166,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		text = new TextView(this);
 		text.setText("Riepilogo Ordinazione");
 		text.setPadding(0,0,0,30);
-		text.setTextAppearance(this, android.R.attr.textAppearanceLarge);
+		text.setTextAppearance(this, attr.textAppearanceLarge);
 		row.addView(text);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		

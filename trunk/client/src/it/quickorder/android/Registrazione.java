@@ -210,7 +210,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 				}
 				else if (message.equalsIgnoreCase("ABILITATO"))
 				{
-					//dbAdapter.registraCliente(nuovoCliente);
+					dbAdapter.registraCliente(nuovoCliente);
 					progress.dismiss();
 					Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
 					t.show();
