@@ -59,7 +59,7 @@ public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 			pannelli.add(nuovo);
 		}
 		size = new Dimension();
-		size.height = dimY * 10 + 13;
+		size.height = dimY * numeroPannelli + 13;
 		size.width = 140;
 		setResizable(false);
 		setSize(size);
