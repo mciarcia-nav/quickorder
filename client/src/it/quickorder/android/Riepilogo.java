@@ -6,9 +6,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import it.quickorder.domain.Articolo;
+import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.android.R;
 import android.R.attr;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -46,7 +50,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	private int numeroTavolo;
 	private Spinner spinner;
 	private String[] tavoli;
-	
+		
 	@Override
 	public void onResume()
 	{
@@ -88,34 +92,59 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		
 		if (v.getId() == 100)
 		{
-			try
+			final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
+			alert.setTitle("Conferma");
+			alert.setMessage("Sei sicuro di voler inviare l'ordinazione?");
+			alert.setButton("Conferma", new DialogInterface.OnClickListener() 
 			{
 				
-				ordinazione.setNumeroTavolo(numeroTavolo);
-				Socket socket = new Socket(SRV_ADDRESS, ORDERS_PORT);
-				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-				output.writeObject(ordinazione);
-				output.flush();
-				int response = input.readInt();
-				
-				if (response == 0)
+				@Override
+				public void onClick(DialogInterface dialog, int which) 
 				{
-					Toast t = Toast.makeText(getApplicationContext(), "Ordinazione inviata con successo.", Toast.LENGTH_SHORT);
-					t.show();
+					// TODO Auto-generated method stub
+					try
+					{
+						
+						ordinazione.setNumeroTavolo(numeroTavolo);
+						Socket socket = new Socket(SRV_ADDRESS, ORDERS_PORT);
+						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+						ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+						output.writeObject(ordinazione);
+						output.flush();
+						int response = input.readInt();
+						
+						if (response == 0)
+						{
+							Toast t = Toast.makeText(getApplicationContext(), "Ordinazione inviata con successo.", Toast.LENGTH_SHORT);
+							t.show();
+							fine();
+							finish();
+						}
+						else
+						{
+							Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito.", Toast.LENGTH_SHORT);
+							t.show();
+							return;
+						}
+						
+					}
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
 				}
-				else
-				{
-					Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito.", Toast.LENGTH_SHORT);
-					t.show();
-				}
+
 				
-			}
-			catch (Exception ex)
+			});
+			alert.setButton2("Annulla",new DialogInterface.OnClickListener()
 			{
-				ex.printStackTrace();
-			}
-			
+				@Override
+				public void onClick(DialogInterface dialog, int which) 
+				{
+					alert.dismiss();
+				}
+			});
+			alert.show();
 		}
 		else //BOTTONE CANCELLA
 		{
@@ -150,6 +179,16 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			}
 		}
 		
+	}
+	
+	private void fine() 
+	{
+		Log.i("fine", "fine");
+		Intent i = new Intent(this,Fine.class);
+		String pkg = getPackageName();
+		Cliente cliente = ordinazione.getCliente();
+		i.putExtra(pkg + ".cliente", cliente);
+		startActivity(i);
 	}
 	
 	private void creaTabella()
