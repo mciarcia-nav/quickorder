@@ -41,6 +41,7 @@ public class Main extends JFrame
 	private JInternalFrame gestioneClienti;
 	private JButton btnGestioneClienti;
 	private NotificaButton btnNotificheRegistrazione;
+	
 	{
 		inizializzaFonts();
 	}
@@ -113,6 +114,10 @@ public class Main extends JFrame
 				{
 					clientiFrame.setVisible(true);
 					clientiFrame.moveToFront();
+				}
+				else
+				{
+					clientiFrame.setVisible(false);
 				}
 			}
 		});

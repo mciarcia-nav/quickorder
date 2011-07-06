@@ -3,6 +3,7 @@ package it.quickorder.gui.table;
 import it.quickorder.domain.Cliente;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -16,7 +17,7 @@ import antlr.collections.impl.BitSet;
 public class ClienteModel extends AbstractTableModel 
 {
 	private static final String[] headers = {"Codice Fiscale", "Indirizzo e-mail", "Nome", "Cognome", "Sesso", "Data di Nascita", "Luogo di nascita", "IMEI", "Stato Abilitazione"};
-	private static final Class[] columnClasses = { String.class, String.class, String.class, String.class, Character.class, Date.class, String.class, String.class, Boolean.class};
+	private static final Class[] columnClasses = { String.class, String.class, String.class, String.class, Character.class, Timestamp.class, String.class, String.class, Boolean.class};
 	private ArrayList<Object[]> data;
 	
 	public ClienteModel()
@@ -79,5 +80,21 @@ public class ClienteModel extends AbstractTableModel
         	aRow[8] = c.isAbilitato();
         	data.add(aRow);
         }
+	}
+	
+	public Cliente recuperaCliente(int row)
+	{
+		Cliente cliente = new Cliente();
+		cliente.setCodiceFiscale((String)data.get(row)[0]);
+		cliente.setEmail((String)data.get(row)[1]);
+		cliente.setNome((String)data.get(row)[2]);
+		cliente.setCognome((String)data.get(row)[3]);
+		cliente.setSesso((Character)data.get(row)[4]);
+		cliente.setDataNascita((Timestamp)data.get(row)[5]);
+		cliente.setLuogoNascita((String)data.get(row)[6]);
+		cliente.setIMEI((String)data.get(row)[7]);
+		cliente.setAbilitato((Boolean)data.get(row)[8]);
+		
+		return cliente;
 	}
 }
