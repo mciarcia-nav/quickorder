@@ -55,7 +55,7 @@ public class Main extends JFrame
 		setSize(screenSize);
 		setMinimumSize(screenSize);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		// Creazione oggetti di gestione.
 		stack = new StackOrdinazioni();
 		codaNotifiche = new CodaNotifiche();
