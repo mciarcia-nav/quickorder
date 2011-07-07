@@ -145,6 +145,12 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 		        else
 		        {
 		        	clientiTableModel.eliminaCliente(row);
+		        	if(clientiTableModel.getRowCount()==0)
+		        	{
+		        		abilitaButton.setEnabled(false);
+		        		disabilitaButton.setEnabled(false);
+		        		eliminaButton.setEnabled(false);
+		        	}
 		        }
 			}
 		});
