@@ -3,6 +3,8 @@ package it.quickorder.android;
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
+
+import java.text.DecimalFormat;
 import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,6 +33,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 	private TextView labelTotale;
 	private Ordinazione ordinazione;
 	private int tipologia;
+	private DecimalFormat formatoPrezzo;
 	
 	@Override
 	public void onDestroy()
@@ -48,7 +51,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 	public void onResume()
 	{
 		super.onResume();
-		labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
+		labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
 	}
 	
 	@Override
@@ -58,6 +61,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			setContentView(R.layout.layoutsceltaprodotto);
 			String pkg = getPackageName();
 			tipologia = getIntent().getIntExtra(pkg + ".tipologia", -1);
+			formatoPrezzo = new DecimalFormat("##.00");
             next = (ImageButton) findViewById(R.id.next);
             prev = (ImageButton) findViewById(R.id.prev);
             aggiungi = (ImageButton) findViewById(R.id.aggiungi);
@@ -82,7 +86,7 @@ public class SceltaProdotto extends Base implements OnClickListener
             listaProdotti = dbAdapter.caricaDatiProdotti(tipologia);
             posizione = 0;
             aggiornaInformazioniProdotto(posizione);
-            labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
+            labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
     }
 
 
@@ -128,7 +132,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
 			ordinazione.aggiungiArticolo(nuovo);
-			labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
+			labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
 			aggiungi.setImageResource(R.drawable.refresh);
 		}
 	}
@@ -138,7 +142,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 		Prodotto corrente = listaProdotti.get(posizioneLista);
 		nomeProdotto.setText(corrente.getNome());
 		descrizioneProdotto.setText(corrente.getDescrizione());
-		prezzoProdotto.setText("Prezzo: € "+Double.toString(corrente.getPrezzo()));
+		prezzoProdotto.setText("Prezzo: € "+ formatoPrezzo.format(corrente.getPrezzo()));
 		if (ordinazione.containsProdotto(corrente))
 		{
 			aggiungi.setImageResource(R.drawable.refresh);
