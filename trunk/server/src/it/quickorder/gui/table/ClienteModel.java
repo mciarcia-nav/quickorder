@@ -1,6 +1,8 @@
 package it.quickorder.gui.table;
 
 import it.quickorder.domain.Cliente;
+import it.quickorder.gui.DataRecovery;
+import it.quickorder.gui.DataRecoveryImpl;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 import org.hibernate.type.descriptor.sql.BitTypeDescriptor;
@@ -19,10 +23,12 @@ public class ClienteModel extends AbstractTableModel
 	private static final String[] headers = {"Codice Fiscale", "Indirizzo e-mail", "Nome", "Cognome", "Sesso", "Data di Nascita", "Luogo di nascita", "IMEI", "Stato Abilitazione"};
 	private static final Class[] columnClasses = { String.class, String.class, String.class, String.class, Character.class, Timestamp.class, String.class, String.class, Boolean.class};
 	private ArrayList<Object[]> data;
+	private DataRecovery dataRecovery;
 	
 	public ClienteModel()
 	{
 		data = new ArrayList<Object[]>();
+		dataRecovery = new DataRecoveryImpl();
 	}
 	
 	@Override
@@ -97,4 +103,12 @@ public class ClienteModel extends AbstractTableModel
 		
 		return cliente;
 	}
+	
+	public void modificaAbilitazioneCliente(int row, boolean abilitazione)
+	{
+		Object[] riga = data.get(row);
+		riga[8] = abilitazione;
+		data.set(row, riga);
+	}
+	
 }
