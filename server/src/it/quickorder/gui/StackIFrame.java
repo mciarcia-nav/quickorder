@@ -181,18 +181,26 @@ public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 	public void ordinazioneRimossa(Event event) 
 	{
 		Ordinazione rimossa = (Ordinazione) event.arg;
-		for (int index = 0; index < pannelli.size(); index++)
+		boolean trovato = false;
+		int index = 0, size = pannelli.size();
+		StackPanel corrente = null;
+		while (!trovato && index++ < size)
 		{
-			StackPanel corrente = pannelli.get(index);
+			corrente = pannelli.get(index);
 			if (corrente.hasOrdinazione() && corrente.getOrdinazione().equals(rimossa))
 			{
-				contentPane.remove(corrente);
-				contentPane.add(corrente);
-				contentPane.doLayout();
-				corrente.rimuoviOrdinazione();
-				return;
+				trovato = true;
 			}
-		}	
+		}
 		
+		if (trovato)
+		{
+			contentPane.remove(corrente);
+			contentPane.add(corrente);
+			contentPane.doLayout();
+			corrente.rimuoviOrdinazione();
+			pannelli.remove(corrente);
+			pannelli.add(size - 1, corrente);
+		}	
 	}
 }
