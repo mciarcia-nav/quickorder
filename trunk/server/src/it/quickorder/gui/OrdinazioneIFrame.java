@@ -6,6 +6,8 @@ import it.quickorder.gui.table.OrdinazioneModel;
 import it.quickorder.gui.table.PrezzoEuroCellRenderer;
 import it.quickorder.gui.table.ScrollableTable;
 import it.quickorder.gui.table.TipologiaTableCellRenderer;
+import it.quickorder.helpers.HibernateUtil;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +18,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
+
+import org.hibernate.classic.Session;
 
 
 @SuppressWarnings("serial")
@@ -125,10 +129,20 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 			emessoScontrino = true;
 			emettiScontrino.setEnabled(false);
 			eliminaOrdinazione.setEnabled(false);
+			salvaOrdinazione();
 		}
 		
 	}
 	
+
+	private void salvaOrdinazione() 
+	{
+		Session sessione = HibernateUtil.getSessionFactory().getCurrentSession();
+		sessione.beginTransaction();
+		sessione.save(ordinazione);
+		sessione.getTransaction().commit();
+		
+	}
 
 	private void costruisciInterfaccia()
 	{

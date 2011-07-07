@@ -18,7 +18,7 @@ public class DeskManager extends DefaultDesktopManager
 	private static final long serialVersionUID = 6182103251037333895L;
 	private JDesktopPane jDesktop;
 	private int ordinazioniAttive, ordinazioniMassime;
-	private HashMap<Integer, OrdinazioneIFrame> ordinazioni;
+	private HashMap<Long, OrdinazioneIFrame> ordinazioni;
 	private StackOrdinazioni stackOrdinazioni;
 	private static final int SCOSTAMENTO_ORIZZONTALE = 15, SCOSTAMENTO_VERTICALE = 30;
 	
@@ -28,7 +28,7 @@ public class DeskManager extends DefaultDesktopManager
 		this.jDesktop = jDesktop;
 		ordinazioniAttive = 0;
 		ordinazioniMassime = numeroOrdinazioni;
-		ordinazioni = new HashMap<Integer, OrdinazioneIFrame>(ordinazioniMassime);
+		ordinazioni = new HashMap<Long, OrdinazioneIFrame>(ordinazioniMassime);
 	}
 	
 	public void activateFrame(JInternalFrame frame)
@@ -111,7 +111,7 @@ public class DeskManager extends DefaultDesktopManager
 		
 		ordinazioniAttive++;
 		
-		int id = ordinazione.getId();
+		long id = ordinazione.getId();
 		if (ordinazioni.containsKey(id))
 		{
 			

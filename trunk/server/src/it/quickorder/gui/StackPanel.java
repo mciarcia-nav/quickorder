@@ -27,7 +27,6 @@ public class StackPanel extends JPanel
 	private JButton btn;
 	private DeskManager deskManager;
 	
-	
 	public StackPanel(DeskManager deskManager)
 	{
 		this.deskManager = deskManager;
@@ -83,7 +82,28 @@ public class StackPanel extends JPanel
 		btn.setBorder(BorderFactory.createLoweredBevelBorder());
 		btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btn.setPreferredSize(new Dimension(layoutArea.width, layoutArea.height));
-		btn.setText("< 1 min");
+		int minuti = (int) (System.currentTimeMillis() - ordinazione.getArrivo().getTime()) / 60000;
+		if (minuti == 0)
+		{
+			btn.setForeground(StackIFrame.verde_scuro);
+			btn.setText("< 1 min");
+		}
+		else
+		{
+			if (minuti < 10)
+			{
+				btn.setForeground(StackIFrame.verde_scuro);
+			}
+			else if (minuti >= 10 && minuti < 15)
+			{
+				btn.setForeground(StackIFrame.giallo_scuro);
+			}
+			else
+			{
+				btn.setForeground(Color.RED);
+			}
+			btn.setText("" + minuti + " min");
+		}
 		btn.setLocation(layoutArea.x, layoutArea.y);
 		btn.addActionListener(new ActionListener()
 		{
