@@ -2,9 +2,9 @@ package it.quickorder.android;
 
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
+import it.quickorder.domain.Prodotto;
 import android.app.TabActivity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -29,16 +29,20 @@ public class NuovaOrdinazione extends TabActivity
 		TabSpec riepilogo = tabhost.newTabSpec("riepilogo");
 		sceltaPanino.setIndicator("Panini", getResources().getDrawable(R.drawable.tabpanini));
 		sceltaBibita.setIndicator("Bevande", getResources().getDrawable(R.drawable.tabbevande));
-		riepilogo.setIndicator("Riepilogo", getResources().getDrawable(R.drawable.tabriepilogo));
-		sceltaPanino.setContent(new Intent(this,SceltaPanino.class));
-		sceltaBibita.setContent(new Intent(this,SceltaBibita.class));
+		riepilogo.setIndicator("Riepilogo", getResources().getDrawable(R.drawable.tabriepilogo));		
+		
+		// Creazione degli Intent per panini e bevande.
+		Intent intentSceltaPanino = new Intent(this, SceltaProdotto.class);
+		intentSceltaPanino.putExtra(pkg + ".tipologia", Prodotto.PANINO);
+		Intent intentSceltaBibita = new Intent(this, SceltaProdotto.class);
+		intentSceltaBibita.putExtra(pkg + ".tipologia", Prodotto.BEVANDA);
+		sceltaPanino.setContent(intentSceltaPanino);
+		sceltaBibita.setContent(intentSceltaBibita);
 		riepilogo.setContent(new Intent(this,Riepilogo.class));
 		tabhost.addTab(sceltaPanino);
 		tabhost.addTab(sceltaBibita);
 		tabhost.addTab(riepilogo);
 		tabhost.setCurrentTab(0);
-		
-		
 	}
 
 	public Ordinazione getOrdinazione() 

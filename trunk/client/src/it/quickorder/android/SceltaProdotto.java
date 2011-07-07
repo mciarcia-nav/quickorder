@@ -4,34 +4,33 @@ import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 import java.util.List;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SceltaPanino extends Base implements OnClickListener
+public class SceltaProdotto extends Base implements OnClickListener
 {	
 	private static final String imagesPath = "/data/data/it.quickorder.android/files/";
 	private int posizione;
-	private List<Prodotto> listaPanini;
+	private List<Prodotto> listaProdotti;
 	private ImageButton next;
 	private ImageButton prev;
 	private ImageButton quantitaMinus;
 	private ImageButton quantitaPlus;
 	private ImageButton aggiungi;
-	private TextView prezzoPanino;
-	private TextView nomePanino;
-	private TextView descrizionePanino;
+	private TextView prezzoProdotto;
+	private TextView nomeProdotto;
+	private TextView descrizioneProdotto;
 	private TextView quantita;
 	private ImageView image;
 	private TextView labelTotale;
 	private Ordinazione ordinazione;
+	private int tipologia;
 	
 	@Override
 	public void onDestroy()
@@ -56,7 +55,9 @@ public class SceltaPanino extends Base implements OnClickListener
 	  public void onCreate(Bundle savedInstanceState)  
 	  {
 			super.onCreate(savedInstanceState);
-			setContentView(R.layout.layoutsceltapanino);
+			setContentView(R.layout.layoutsceltaprodotto);
+			String pkg = getPackageName();
+			tipologia = getIntent().getIntExtra(pkg + ".tipologia", -1);
             next = (ImageButton) findViewById(R.id.next);
             prev = (ImageButton) findViewById(R.id.prev);
             aggiungi = (ImageButton) findViewById(R.id.aggiungi);
@@ -65,13 +66,11 @@ public class SceltaPanino extends Base implements OnClickListener
             quantitaMinus.setEnabled(false);
             labelTotale = (TextView) findViewById(R.id.labelTotale);
             quantitaPlus = (ImageButton) findViewById(R.id.plus);
-            prezzoPanino = (TextView) findViewById(R.id.prezzo);
-            nomePanino = (TextView) findViewById(R.id.nome);
-            descrizionePanino = (TextView) findViewById(R.id.descrizione);
+            prezzoProdotto = (TextView) findViewById(R.id.prezzo);
+            nomeProdotto = (TextView) findViewById(R.id.nome);
+            descrizioneProdotto = (TextView) findViewById(R.id.descrizione);
             quantita = (TextView) findViewById(R.id.labelQuantita);
             image = (ImageView) findViewById(R.id.immagine);
-            image.setImageResource(R.drawable.panino);
-            image.setAdjustViewBounds(true);
             
             // Impostazione Listeners
             next.setOnClickListener(this);
@@ -80,9 +79,9 @@ public class SceltaPanino extends Base implements OnClickListener
             quantitaPlus.setOnClickListener(this);
             aggiungi.setOnClickListener(this);
             ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
-            listaPanini = dbAdapter.caricaDatiProdotti(Prodotto.PANINO);
+            listaProdotti = dbAdapter.caricaDatiProdotti(tipologia);
             posizione = 0;
-            aggiornaInformazioniPanino(posizione);
+            aggiornaInformazioniProdotto(posizione);
             labelTotale.setText("€ " + Double.toString(ordinazione.getTotale()));
     }
 
@@ -90,17 +89,17 @@ public class SceltaPanino extends Base implements OnClickListener
 	@Override
 	public void onClick(View v) 
 	{
-		if (v.getId() == R.id.next) // PANINO SUCCESSIVO
+		if (v.getId() == R.id.next) // Prodotto SUCCESSIVO
 		{
-			posizione = (posizione + 1) % listaPanini.size();
-			aggiornaInformazioniPanino(posizione);
+			posizione = (posizione + 1) % listaProdotti.size();
+			aggiornaInformazioniProdotto(posizione);
 		}
-		else if (v.getId() == R.id.prev) // PANINO PRECEDENTE
+		else if (v.getId() == R.id.prev) // Prodotto PRECEDENTE
 		{			
-			posizione = (posizione + listaPanini.size() - 1) % listaPanini.size();
-			aggiornaInformazioniPanino(posizione);
+			posizione = (posizione + listaProdotti.size() - 1) % listaProdotti.size();
+			aggiornaInformazioniProdotto(posizione);
 		}
-		else if (v.getId() == R.id.plus) // AGGIUNGI PANINO
+		else if (v.getId() == R.id.plus) // Aggiungi Prodotto
 		{
 			int q = Integer.parseInt(quantita.getText().toString()) +  1;
 			quantita.setText("" + q);
@@ -124,7 +123,7 @@ public class SceltaPanino extends Base implements OnClickListener
 		{
 			Articolo nuovo = new Articolo();
 			int q = Integer.parseInt(quantita.getText().toString());
-			Prodotto selezionato = listaPanini.get(posizione);
+			Prodotto selezionato = listaProdotti.get(posizione);
 			nuovo.setSubTotale(q * selezionato.getPrezzo());
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
@@ -134,12 +133,12 @@ public class SceltaPanino extends Base implements OnClickListener
 		}
 	}
 		
-	private void aggiornaInformazioniPanino(int posizioneLista)
+	private void aggiornaInformazioniProdotto(int posizioneLista)
 	{
-		Prodotto corrente = listaPanini.get(posizioneLista);
-		nomePanino.setText(corrente.getNome());
-		descrizionePanino.setText(corrente.getDescrizione());
-		prezzoPanino.setText("Prezzo: € "+Double.toString(corrente.getPrezzo()));
+		Prodotto corrente = listaProdotti.get(posizioneLista);
+		nomeProdotto.setText(corrente.getNome());
+		descrizioneProdotto.setText(corrente.getDescrizione());
+		prezzoProdotto.setText("Prezzo: € "+Double.toString(corrente.getPrezzo()));
 		if (ordinazione.containsProdotto(corrente))
 		{
 			aggiungi.setImageResource(R.drawable.refresh);
