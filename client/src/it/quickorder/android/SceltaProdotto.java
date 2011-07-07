@@ -138,9 +138,15 @@ public class SceltaProdotto extends Base implements OnClickListener
 		}
 		else if (v.getId() == R.id.aggiungi)
 		{
-			Articolo nuovo = new Articolo();
-			int q = Integer.parseInt(quantita.getText().toString());
 			Prodotto selezionato = listaProdotti.get(posizione);
+			Articolo esistente = ordinazione.getArticolo(selezionato);
+			if (esistente != null)
+			{
+				ordinazione.rimuoviArticolo(selezionato);
+			}
+					
+			Articolo nuovo = new Articolo();
+			int q = Integer.parseInt(quantita.getText().toString());				
 			nuovo.setSubTotale(((double) q) * selezionato.getPrezzo());
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
@@ -154,7 +160,6 @@ public class SceltaProdotto extends Base implements OnClickListener
 			notaDaScrivere = "";
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle("Note");
-			// Set an EditText view to get user input 
 			final EditText editNota = new EditText(this);
 			editNota.setHint("Inserisci eventuali note per il panino");
 			alert.setView(editNota);
