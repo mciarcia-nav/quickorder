@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Articolo implements Serializable 
 {
+	private static final long serialVersionUID = 7465804146814404007L;
 	private int id, quantita;
 	private double subTotale;
 	private Prodotto prodotto;

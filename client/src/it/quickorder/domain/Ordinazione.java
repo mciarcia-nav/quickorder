@@ -1,32 +1,34 @@
 package it.quickorder.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class Ordinazione implements Serializable 
 {
 	private static final long serialVersionUID = 4936994990728437519L;
-	private int id, numeroTavolo, numeroProdotti;
+	private long id;
+	private int numeroTavolo, numeroProdotti;
 	private Cliente cliente;
 	private Date arrivo;
-	private ArrayList<Articolo> articoli;
+	private Set<Articolo> articoli;
 	private double totale;
 	
 	public Ordinazione()
 	{
 		totale = 0;
-		articoli = new ArrayList<Articolo>();
+		articoli = new LinkedHashSet<Articolo>();
 		numeroProdotti = 0;
 	}
 	
-	public int getId() 
+	public long getId() 
 	{
 		return id;
 	}
 	
-	public void setId(int id) 
+	public void setId(long id) 
 	{
 		this.id = id;
 	}
@@ -63,22 +65,9 @@ public class Ordinazione implements Serializable
 	
 	public void aggiungiArticolo(Articolo a)
 	{
-		Articolo corrente = getArticolo(a.getProdotto());
-		if (corrente != null)
-		{
-			totale -= corrente.getSubTotale();
-			articoli.remove(corrente);
-			numeroProdotti -= corrente.getQuantita();
-		}
 		totale += a.getSubTotale();
-		numeroProdotti += a.getQuantita();	
 		articoli.add(a);
-
-	}
-	
-	public void rimuoviSingoloProdotto()
-	{
-		numeroProdotti -=1;
+		numeroProdotti += a.getQuantita();
 	}
 	
 	public void rimuoviArticolo(Prodotto p)
@@ -115,12 +104,12 @@ public class Ordinazione implements Serializable
 		this.totale = totale;
 	}
 	
-	public ArrayList<Articolo> getArticoli()
+	public Set<Articolo> getArticoli()
 	{
 		return articoli;
 	}
 	
-	public void setArticoli(ArrayList<Articolo> articoli)
+	public void setArticoli(Set<Articolo> articoli)
 	{
 		this.articoli = articoli;
 	}
@@ -150,4 +139,10 @@ public class Ordinazione implements Serializable
 		}
 		return null;
 	}
+	
+	public void rimuoviSingoloProdotto()
+	{
+		numeroProdotti -= 1;
+	}
 }
+
