@@ -34,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -79,7 +80,8 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.riepilogo);	
 		formatoPrezzo = new DecimalFormat("#0.00");
-		scroll = (ScrollView) findViewById(R.id.riepilogoSroll);
+		//scroll = (ScrollView) findViewById(R.id.riepilogoSroll);
+		tl = (TableLayout) findViewById(R.id.tableRiepilogo);
 		ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
 		Log.i("ordinazione",Integer.toString(ordinazione.getArticoli().size()));
 		if (ordinazione.getArticoli().size()==0)
@@ -112,11 +114,9 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 				
 				if (response == 0)
 				{
-					Toast t = Toast.makeText(getApplicationContext(), "Ordinazione inviata con successo.", Toast.LENGTH_SHORT);
-					t.show();
 					final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
-					alert.setTitle("Scegli");
-					alert.setMessage("Cosa vuoi fare?");
+					alert.setTitle("Ordinazione");
+					alert.setMessage("Ordinazione inviata con successo! Cosa vuoi fare?");
 					alert.setButton("Nuova Ordinazione", new DialogInterface.OnClickListener() 
 					{
 						
@@ -203,10 +203,8 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	
 	private void creaTabella()
 	{
-		scroll.removeAllViews();
-		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		tl = new TableLayout(this);
-		tl.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		tl.removeAllViews();
+		//tl.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		listaArticoli = ordinazione.getArticoli();
 		
 		//TITOLO
@@ -215,27 +213,29 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		text = new TextView(this);
 		text.setText("Riepilogo Ordinazione");
 		text.setPadding(0,0,0,30);
-		text.setTextAppearance(this, attr.textAppearanceLarge);
+		text.setTextAppearance(this, android.R.style.TextAppearance_Large);
 		row.addView(text);
+		//tl.addView(row);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 		//INTESTAZIONE TABELLA
 		row = new TableRow(this);
 		text = new TextView(this);
 		text.setText("Nome Articolo");
-		text.setTextAppearance(this, android.R.attr.textAppearanceMedium);
-		//text.setLayoutParams(lp);
+		//text.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+		//text.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		row.addView(text);
 		text = new TextView(this);
 		text.setText("Quantità");
-		text.setTextAppearance(this, android.R.attr.textAppearanceMedium);
-		//text.setLayoutParams(lp);
+		//text.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+		//text.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		row.addView(text);
 		text = new TextView(this);
 		text.setText("Prezzo");
-		text.setTextAppearance(this, android.R.attr.textAppearanceMedium);
-		//text.setLayoutParams(lp);
+		//text.setTextAppearance(this, android.R.style.TextAppearance_Medium);
+		//text.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		row.addView(text);
+		//tl.addView(row);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 		//CARICAMENTO ARTICOLI
@@ -265,6 +265,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			cancella.setBackgroundColor(android.R.color.transparent);
 			row.addView(cancella);
 			tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			//tl.addView(row);
 			index++;
 		}
 		
@@ -281,6 +282,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		//text.setLayoutParams(lp);
 		row.addView(text);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		//tl.addView(row);
 		
 		//SPINNER NUMERO TAVOLI
 		row = new TableRow(this);
@@ -292,6 +294,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		caricaSpinner();
 		row.addView(spinner);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		//tl.addView(row);
 		
 		//PULSANTE INVIA ORDINE
 		inviaOrdinazione = new Button(this);
@@ -304,9 +307,10 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row.addView(inviaOrdinazione);
 		row.setPadding(0, 30, 0, 0);
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		//tl.addView(row);
 		
 		//ADD TABLE TO SCROLL
-		scroll.addView(tl);
+		//scroll.addView(tl);
 	}
 	
 	private void caricaSpinner()
@@ -321,16 +325,20 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	
 	private void vuoto()
 	{
-		scroll.removeAllViews();
-		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		tl = new TableLayout(this);
+		int id=1;
+		tl.removeAllViews();
 		row = new TableRow(this);
-		row.setGravity(Gravity.CENTER_HORIZONTAL);
+		row.setId(id);
+		row.setGravity(Gravity.CENTER);
 		text = new TextView(this);
+		text.setGravity(Gravity.CENTER);
+		text.setId(id++);
+		text.setTextAppearance(this, android.R.style.TextAppearance_Large);
 		text.setText("Nessun prodotto selezionato");
+		//text.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		row.addView(text);
-		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		scroll.addView(tl);
+		//row.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		tl.addView(row);
 	}
 
 	@Override

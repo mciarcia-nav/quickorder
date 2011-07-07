@@ -27,7 +27,7 @@
     </RelativeLayout>
     <TextView android:textAppearance="?android:attr/textAppearanceSmall" android:text="TextView" android:layout_width="match_parent" android:id="@+id/descrizione" android:layout_marginTop="10px" android:editable="false" android:layout_margin="5px" android:gravity="center" android:layout_height="wrap_content"></TextView>
     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/relativeLayout4">
-        <ImageButton android:background="@android:color/transparent" android:id="@+id/nota" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/nota2" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true"></ImageButton>
+        <ImageButton  android:id="@+id/nota" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/nota3" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true"></ImageButton>
         <TextView android:layout_height="wrap_content" android:text="TextView" android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceMedium" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:id="@+id/labelTotale"></TextView>
         <ImageView android:layout_height="wrap_content" android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_toLeftOf="@+id/labelTotale" android:layout_alignTop="@+id/labelTotale" android:layout_alignBottom="@+id/labelTotale" android:src="@drawable/money"></ImageView>
     </RelativeLayout>
