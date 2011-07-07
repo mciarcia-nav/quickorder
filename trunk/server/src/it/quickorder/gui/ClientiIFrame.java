@@ -109,23 +109,30 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 			@Override
 			public void tableChanged(TableModelEvent e) 
 			{
-				System.out.println(e.getType());
 				int row = e.getFirstRow();
+				System.out.println("riga "+row);
 		        int col = e.getColumn();
-//		        boolean abilitazione = (Boolean)clientiTableModel.getValueAt(row, col);
-//		        if( abilitazione == true)
-//		        {
-//		        	clientiTableModel.modificaAbilitazioneCliente(row, false);
-//		        	disabilitaButton.setEnabled(false);
-//		        	abilitaButton.setEnabled(true);
-//		        }
-//		        else
-//		        {
-//		        	clientiTableModel.modificaAbilitazioneCliente(row, true);
-//		        	disabilitaButton.setEnabled(true);
-//		        	abilitaButton.setEnabled(false);
-//		        }
-		        System.out.println("dato cambiato nella riga "+row+" e nella colonna "+col);
+		        System.out.println("colonna "+col);
+		        if(col!=-1)
+		        {
+		        	boolean abilitazione = (Boolean)clientiTableModel.getValueAt(row, col);
+		        	if( abilitazione == true)
+		        	{
+		        		clientiTableModel.modificaAbilitazioneCliente(row, false);
+		        		disabilitaButton.setEnabled(false);
+		        		abilitaButton.setEnabled(true);
+		        	}
+		        	else
+		        	{
+		        		clientiTableModel.modificaAbilitazioneCliente(row, true);
+		        		disabilitaButton.setEnabled(true);
+		        		abilitaButton.setEnabled(false);
+		        	}
+		        }
+		        else
+		        {
+		        	clientiTableModel.eliminaCliente(row);
+		        }
 			}
 		});
 		clienti.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -134,20 +141,24 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 			public void valueChanged(ListSelectionEvent e)
 			{
 				int selectedRow = clienti.getSelectedRow();
-	    		clienteSelezionato = clientiTableModel.recuperaCliente(selectedRow);
-	    		setRigaSelezionata(selectedRow);
-	    		if(clienteSelezionato.isAbilitato())
-	    		{
-	    			disabilitaButton.setEnabled(true);
-	    			abilitaButton.setEnabled(false);
-		        	eliminaButton.setEnabled(true);
-	    		}
-	    		else
-	    		{
-	    			disabilitaButton.setEnabled(false);
-	    			abilitaButton.setEnabled(true);
-		        	eliminaButton.setEnabled(true);
-	    		}
+				if(selectedRow != -1)
+				{
+					clienteSelezionato = clientiTableModel.recuperaCliente(selectedRow);
+					setRigaSelezionata(selectedRow);
+					if(clienteSelezionato.isAbilitato())
+					{
+						disabilitaButton.setEnabled(true);
+						abilitaButton.setEnabled(false);
+						eliminaButton.setEnabled(true);
+					}
+					else
+					{
+						disabilitaButton.setEnabled(false);
+						abilitaButton.setEnabled(true);
+						eliminaButton.setEnabled(true);
+					}
+				}
+				
 			}
 		});
 		

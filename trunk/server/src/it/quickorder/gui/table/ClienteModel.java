@@ -111,4 +111,9 @@ public class ClienteModel extends AbstractTableModel
 		data.set(row, riga);
 	}
 	
+	public void eliminaCliente(int row)
+	{
+		data.remove(row);
+	}
+	
 }

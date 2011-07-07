@@ -27,10 +27,8 @@ public class DataRecoveryImpl implements DataRecovery
 	public List<Cliente> getClienti() 
 	{
 		if(!session.isOpen())
-		{
-			System.out.println("La sessione è chiusa");
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
-		}
+
 		session.beginTransaction();
 		Query query = session.createQuery("select distinct cliente from Cliente cliente");
         return query.list();
@@ -40,10 +38,8 @@ public class DataRecoveryImpl implements DataRecovery
 	public void abilitaCliente(Cliente cliente) 
 	{
 		if(!session.isOpen())
-		{
-			System.out.println("La sessione è chiusa");
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
-		}
+
 		Transaction tr = session.beginTransaction();
 		Cliente toUpdate = (Cliente) session.get(Cliente.class, new String(cliente.getCodiceFiscale()));
 		toUpdate.setAbilitato(true);
@@ -54,10 +50,8 @@ public class DataRecoveryImpl implements DataRecovery
 	public void disabilitaCliente(Cliente cliente) 
 	{
 		if(!session.isOpen())
-		{
-			System.out.println("La sessione è chiusa");
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
-		}
+
 		Transaction tr = session.beginTransaction();
 		Cliente toUpdate = (Cliente) session.get(Cliente.class, new String(cliente.getCodiceFiscale()));
 		toUpdate.setAbilitato(false);
@@ -69,10 +63,8 @@ public class DataRecoveryImpl implements DataRecovery
 	public void eliminaCliente(Cliente cliente)
 	{
 		if(!session.isOpen())
-		{
-			System.out.println("La sessione è chiusa");
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
-		}
+
 		Transaction tr = session.beginTransaction();
 		Cliente toDelete = (Cliente) session.get(Cliente.class, new String(cliente.getCodiceFiscale()));
 		session.delete(toDelete);
