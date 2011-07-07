@@ -28,7 +28,7 @@ public class TipologiaTableCellRenderer extends DefaultTableCellRenderer
 				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
 				break;
 			case Prodotto.BEVANDA:
-				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "bevanda24.png")));
 				break;
 			default:
 				nuova.setText("" + valore);

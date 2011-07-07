@@ -77,7 +77,7 @@ class UpdateRequestThreadHandler implements Runnable
 				session.beginTransaction();
 				// Recupero i prodotti che sono stati aggiornati.
 				Query query = session.createQuery("from Prodotto where versione > :var");
-				query.setInteger("var", 0);//versione);
+				query.setInteger("var", versione);
 				@SuppressWarnings("unchecked")
 				List<Prodotto> risultati = (List<Prodotto>) query.list();
 				
