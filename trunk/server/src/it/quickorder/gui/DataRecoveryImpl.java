@@ -1,6 +1,7 @@
 package it.quickorder.gui;
 
 import it.quickorder.domain.Cliente;
+import it.quickorder.domain.Ordinazione;
 import it.quickorder.helpers.HibernateUtil;
 
 import java.util.List;
@@ -66,6 +67,10 @@ public class DataRecoveryImpl implements DataRecovery
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		Transaction tr = session.beginTransaction();
+		@SuppressWarnings("unchecked")
+		List<Ordinazione> daEliminare = (List<Ordinazione>)session.createQuery("from Ordinazione WHERE cliente.codiceFiscale = :var").setString("var", cliente.getCodiceFiscale()).list();
+		for (Ordinazione o : daEliminare)
+			session.delete(o);
 		Cliente toDelete = (Cliente) session.get(Cliente.class, new String(cliente.getCodiceFiscale()));
 		session.delete(toDelete);
 		tr.commit();

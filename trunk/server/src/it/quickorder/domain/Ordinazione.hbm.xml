@@ -9,7 +9,7 @@
   		</id>
   		<many-to-one name="cliente" class="Cliente" column="FKID_CLIENTE" not-null="true"/>
   		<property name="arrivo" type="timestamp" column="DATA" not-null="true"/>
-  		<set name="articoli" table="ORDINAZIONE_PRODOTTO" lazy="false">
+  		<set name="articoli" table="ORDINAZIONE_PRODOTTO" cascade="delete" lazy="false">
   			<key column="ORDINAZIONE_ID"/>
   			<composite-element class="Articolo">
 				<property name="quantita" type="integer" column="QUANTITA"/>
