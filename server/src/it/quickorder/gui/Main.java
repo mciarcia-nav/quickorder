@@ -24,7 +24,9 @@ public class Main extends JFrame
 	private static final int ORDERS_PORT = 4444;
 	private static final int UPD_PORT = 4445;
 	private static final int SIGNUP_PORT = 4446;
-	
+	private static final int SCOSTAMENTO_ORIZZONTALE = 15, SCOSTAMENTO_VERTICALE = 30;
+	private final static int MAX_WIDTH = 1100;
+	private final static int MAX_HEIGHT = 600;
 	protected Dimension SIZE;
 	private JPanel jContentPane;
 	private JDesktopPane jDesktopPane;
@@ -113,6 +115,32 @@ public class Main extends JFrame
 			{
 				if(!clientiFrame.isVisible())
 				{
+					Point stackLoc = stackFrame.getLocation();
+					Dimension stackSize = stackFrame.getSize();
+					Dimension deskSize = jDesktopPane.getSize();
+					Dimension frameSize = new Dimension();
+					frameSize.width = deskSize.width - stackSize.width - 80 - SCOSTAMENTO_ORIZZONTALE - (int) (deskSize.width * 0.1);
+					frameSize.height = (int) (stackSize.height * 0.9) - SCOSTAMENTO_VERTICALE; 
+					
+					if (frameSize.width > MAX_WIDTH)
+						frameSize.width = MAX_WIDTH;
+					if (frameSize.height > MAX_HEIGHT)
+						frameSize.height = MAX_HEIGHT;
+					
+					Point frameLoc = new Point();
+					if (stackFrame.getLocation().x == 30)
+					{
+						int spazioDisponibile = deskSize.width - stackLoc.x -  stackSize.width;
+						frameLoc.x = 30 + stackSize.width + (int) ((spazioDisponibile - frameSize.width) / 2) + 15 ;
+					}
+					else
+					{
+						int spazioDisponibile = deskSize.width -  stackSize.width - 30;
+						frameLoc.x = 30 + (int) ((spazioDisponibile - frameSize.width) / 2) + 15 ;
+					}
+					frameLoc.y = stackLoc.y + (int) ((stackSize.height - frameSize.height) / 4) + 30 ;
+					
+					clientiFrame.setBounds(frameLoc.x, frameLoc.y, frameSize.width, frameSize.height);
 					clientiFrame.setVisible(true);
 					clientiFrame.moveToFront();
 				}

@@ -10,8 +10,10 @@ import it.quickorder.helpers.HibernateUtil;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -58,8 +60,7 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
         setClosable(true);
         setResizable(true);
 		setMaximizable(true);
-        setLocation(100, 100);
-        setSize(1000, 400);
+		
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
         toolbar = new JToolBar();
@@ -69,6 +70,7 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
        
         jContentPane = new JPanel();
         jContentPane.setLayout(new BorderLayout());
+       
         clientiTableModel = new ClienteModel();
         clientiTableModel.caricaClienti(dataRecovery.getClienti());
         
@@ -88,15 +90,26 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 		clienti.setSelectionBackground(Color.white);
 		clienti.setAutoscrolls(true);
 		clienti.setShowVerticalLines(false);
+		
+		clienti.getColumnModel().getColumn(0).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(1).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(2).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(3).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(4).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(5).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(6).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(7).setPreferredWidth(180);
+		clienti.getColumnModel().getColumn(8).setPreferredWidth(180);
+		
         jContentPane.add(clienti.getTableHeader(), BorderLayout.NORTH);
 		jContentPane.add(clienti, BorderLayout.CENTER);
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		getContentPane().add(jContentPane, BorderLayout.CENTER);
-		abilitaButton = new JButton("Abilita", new ImageIcon(URL_IMAGES+"yes.png"));
+		abilitaButton = new JButton("Abilita", new ImageIcon(getClass().getResource(URL_IMAGES+"yesIcon.png")));
 		abilitaButton.addActionListener(this);
-	    disabilitaButton = new JButton("Disabilita", new ImageIcon(URL_IMAGES+"no.png"));
+	    disabilitaButton = new JButton("Disabilita", new ImageIcon(getClass().getResource(URL_IMAGES+"noIcon.png")));
 	    disabilitaButton.addActionListener(this);
-	    eliminaButton = new JButton("Elimina", new ImageIcon(URL_IMAGES+"delete.png"));
+	    eliminaButton = new JButton("Elimina", new ImageIcon(getClass().getResource(URL_IMAGES+"delete.png")));
 	    eliminaButton.addActionListener(this);
 	    abilitaButton.setEnabled(false);
 	    disabilitaButton.setEnabled(false);
