@@ -6,11 +6,16 @@ import it.quickorder.domain.Prodotto;
 
 import java.text.DecimalFormat;
 import java.util.List;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +39,8 @@ public class SceltaProdotto extends Base implements OnClickListener
 	private Ordinazione ordinazione;
 	private int tipologia;
 	private DecimalFormat formatoPrezzo;
+	private ImageButton nota;
+	private String notaDaScrivere ="";
 	
 	@Override
 	public void onDestroy()
@@ -75,15 +82,19 @@ public class SceltaProdotto extends Base implements OnClickListener
             descrizioneProdotto = (TextView) findViewById(R.id.descrizione);
             quantita = (TextView) findViewById(R.id.labelQuantita);
             image = (ImageView) findViewById(R.id.immagine);
-            
+            nota = (ImageButton) findViewById(R.id.nota);
+            nota.setEnabled(false);
             // Impostazione Listeners
             next.setOnClickListener(this);
             prev.setOnClickListener(this);
             quantitaMinus.setOnClickListener(this);
             quantitaPlus.setOnClickListener(this);
             aggiungi.setOnClickListener(this);
+            nota.setOnClickListener(this);
             ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
             listaProdotti = dbAdapter.caricaDatiProdotti(tipologia);
+            if (tipologia != 0)
+            	nota.setVisibility(4);
             posizione = 0;
             aggiornaInformazioniProdotto(posizione);
             labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
@@ -111,6 +122,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			{
 				quantitaMinus.setEnabled(true);
 				aggiungi.setEnabled(true);
+				nota.setEnabled(true);
 			}
 		}
 		else if (v.getId() == R.id.minus) // RIMOUVI PANINO
@@ -121,6 +133,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			{
 				quantitaMinus.setEnabled(false);
 				aggiungi.setEnabled(false);
+				nota.setEnabled(false);
 			}
 		}
 		else if (v.getId() == R.id.aggiungi)
@@ -131,9 +144,37 @@ public class SceltaProdotto extends Base implements OnClickListener
 			nuovo.setSubTotale(((double) q) * selezionato.getPrezzo());
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
+			nuovo.setNote(notaDaScrivere);
 			ordinazione.aggiungiArticolo(nuovo);
 			labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
 			aggiungi.setImageResource(R.drawable.refresh);
+		}
+		else if (v.getId() == R.id.nota)
+		{
+			notaDaScrivere = "";
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Note");
+			// Set an EditText view to get user input 
+			final EditText editNota = new EditText(this);
+			editNota.setHint("Inserisci eventuali note per il panino");
+			alert.setView(editNota);
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+				  notaDaScrivere = editNota.getText().toString();
+				  return;
+				}
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+					return;
+				}
+			});
+			alert.show();
 		}
 	}
 		

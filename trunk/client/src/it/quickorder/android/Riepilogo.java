@@ -98,59 +98,62 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		
 		if (v.getId() == 100)
 		{
-			final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
-			alert.setTitle("Conferma");
-			alert.setMessage("Sei sicuro di voler inviare l'ordinazione?");
-			alert.setButton("Conferma", new DialogInterface.OnClickListener() 
+			// TODO Auto-generated method stub
+			try
 			{
 				
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
+				ordinazione.setNumeroTavolo(numeroTavolo);
+				Socket socket = new Socket(SRV_ADDRESS, ORDERS_PORT);
+				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+				output.writeObject(ordinazione);
+				output.flush();
+				int response = input.readInt();
+				
+				if (response == 0)
 				{
-					// TODO Auto-generated method stub
-					try
+					Toast t = Toast.makeText(getApplicationContext(), "Ordinazione inviata con successo.", Toast.LENGTH_SHORT);
+					t.show();
+					final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
+					alert.setTitle("Scegli");
+					alert.setMessage("Cosa vuoi fare?");
+					alert.setButton("Nuova Ordinazione", new DialogInterface.OnClickListener() 
 					{
 						
-						ordinazione.setNumeroTavolo(numeroTavolo);
-						Socket socket = new Socket(SRV_ADDRESS, ORDERS_PORT);
-						ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-						ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-						output.writeObject(ordinazione);
-						output.flush();
-						int response = input.readInt();
-						
-						if (response == 0)
+						@Override
+						public void onClick(DialogInterface dialog, int which) 
 						{
-							Toast t = Toast.makeText(getApplicationContext(), "Ordinazione inviata con successo.", Toast.LENGTH_SHORT);
-							t.show();
-							fine();
+							alert.dismiss();
+							nuovaOrdinazione();
 							finish();
 						}
-						else
-						{
-							Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito.", Toast.LENGTH_SHORT);
-							t.show();
-							return;
-						}
-						
-					}
-					catch (Exception ex)
-					{
-						ex.printStackTrace();
-					}
-				}
 
-				
-			});
-			alert.setButton2("Annulla",new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
-				{
-					alert.dismiss();
+						
+					});
+					alert.setButton2("Esci",new DialogInterface.OnClickListener()
+					{
+						@Override
+						public void onClick(DialogInterface dialog, int which) 
+						{
+							alert.dismiss();
+							finish();
+						}
+					});
+					alert.show();
 				}
-			});
-			alert.show();
+				else
+				{
+					Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito.", Toast.LENGTH_SHORT);
+					t.show();
+					return;
+				}
+				
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			
 		}
 		else //BOTTONE CANCELLA
 		{
@@ -189,10 +192,9 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		
 	}
 	
-	private void fine() 
+	private void nuovaOrdinazione() 
 	{
-		Log.i("fine", "fine");
-		Intent i = new Intent(this,Fine.class);
+		Intent i = new Intent(this,NuovaOrdinazione.class);
 		String pkg = getPackageName();
 		Cliente cliente = ordinazione.getCliente();
 		i.putExtra(pkg + ".cliente", cliente);
