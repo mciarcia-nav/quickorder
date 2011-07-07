@@ -6,10 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-
 import it.quickorder.domain.Aggiornamento;
 import it.quickorder.domain.Cliente;
-import it.quickorder.domain.Prodotto;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,7 +37,7 @@ public class SplashScreen extends Base
 					break;
 				case 2:
 					downloadCounter = msg.arg2;
-					int progresso = (int) Math.ceil(85 / downloadTotal);
+					int progresso = (int) Math.ceil(80 / downloadTotal);
 					labelStato.setText("Aggiornamento prodotto " + downloadCounter + " di " + downloadTotal + ".");
 					progressBar1.incrementProgressBy(progresso);
 					break;
