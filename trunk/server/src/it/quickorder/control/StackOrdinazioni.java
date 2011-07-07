@@ -49,14 +49,16 @@ public class StackOrdinazioni
 			if (trovato)
 			{
 				ordinazioni.remove(ord);
-				ultimaOrdinazione = ordinazioni.get(9);
+				if (ordinazioni.size() >= 9)
+					ultimaOrdinazione = ordinazioni.get(9);
 			}
 		}
 		if (trovato)
 			for (OrdinazioniListener l : listeners)
 			{
 				l.ordinazioneRimossa(new Event(null, 0, ord));
-				l.ordinazioneRicevuta(new Event(null, 0, ultimaOrdinazione));
+				if (ultimaOrdinazione != null)
+					l.ordinazioneRicevuta(new Event(null, 0, ultimaOrdinazione));
 			}
 	}
 	

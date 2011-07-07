@@ -39,7 +39,8 @@ public class Main extends JFrame
 	private UpdateServer updateServer;
 	private JInternalFrame notificaRegistrazione;
 	private JInternalFrame gestioneClienti;
-	private JButton btnGestioneClienti;
+	private JInternalFrame chiusura;
+	private JButton btnGestioneClienti, btnChiusura;
 	private NotificaButton btnNotificheRegistrazione;
 	
 	{
@@ -122,6 +123,17 @@ public class Main extends JFrame
 			}
 		});
 
+		// Creazione del bottone per la chiusura.
+		chiusura = new TransparentJInternalFrame();
+		btnChiusura = new JButton("Esci");
+		btnChiusura.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "close.png")));
+		btnChiusura.setBackground(Color.WHITE);
+		btnChiusura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		chiusura.add(btnChiusura);
+		chiusura.pack();
+		jDesktopPane.add(chiusura, Integer.MAX_VALUE - 1);
+		chiusura.setVisible(true);
+		
 		jDesktopPane.add(clientiFrame);
 		setContentPane(jContentPane);		
 	}
@@ -247,7 +259,16 @@ public class Main extends JFrame
 		notificheLoc.y = gestioneClientiLoc.y;
 		notificaRegistrazione.setLocation(notificheLoc);
 		
+		Dimension chiusuraSize = new Dimension();
+		chiusuraSize.width = stackFrame.getWidth();
+		chiusuraSize.height = size1.height;
 		
+		Point chiusuraLoc = new Point();
+		chiusuraLoc.x = stackLoc.x;
+		chiusuraLoc.y = 0 + (int) (chiusuraSize.height / 2);
+		
+		chiusura.setSize(chiusuraSize);
+		chiusura.setLocation(chiusuraLoc);
 	}
 	
 }

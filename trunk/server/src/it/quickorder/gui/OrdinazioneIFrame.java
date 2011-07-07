@@ -62,10 +62,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 	}
 
 	@Override
-	public void internalFrameActivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void internalFrameActivated(InternalFrameEvent e) {}
 
 	@Override
 	public void internalFrameClosed(InternalFrameEvent e) 
@@ -82,35 +79,16 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 	}
 
 	@Override
-	public void internalFrameClosing(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void internalFrameClosing(InternalFrameEvent e){}
 	@Override
-	public void internalFrameDeactivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void internalFrameDeactivated(InternalFrameEvent e) {}
 	@Override
-	public void internalFrameDeiconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void internalFrameDeiconified(InternalFrameEvent e) {}
 	@Override
-	public void internalFrameIconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void internalFrameIconified(InternalFrameEvent e) {}
 	@Override
-	public void internalFrameOpened(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void internalFrameOpened(InternalFrameEvent e) {}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
