@@ -22,7 +22,7 @@ public class OrdersServer implements Runnable
 		formato = new SimpleDateFormat("hh:mm.ss");
 		srvSocket = new ServerSocket(port);
 	}
-
+	
 	@Override
 	public void run()
 	{

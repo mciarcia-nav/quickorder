@@ -223,13 +223,16 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		// Pannello pulsanti
 		JPanel pulsanti = new JPanel(new GridBagLayout());
 		emettiScontrino = new JButton("Emetti scontrino");
-		emettiScontrino.setBackground(Color.GREEN);
+		emettiScontrino.setBackground(new Color(51,153,102));
+		emettiScontrino.setForeground(Color.WHITE);
+		emettiScontrino.setFont(Main.plainFont);
 		emettiScontrino.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "receipt.png")));
 		emettiScontrino.addActionListener(this);
 		
 		eliminaOrdinazione = new JButton("Elimina Ordinazione");
 		eliminaOrdinazione.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "delete.png")));
 		eliminaOrdinazione.setBackground(Color.RED);
+		eliminaOrdinazione.setFont(Main.plainFont);
 		eliminaOrdinazione.setForeground(Color.WHITE);
 		eliminaOrdinazione.addActionListener(this);
 		
@@ -289,13 +292,10 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		labelDesc.setVerticalTextPosition(SwingConstants.BOTTOM);
 		DecimalFormat formato = new DecimalFormat("##.00");
 		labelTotale = new JLabel("€ " + formato.format(ordinazione.getTotale()));
-		labelTotale.setHorizontalTextPosition(SwingConstants.TRAILING);
-		
+		labelTotale.setHorizontalTextPosition(SwingConstants.TRAILING);	
 		labelTotale.setFont(Main.plainFont);
 		totale.add(labelDesc);
-		totale.add(labelTotale);
-		totale.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		
+		totale.add(labelTotale);	
 		
 		// Impostazione layout content pane
 		GridBagConstraints gb = new GridBagConstraints();

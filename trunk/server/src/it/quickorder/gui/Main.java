@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-public class Main extends JFrame 
+public class Main extends JFrame implements ActionListener 
 {
 	private static final long serialVersionUID = -571519118389440334L;
 
@@ -50,7 +50,7 @@ public class Main extends JFrame
 	}
 	
 	
-	public Main() throws IOException
+	public Main()throws IOException
 	{
 		super("QuickOrder");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -157,11 +157,11 @@ public class Main extends JFrame
 		btnChiusura.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "close.png")));
 		btnChiusura.setBackground(Color.WHITE);
 		btnChiusura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnChiusura.addActionListener(this);
 		chiusura.add(btnChiusura);
 		chiusura.pack();
 		jDesktopPane.add(chiusura, Integer.MAX_VALUE - 1);
 		chiusura.setVisible(true);
-		
 		jDesktopPane.add(clientiFrame);
 		setContentPane(jContentPane);		
 	}
@@ -297,6 +297,15 @@ public class Main extends JFrame
 		
 		chiusura.setSize(chiusuraSize);
 		chiusura.setLocation(chiusuraLoc);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent a) 
+	{
+		int choice = JOptionPane.showInternalConfirmDialog(jDesktopPane, "Vuoi davvero uscire da questa amazing applicazione?", "Quick Order", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (choice == JOptionPane.OK_OPTION)
+			System.exit(0);
+		
 	}
 	
 }

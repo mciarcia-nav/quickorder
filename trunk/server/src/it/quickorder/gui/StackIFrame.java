@@ -184,13 +184,14 @@ public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 		boolean trovato = false;
 		int index = 0, size = pannelli.size();
 		StackPanel corrente = null;
-		while (!trovato && index++ < size)
+		while (!trovato && index < size)
 		{
 			corrente = pannelli.get(index);
 			if (corrente.hasOrdinazione() && corrente.getOrdinazione().equals(rimossa))
 			{
 				trovato = true;
 			}
+			index++;
 		}
 		
 		if (trovato)
