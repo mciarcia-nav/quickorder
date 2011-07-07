@@ -163,7 +163,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			final EditText editNota = new EditText(this);
 			editNota.setHint("Inserisci eventuali note per il panino");
 			alert.setView(editNota);
-			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() 
+			alert.setPositiveButton("Aggiungi Nota", new DialogInterface.OnClickListener() 
 			{
 				public void onClick(DialogInterface dialog, int whichButton) 
 				{
@@ -172,7 +172,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 				}
 			});
 
-			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() 
+			alert.setNegativeButton("Annulla", new DialogInterface.OnClickListener() 
 			{
 				public void onClick(DialogInterface dialog, int whichButton) 
 				{
