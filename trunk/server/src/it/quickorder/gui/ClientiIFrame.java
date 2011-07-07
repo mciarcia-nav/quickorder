@@ -63,7 +63,7 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 		
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
-        setFrameIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers.png")));
+        setFrameIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers24.png")));
         toolbar = new JToolBar();
         toolbar.setLayout(new GridLayout(1, 2));
         dataRecovery = new DataRecoveryImpl();
