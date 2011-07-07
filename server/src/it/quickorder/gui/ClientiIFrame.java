@@ -35,6 +35,8 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
 
 @SuppressWarnings("serial")
@@ -45,9 +47,10 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 	private DataRecovery dataRecovery;
 	private JToolBar toolbar;
 	public static String URL_IMAGES = "/it/quickorder/gui/images/";
-	private JButton abilitaButton, disabilitaButton, eliminaButton;
+	private JButton abilitaButton, disabilitaButton, eliminaButton, aggiornaButton;
 	private ClienteModel clientiTableModel;
 	private Cliente clienteSelezionato;
+	private int rigaSelezionata;
 	
 	public ClientiIFrame() 
 	{
@@ -62,6 +65,7 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
         toolbar = new JToolBar();
         toolbar.setLayout(new GridLayout(1, 2));
         dataRecovery = new DataRecoveryImpl();
+        rigaSelezionata = -1;
        
         jContentPane = new JPanel();
         jContentPane.setLayout(new BorderLayout());
@@ -94,9 +98,36 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 	    disabilitaButton.addActionListener(this);
 	    eliminaButton = new JButton("Elimina", new ImageIcon(URL_IMAGES+"delete.png"));
 	    eliminaButton.addActionListener(this);
+	    abilitaButton.setEnabled(false);
+	    disabilitaButton.setEnabled(false);
+	    eliminaButton.setEnabled(false);
 	    toolbar.add(abilitaButton);
 	    toolbar.add(disabilitaButton);
 	    toolbar.add(eliminaButton);
+	    clientiTableModel.addTableModelListener(new TableModelListener() {
+			
+			@Override
+			public void tableChanged(TableModelEvent e) 
+			{
+				System.out.println(e.getType());
+				int row = e.getFirstRow();
+		        int col = e.getColumn();
+//		        boolean abilitazione = (Boolean)clientiTableModel.getValueAt(row, col);
+//		        if( abilitazione == true)
+//		        {
+//		        	clientiTableModel.modificaAbilitazioneCliente(row, false);
+//		        	disabilitaButton.setEnabled(false);
+//		        	abilitaButton.setEnabled(true);
+//		        }
+//		        else
+//		        {
+//		        	clientiTableModel.modificaAbilitazioneCliente(row, true);
+//		        	disabilitaButton.setEnabled(true);
+//		        	abilitaButton.setEnabled(false);
+//		        }
+		        System.out.println("dato cambiato nella riga "+row+" e nella colonna "+col);
+			}
+		});
 		clienti.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -104,25 +135,19 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 			{
 				int selectedRow = clienti.getSelectedRow();
 	    		clienteSelezionato = clientiTableModel.recuperaCliente(selectedRow);
+	    		setRigaSelezionata(selectedRow);
 	    		if(clienteSelezionato.isAbilitato())
 	    		{
 	    			disabilitaButton.setEnabled(true);
-	    			abilitaButton.setEnabled(false);;
+	    			abilitaButton.setEnabled(false);
+		        	eliminaButton.setEnabled(true);
 	    		}
 	    		else
 	    		{
 	    			disabilitaButton.setEnabled(false);
 	    			abilitaButton.setEnabled(true);
+		        	eliminaButton.setEnabled(true);
 	    		}
-			}
-		});
-		
-		abilitaButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				
 			}
 		});
 		
@@ -136,15 +161,31 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 	{
 		if (evt.getSource().equals(abilitaButton))
 		{
-			
+			dataRecovery.abilitaCliente(clienteSelezionato);
+			clientiTableModel.fireTableCellUpdated(getRigaSelezionata(), 8);
 		}
 		else if (evt.getSource().equals(disabilitaButton))
 		{
-			
+			dataRecovery.disabilitaCliente(clienteSelezionato);
+			clientiTableModel.fireTableCellUpdated(getRigaSelezionata(), 8);
+		}
+		else if(evt.getSource().equals(eliminaButton))
+		{
+			dataRecovery.eliminaCliente(clienteSelezionato);
+			clientiTableModel.fireTableRowsDeleted(rigaSelezionata, rigaSelezionata+1);
 		}
 		
 	}
 	
+	private void setRigaSelezionata(int riga)
+	{
+		rigaSelezionata = riga;
+	}
+	
+	private int getRigaSelezionata()
+	{
+		return rigaSelezionata;
+	}
 }
 
 class ClienteCellRenderer extends DefaultTableCellRenderer

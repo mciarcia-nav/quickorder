@@ -11,5 +11,7 @@ public interface DataRecovery
 	public void abilitaCliente(Cliente cliente);
 	
 	public void disabilitaCliente(Cliente cliente);
+	
+	public void eliminaCliente(Cliente cliente);
 }
 
