@@ -65,7 +65,6 @@ public class Main extends JFrame implements ActionListener
 		orderServer = new OrdersServer(ORDERS_PORT, stack);
 		signupServer = new SignupServer(SIGNUP_PORT, codaNotifiche);
 		updateServer = new UpdateServer(UPD_PORT);
-		clientiFrame = new ClientiIFrame();
 			
 		// Disegna l'interfaccia a partire dal content pane.
 		jContentPane = new JPanel();
@@ -113,6 +112,11 @@ public class Main extends JFrame implements ActionListener
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
+				if (clientiFrame == null)
+				{
+					clientiFrame = new ClientiIFrame();
+					jDesktopPane.add(clientiFrame, Integer.MAX_VALUE-1);
+				}
 				if(!clientiFrame.isVisible())
 				{
 					Point stackLoc = stackFrame.getLocation();
@@ -162,7 +166,6 @@ public class Main extends JFrame implements ActionListener
 		chiusura.pack();
 		jDesktopPane.add(chiusura, Integer.MAX_VALUE - 1);
 		chiusura.setVisible(true);
-		jDesktopPane.add(clientiFrame);
 		setContentPane(jContentPane);		
 	}
 	

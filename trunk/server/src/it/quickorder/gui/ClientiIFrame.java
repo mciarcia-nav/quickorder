@@ -59,10 +59,11 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
         super("Gestione Clienti");
         setClosable(true);
         setResizable(true);
-		setMaximizable(true);
+		setMaximizable(false);
 		
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
+        setFrameIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers.png")));
         toolbar = new JToolBar();
         toolbar.setLayout(new GridLayout(1, 2));
         dataRecovery = new DataRecoveryImpl();
