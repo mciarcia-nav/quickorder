@@ -3,7 +3,11 @@ package it.quickorder.android;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Cliente;
@@ -43,14 +47,15 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	private ImageButton cancella;
 	private Ordinazione ordinazione;
 	private ScrollView scroll;
-	private ArrayList<Articolo> listaArticoli;
+	private Set<Articolo> listaArticoli;
 	private TableLayout tl;
 	private TableRow row;
 	private TextView text;
 	private int numeroTavolo;
 	private Spinner spinner;
 	private String[] tavoli;
-		
+	private DecimalFormat formatoPrezzo;
+	
 	@Override
 	public void onResume()
 	{
@@ -73,6 +78,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.riepilogo);	
+		formatoPrezzo = new DecimalFormat("#0.00");
 		scroll = (ScrollView) findViewById(R.id.riepilogoSroll);
 		ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
 		Log.i("ordinazione",Integer.toString(ordinazione.getArticoli().size()));
@@ -149,8 +155,9 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		else //BOTTONE CANCELLA
 		{
 			int posizione = v.getId() - 200;
-			ArrayList<Articolo> listaArticoli = ordinazione.getArticoli();
-			Articolo a = listaArticoli.get(posizione);
+			Articolo[] articoli = new Articolo[ordinazione.getArticoli().size()];
+			ordinazione.getArticoli().toArray(articoli);
+			Articolo a = articoli[posizione];
 			double totale = ordinazione.getTotale();
 			double prezzoSingolo = a.getProdotto().getPrezzo();
 			double subTotale = a.getSubTotale();
@@ -164,9 +171,10 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			else
 			{
 				Log.i("rimuovi","singolo");
-				ordinazione.getArticoli().get(posizione).setQuantita(quantita-1);
-				ordinazione.getArticoli().get(posizione).setSubTotale(subTotale - prezzoSingolo);
-				ordinazione.setTotale(totale-prezzoSingolo);
+				Articolo aa = ordinazione.getArticolo(a.getProdotto());
+				aa.setQuantita(quantita-1);
+				aa.setSubTotale(subTotale - prezzoSingolo);
+				ordinazione.setTotale(totale - prezzoSingolo);
 				ordinazione.rimuoviSingoloProdotto();
 			}
 			if (ordinazione.getArticoli().size()==0)
@@ -229,29 +237,33 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 		//CARICAMENTO ARTICOLI
-		for (int i = 0; i<listaArticoli.size(); i++)
+		Iterator<Articolo> articoli = listaArticoli.iterator();
+		int index = 0;
+		while (articoli.hasNext())
 		{
+			Articolo corrente = articoli.next();
 			row = new TableRow(this);
 			text = new TextView(this);
-			text.setText(listaArticoli.get(i).getProdotto().getNome());
+			text.setText(corrente.getProdotto().getNome());
 			//text.setLayoutParams(lp);
 			row.addView(text);
 			text = new TextView(this);
-			text.setText(Integer.toString(listaArticoli.get(i).getQuantita()));
+			text.setText(Integer.toString(corrente.getQuantita()));
 			text.setGravity(Gravity.CENTER);
 			//text.setLayoutParams(lp);
 			row.addView(text);
 			text = new TextView(this);
-			text.setText(Double.toString(listaArticoli.get(i).getSubTotale())+"€");
+			text.setText(formatoPrezzo.format(corrente.getSubTotale()) + " €");
 			//text.setLayoutParams(lp);
 			row.addView(text);
 			cancella = new ImageButton(this);
 			cancella.setImageResource(R.drawable.delete);
 			cancella.setOnClickListener(this);
-			cancella.setId(200+i);
+			cancella.setId(200 + index);
 			cancella.setBackgroundColor(android.R.color.transparent);
 			row.addView(cancella);
 			tl.addView(row,new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			index++;
 		}
 		
 		//PREZZO FINALE
@@ -262,7 +274,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		//text.setLayoutParams(lp);
 		row.addView(text);
 		text = new TextView(this);
-		text.setText(Double.toString(ordinazione.getTotale())+"€");
+		text.setText(formatoPrezzo.format(ordinazione.getTotale()) + " €");
 		text.setPadding(0, 30, 0, 30);
 		//text.setLayoutParams(lp);
 		row.addView(text);

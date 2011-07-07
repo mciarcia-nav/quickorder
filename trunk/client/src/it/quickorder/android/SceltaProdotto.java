@@ -61,7 +61,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			setContentView(R.layout.layoutsceltaprodotto);
 			String pkg = getPackageName();
 			tipologia = getIntent().getIntExtra(pkg + ".tipologia", -1);
-			formatoPrezzo = new DecimalFormat("##.00");
+			formatoPrezzo = new DecimalFormat("#0.00");
             next = (ImageButton) findViewById(R.id.next);
             prev = (ImageButton) findViewById(R.id.prev);
             aggiungi = (ImageButton) findViewById(R.id.aggiungi);
@@ -128,7 +128,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			Articolo nuovo = new Articolo();
 			int q = Integer.parseInt(quantita.getText().toString());
 			Prodotto selezionato = listaProdotti.get(posizione);
-			nuovo.setSubTotale(q * selezionato.getPrezzo());
+			nuovo.setSubTotale(((double) q) * selezionato.getPrezzo());
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
 			ordinazione.aggiungiArticolo(nuovo);
