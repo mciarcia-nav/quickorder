@@ -65,7 +65,8 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 	public void onClick(View v)
 	{
 		nuovoCliente = creaBeanCliente();
-		tipoThread = "controllo";	
+		tipoThread = "controllo";
+		new Thread(Registrazione.this).start();
 		if (v.getId() == sessoFormM.getId())
 		{	
 			sessoFormM.setChecked(true);
