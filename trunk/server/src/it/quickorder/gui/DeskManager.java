@@ -201,8 +201,8 @@ public class DeskManager extends DefaultDesktopManager
 		Dimension stackSize = stackFrame.getSize();
 		Dimension deskSize = jDesktop.getSize();
 		Dimension frameSize = new Dimension();
-		frameSize.width = deskSize.width - stackSize.width - 80 - SCOSTAMENTO_ORIZZONTALE * ordinazioniMassime - (int) (deskSize.width * 0.1);
-		frameSize.height = (int) (stackSize.height * 0.9) - SCOSTAMENTO_VERTICALE * ordinazioniMassime; 
+		frameSize.width = deskSize.width - stackSize.width - 30 - SCOSTAMENTO_ORIZZONTALE * ordinazioniMassime;
+		frameSize.height = stackSize.height - SCOSTAMENTO_VERTICALE * ordinazioniMassime; 
 		
 		if (frameSize.width > MAX_WIDTH)
 			frameSize.width = MAX_WIDTH;
@@ -213,14 +213,14 @@ public class DeskManager extends DefaultDesktopManager
 		if (stackFrame.getLocation().x == 30)
 		{
 			int spazioDisponibile = deskSize.width - stackLoc.x -  stackSize.width;
-			frameLoc.x = 30 + stackSize.width + (int) ((spazioDisponibile - frameSize.width) / 2) + 15 * ordinazioniAttive.size();
+			frameLoc.x = 30 + stackSize.width + (int) ((spazioDisponibile - frameSize.width) / 2) + (int) (SCOSTAMENTO_ORIZZONTALE * ordinazioniAttive.size() / 2);
 		}
 		else
 		{
 			int spazioDisponibile = deskSize.width -  stackSize.width - 30;
-			frameLoc.x = 30 + (int) ((spazioDisponibile - frameSize.width) / 2) + 15 * ordinazioniAttive.size();
+			frameLoc.x = (int) ((spazioDisponibile - frameSize.width) / 2) + (int) (15 * ordinazioniAttive.size() /2);
 		}
-		frameLoc.y = stackLoc.y + (int) ((stackSize.height - frameSize.height) / 4) + 30 * ordinazioniAttive.size();
+		frameLoc.y = stackLoc.y + SCOSTAMENTO_VERTICALE * ordinazioniAttive.size();
 		
 		OrdinazioneIFrame o = new OrdinazioneIFrame(stackOrdinazioni, ordinazione);
 		ordinazioni.put(id, o);
