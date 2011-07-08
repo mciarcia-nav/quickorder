@@ -122,7 +122,6 @@ public class SceltaProdotto extends Base implements OnClickListener
 			{
 				quantitaMinus.setEnabled(true);
 				aggiungi.setEnabled(true);
-				nota.setEnabled(true);
 			}
 		}
 		else if (v.getId() == R.id.minus) // RIMOUVI PANINO
@@ -133,7 +132,6 @@ public class SceltaProdotto extends Base implements OnClickListener
 			{
 				quantitaMinus.setEnabled(false);
 				aggiungi.setEnabled(false);
-				nota.setEnabled(false);
 			}
 		}
 		else if (v.getId() == R.id.aggiungi)
@@ -150,33 +148,45 @@ public class SceltaProdotto extends Base implements OnClickListener
 			nuovo.setSubTotale(((double) q) * selezionato.getPrezzo());
 			nuovo.setProdotto(selezionato);
 			nuovo.setQuantita(q);
-			nuovo.setNote(notaDaScrivere);
+			nuovo.setNote(new String());
 			ordinazione.aggiungiArticolo(nuovo);
 			labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
-			aggiungi.setImageResource(R.drawable.refresh);
+			aggiungi.setImageResource(R.drawable.aggiornaprodottoicon);
+			nota.setEnabled(true);
 		}
 		else if (v.getId() == R.id.nota)
 		{
-			notaDaScrivere = "";
+			Prodotto selezionato = listaProdotti.get(posizione);
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle("Note");
+			alert.setTitle("Aggiungi nota per " + selezionato.getNome());
 			final EditText editNota = new EditText(this);
-			editNota.setHint("Inserisci eventuali note per il panino");
+			final Articolo esistente = ordinazione.getArticolo(selezionato);
+			editNota.setText(esistente.getNote());
+			editNota.setHint("Scrivi qui eventuali modifiche da apportare..");
 			alert.setView(editNota);
-			alert.setPositiveButton("Aggiungi Nota", new DialogInterface.OnClickListener() 
+			if (esistente.getNote().equalsIgnoreCase(""))
+				alert.setPositiveButton("Aggiungi", new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int whichButton) 
+					{
+					  esistente.setNote(editNota.getText().toString());
+					  return;
+					}
+				});
+			else
+				alert.setPositiveButton("Modifica", new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int whichButton) 
+					{
+						esistente.setNote(editNota.getText().toString());
+					  return;
+					}
+				});
+			alert.setNegativeButton("Cancella", new DialogInterface.OnClickListener() 
 			{
 				public void onClick(DialogInterface dialog, int whichButton) 
 				{
-				  notaDaScrivere = editNota.getText().toString();
-				  return;
-				}
-			});
-
-			alert.setNegativeButton("Annulla", new DialogInterface.OnClickListener() 
-			{
-				public void onClick(DialogInterface dialog, int whichButton) 
-				{
-					return;
+					esistente.setNote("");
 				}
 			});
 			alert.show();
@@ -191,17 +201,19 @@ public class SceltaProdotto extends Base implements OnClickListener
 		prezzoProdotto.setText("Prezzo: € "+ formatoPrezzo.format(corrente.getPrezzo()));
 		if (ordinazione.containsProdotto(corrente))
 		{
-			aggiungi.setImageResource(R.drawable.refresh);
+			aggiungi.setImageResource(R.drawable.aggiornaprodottoicon);
 			quantita.setText("" + ordinazione.getArticolo(corrente).getQuantita());
 			aggiungi.setEnabled(true);
 			quantitaMinus.setEnabled(true);
+			nota.setEnabled(true);
 		}
 		else
 		{
-			aggiungi.setImageResource(R.drawable.shopping_cart_add);
+			aggiungi.setImageResource(R.drawable.aggiungiprodotto);
 			quantita.setText("0");
 			aggiungi.setEnabled(false);
 			quantitaMinus.setEnabled(false);
+			nota.setEnabled(false);
 		}
 		
 		Bitmap bm = BitmapFactory.decodeFile(imagesPath + corrente.getCodice() + ".jpg");
