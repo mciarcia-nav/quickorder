@@ -1,5 +1,6 @@
 package it.quickorder.android;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,6 +38,9 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 	private Button registra;
 	private Cliente nuovoCliente;
 	private ProgressDialog progress;
+	private String tipoThread;
+	private boolean[] check;
+	private String messaggioCf;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -55,19 +59,13 @@ public class Registrazione extends Base implements OnClickListener, Runnable
        registra.setOnClickListener(this);
        sessoFormM.setOnClickListener(this);
        sessoFormF.setOnClickListener(this);
-       //TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-       //imei = telephonyManager.getDeviceId();
-       /*if (imei.equals(null))
-       {
-    	   imei = Settings.System.getString(getContentResolver(), Settings.System.ANDROID_ID);
-       }*/
     }
 	
 	@Override
 	public void onClick(View v)
 	{
 		nuovoCliente = creaBeanCliente();
-		boolean[] check = ControlloDati.checkBeanCliente(nuovoCliente);
+		tipoThread = "controllo";	
 		if (v.getId() == sessoFormM.getId())
 		{	
 			sessoFormM.setChecked(true);
@@ -93,7 +91,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 					{
 						progress = ProgressDialog.show(Registrazione.this, "", "Invio dei dati al server in corso..",true,true);
 						progress.show();
-						
+						tipoThread="registrazione";
 						new Thread(Registrazione.this).start();
 			        }
 				});
@@ -122,12 +120,21 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 				if (!check[5])
 					messaggio += "E-Mail, ";
 				if (!check[6])
-					messaggio += "Codice Fiscale, ";
-				
+					messaggio += "Codice Fiscale " + messaggioCf +", ";
 				messaggio = messaggio.substring(0, messaggio.length() - 2);
 				messaggio += ".";
-				Toast t = Toast.makeText(this.getApplicationContext(), messaggio, Toast.LENGTH_SHORT);
-	        	t.show();
+				final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
+				alert.setTitle("Errore");
+				alert.setMessage(messaggio);
+				alert.setButton("OK", new DialogInterface.OnClickListener() 
+				{		
+					@Override
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						alert.dismiss();
+			        }
+				});
+				alert.show();
 			}
 		}
 	}
@@ -155,7 +162,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 		c.setIMEI(randomImei());
 		Date dataNascita = new Date();
 		dataNascita.setDate(dataForm.getDayOfMonth());
-		dataNascita.setMonth(dataForm.getMonth()-1);
+		dataNascita.setMonth(dataForm.getMonth());
 		dataNascita.setYear(dataForm.getYear()-1900);
 		Log.i("date",dataNascita.toString());
 		c.setDataNascita(dataNascita);
@@ -231,50 +238,59 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 	@Override
 	public void run() 
 	{
-		Socket socket = null;
-		String response = null;
-		try
+		if (tipoThread.equals("controllo"))
 		{
-			socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
-			ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-			output.writeObject(nuovoCliente);
-			output.flush();
-			response = (String) input.readObject();
-			Message msg = handler.obtainMessage();
-			msg.obj = response;
-			handler.sendMessage(msg);
-			if (!response.equalsIgnoreCase("OK"))
-				return;
-			Thread.sleep(10000);
-			int abilitazione = input.readInt();
-			msg = handler.obtainMessage();
-			if (abilitazione == 0)
-			{
-				msg.obj = new String("DISABILITATO");
-			}
-			else if (abilitazione == 1)
-			{
-				msg.obj = new String("ABILITATO");
-			}
-			Thread.sleep(1000);
-			handler.sendMessage(msg);
+			
+			check = ControlloDati.checkBeanCliente(nuovoCliente);
+			messaggioCf = ControlloDati.getMessaggioCf();
+			progress.dismiss();
 		}
-		catch (Exception ex)
+		else
 		{
-			ex.printStackTrace();
-		}
-		finally
-		{
-			if (socket != null)
-				try 
+			Socket socket = null;
+			String response = null;
+			try
+			{
+				socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
+				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+				output.writeObject(nuovoCliente);
+				output.flush();
+				response = (String) input.readObject();
+				Message msg = handler.obtainMessage();
+				msg.obj = response;
+				handler.sendMessage(msg);
+				if (!response.equalsIgnoreCase("OK"))
+					return;
+				Thread.sleep(10000);
+				int abilitazione = input.readInt();
+				msg = handler.obtainMessage();
+				if (abilitazione == 0)
 				{
-					socket.close();
-				} catch (IOException e) 
-				{
-					e.printStackTrace();
+					msg.obj = new String("DISABILITATO");
 				}
+				else if (abilitazione == 1)
+				{
+					msg.obj = new String("ABILITATO");
+				}
+				Thread.sleep(1000);
+				handler.sendMessage(msg);
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			finally
+			{
+				if (socket != null)
+					try 
+					{
+						socket.close();
+					} catch (IOException e) 
+					{
+						e.printStackTrace();
+					}
+			}
 		}
-		
 	}
 }
