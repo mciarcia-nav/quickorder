@@ -40,7 +40,6 @@ public class SceltaProdotto extends Base implements OnClickListener
 	private int tipologia;
 	private DecimalFormat formatoPrezzo;
 	private ImageButton nota;
-	private String notaDaScrivere ="";
 	
 	@Override
 	public void onDestroy()
