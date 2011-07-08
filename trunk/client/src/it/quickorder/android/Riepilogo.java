@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -182,15 +183,16 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	
 	private void nuovaOrdinazione() 
 	{
-		Intent i = new Intent(this,NuovaOrdinazione.class);
-		String pkg = getPackageName();
 		Cliente cliente = ordinazione.getCliente();
-		i.putExtra(pkg + ".cliente", cliente);
-		startActivity(i);
+		Intent intent = new Intent(this, NuovaOrdinazione.class);
+		String pkg = getPackageName();
+		intent.putExtra(pkg + ".cliente", cliente);
+		startActivity(intent);
+		finish();
 	}
 	
 	private void creaTabella()
-	{
+	{	
 		scroll.removeAllViews();
 		tl = new TableLayout(this);
 		listaArticoli = ordinazione.getArticoli();
@@ -199,6 +201,8 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		text = new TextView(this);
 		text.setText("Riepilogo Ordinazione");
+		text.setGravity(Gravity.CENTER);
+		//text.setTextColor(android.R.color.);
 		text.setPadding(0,0,0,30);
 		text.setTextAppearance(this, android.R.style.TextAppearance_Large);
 		row.addView(text);
@@ -206,6 +210,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		
 		//INTESTAZIONE TABELLA
 		row = new TableRow(this);
+		row.setGravity(Gravity.LEFT);
 		text = new TextView(this);
 		text.setText("Q.  Prodotto");
 		text.setTextAppearance(this, android.R.style.TextAppearance_Medium);
@@ -224,6 +229,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		{
 			Articolo corrente = articoli.next();
 			row = new TableRow(this);
+			row.setGravity(Gravity.LEFT);
 			text = new TextView(this);
 			text.setText(Integer.toString(corrente.getQuantita()) + "     "+corrente.getProdotto().getNome());
 			row.addView(text);
@@ -232,8 +238,8 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			row.addView(text);
 			
 			cancella = new ImageButton(this);
-			cancella.setImageResource(R.drawable.delete3);
-			cancella.setPadding(7, 0, 0, 10);
+			cancella.setImageResource(R.drawable.deleteicon);
+			cancella.setPadding(0, 0, 3, 10);
 			cancella.setOnClickListener(this);
 			cancella.setId(200 + index);
 			cancella.setBackgroundColor(android.R.color.transparent);
@@ -244,20 +250,24 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		
 		//PREZZO FINALE
 		row = new TableRow(this);
+		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		text = new TextView(this);
-		text.setText("Totale da pagare:"+" "+formatoPrezzo.format(ordinazione.getTotale()) + " €");
+		String html = "<html>Importo totale da pagare:<br>" + formatoPrezzo.format(ordinazione.getTotale()) + " €</html>";
+		text.setText(Html.fromHtml(html));
+		text.setGravity(Gravity.CENTER);
 		text.setTextAppearance(this, android.R.style.TextAppearance_Medium);
-		text.setPadding(0, 30, 0, 30);
+		text.setPadding(0, 15, 0, 15);
 		row.addView(text);
 		tl.addView(row);
 		
 		//SPINNER NUMERO TAVOLI
 		row = new TableRow(this);
+		row.setPadding(0, 0, 0, 5);
 		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		text = new TextView(this);
-		text.setText("Numero tavolo");
-		text.setTextAppearance(this, android.R.style.TextAppearance_Medium);
 		text.setGravity(Gravity.CENTER);
+		text.setText(Html.fromHtml("<html>Seleziona il numero del tavolo<br>al quale sei seduto.</html>"));
+		text.setTextAppearance(this, android.R.style.TextAppearance_Medium);
 		row.addView(text);
 		tl.addView(row);
 		row = new TableRow(this);
@@ -277,9 +287,9 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row = new TableRow(this);
 		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		row.addView(inviaOrdinazione);
-		row.setPadding(0, 30, 0, 0);
+		row.setPadding(0, 15, 0, 0);
 		tl.addView(row);
-		
+	
 		//ADD TABLE TO SCROLL
 		scroll.addView(tl);
 	}
@@ -288,7 +298,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	{
 		tavoli = new String[10];
 		for (int i=0;i<10;i++)
-			tavoli[i] = "No. "+Integer.toString(i+1);
+			tavoli[i] = "Tavolo "+Integer.toString(i+1);
 		ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,tavoli);
 		spinner.setAdapter(adapter);
 		
