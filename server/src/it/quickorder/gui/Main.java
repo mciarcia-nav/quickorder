@@ -296,7 +296,7 @@ public class Main extends JFrame implements ActionListener
 		
 		Point chiusuraLoc = new Point();
 		chiusuraLoc.x = stackLoc.x;
-		chiusuraLoc.y = 0 + (int) (chiusuraSize.height / 2);
+		chiusuraLoc.y = 0 + (int) ((stackLoc.y - chiusuraSize.height) / 2);
 		
 		chiusura.setSize(chiusuraSize);
 		chiusura.setLocation(chiusuraLoc);

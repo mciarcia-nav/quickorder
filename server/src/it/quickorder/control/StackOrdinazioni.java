@@ -49,7 +49,7 @@ public class StackOrdinazioni
 			if (trovato)
 			{
 				ordinazioni.remove(ord);
-				if (ordinazioni.size() >= 9)
+				if (ordinazioni.size() >= 10)
 					ultimaOrdinazione = ordinazioni.get(9);
 			}
 		}
