@@ -2,12 +2,20 @@ package it.quickorder.helpers;
 
 import it.quickorder.domain.Cliente;
 
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ControlloDati 
 {
+	private static String messaggioCf = "(Controlla Lunghezza)";
+	
+	public static String getMessaggioCf()
+	{
+		return messaggioCf;
+	}
+	
 	public static boolean[] checkBeanCliente(Cliente cliente)
 	{
 		int len;
@@ -98,14 +106,25 @@ public class ControlloDati
 			risultato[6] = false;
 		else
 		{
-			if (cliente.getCodiceFiscale().length() != 16)
-				risultato[6] = false;
+			if (cliente.getCodiceFiscale().length() == 16)
+			{
+				ControlloCodiceFiscale cfUtil = new ControlloCodiceFiscale();
+				messaggioCf = cfUtil.isValid(cliente.getCodiceFiscale(), cliente.getNome(), cliente.getCognome(), cliente.getDataNascita(), cliente.getSesso());
+				if (!messaggioCf.equals("ok"))
+					risultato[6] = false;
+				else
+					risultato[6] = true;
+			}
 			else
 			{
 				// TODO: checkCodiceFiscale
-				risultato[6] = true;
+				risultato[6] = false;
 			}
+			
 		}
+		
+		
+		
 		risultato[0] = true;
 		for (int i=1; i < 7; i++)
 			risultato[0] = risultato[0] & risultato[i];
