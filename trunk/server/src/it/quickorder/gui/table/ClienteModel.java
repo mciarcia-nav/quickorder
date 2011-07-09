@@ -1,8 +1,8 @@
 package it.quickorder.gui.table;
 
 import it.quickorder.domain.Cliente;
-import it.quickorder.gui.DataRecovery;
-import it.quickorder.gui.DataRecoveryImpl;
+import it.quickorder.repository.DataRecovery;
+import it.quickorder.repository.DataRecoveryImpl;
 
 import java.sql.Date;
 import java.sql.Timestamp;
