@@ -3,6 +3,7 @@ package it.quickorder.servers;
 import it.quickorder.control.CodaNotifiche;
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Notifica;
+import it.quickorder.helpers.CodiceFiscaleUtil;
 import it.quickorder.helpers.HibernateUtil;
 import java.util.List;
 import java.io.IOException;
@@ -45,28 +46,37 @@ public class RegRequestThreadHandler implements Runnable
 				Cliente nuovoCliente = (Cliente) input.readObject();
 				Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 				String result;
-				try
-				{
-					session.beginTransaction();
-					@SuppressWarnings("rawtypes")
-					List risultati = session.createQuery("FROM Cliente c WHERE c.codiceFiscale = :cf").setString("cf", nuovoCliente.getCodiceFiscale()).list();
-					if (risultati.size() > 0)
-						result = "DUP_CF";
-					else
+				
+				boolean check = CodiceFiscaleUtil.isValid(nuovoCliente.getCodiceFiscale(), nuovoCliente.getNome(), 
+						nuovoCliente.getCognome(), nuovoCliente.getDataNascita(), nuovoCliente.getSesso(), nuovoCliente.getLuogoNascita());
+				
+				if (check)
+					try
 					{
-						risultati = session.createQuery("FROM Cliente c WHERE c.email = :mail").setString("mail", nuovoCliente.getEmail()).list();
+						session.beginTransaction();
+						@SuppressWarnings("rawtypes")
+						List risultati = session.createQuery("FROM Cliente c WHERE c.codiceFiscale = :cf").setString("cf", nuovoCliente.getCodiceFiscale()).list();
 						if (risultati.size() > 0)
-							result = "DUP_EMAIL";
+							result = "DUP_CF";
 						else
 						{
-							result = "OK";
+							risultati = session.createQuery("FROM Cliente c WHERE c.email = :mail").setString("mail", nuovoCliente.getEmail()).list();
+							if (risultati.size() > 0)
+								result = "DUP_EMAIL";
+							else
+							{
+								result = "OK";
+							}
 						}
 					}
-				}
-				catch (HibernateException ex2)
+					catch (HibernateException ex2)
+					{
+						result = "FAILED";
+						ex2.printStackTrace();
+					}
+				else
 				{
-					result = "FAILED";
-					ex2.printStackTrace();
+					result = "WRONG_CF";
 				}
 				
 				// Invio l'esito dell'operazione al client.

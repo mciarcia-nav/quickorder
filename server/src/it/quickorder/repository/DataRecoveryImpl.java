@@ -1,4 +1,4 @@
-package it.quickorder.gui;
+package it.quickorder.repository;
 
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;

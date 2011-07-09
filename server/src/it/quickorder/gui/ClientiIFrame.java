@@ -6,6 +6,8 @@ import it.quickorder.gui.table.ClienteModel;
 import it.quickorder.gui.table.ScrollableTable;
 import it.quickorder.gui.table.SessoTableCellRenderer;
 import it.quickorder.helpers.HibernateUtil;
+import it.quickorder.repository.DataRecovery;
+import it.quickorder.repository.DataRecoveryImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
