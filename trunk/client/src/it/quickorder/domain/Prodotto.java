@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Prodotto implements Serializable
 {
+	private static final long serialVersionUID = -7985024649684205609L;
 	private String nome, codice, descrizione;
 	private int tipologia, versione;
 	private double prezzo;
