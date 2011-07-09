@@ -4,38 +4,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
-
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.android.R;
-import android.R.attr;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -89,7 +76,6 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		
 		if (v.getId() == 100)
 		{
-			// TODO Auto-generated method stub
 			try
 			{
 				
@@ -299,6 +285,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		tavoli = new String[10];
 		for (int i=0;i<10;i++)
 			tavoli[i] = "Tavolo "+Integer.toString(i+1);
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,tavoli);
 		spinner.setAdapter(adapter);
 		

@@ -1,6 +1,5 @@
 package it.quickorder.android;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,9 +38,8 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 	private Button registra;
 	private Cliente nuovoCliente;
 	private ProgressDialog progress;
-	private String tipoThread;
 	private boolean[] check;
-	private String messaggioCf;
+	private boolean confirmed;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -64,9 +63,6 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 	@Override
 	public void onClick(View v)
 	{
-		nuovoCliente = creaBeanCliente();
-		tipoThread = "controllo";
-		new Thread(Registrazione.this).start();
 		if (v.getId() == sessoFormM.getId())
 		{	
 			sessoFormM.setChecked(true);
@@ -79,64 +75,9 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 		}
 		else if (v.getId() == registra.getId())
 		{	
-			// Dati Corretti
-			if (check[0])
-			{
-				final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
-				alert.setTitle("Conferma");
-				alert.setMessage("Sei sicuro di voler confermare i dati?");
-				alert.setButton("Conferma", new DialogInterface.OnClickListener() 
-				{		
-					@Override
-					public void onClick(DialogInterface dialog, int which) 
-					{
-						progress = ProgressDialog.show(Registrazione.this, "", "Invio dei dati al server in corso..",true,true);
-						progress.show();
-						tipoThread="registrazione";
-						new Thread(Registrazione.this).start();
-			        }
-				});
-				alert.setButton2("Annulla", new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(DialogInterface dialog, int which) 
-					{
-						alert.dismiss();
-					}
-				});
-				alert.show();
-			}
-			// Dati non corretti
-			else
-			{
-				String messaggio = "Campi non validi! Correggi i campi:";
-				if (!check[1])
-					messaggio += "Nome, ";
-				if (!check[2])
-					messaggio += "Cognome, ";
-				if (!check[3])
-					messaggio += "Data di Nascita, ";
-				if (!check[4])
-					messaggio += "Luogo di Nascita, ";
-				if (!check[5])
-					messaggio += "E-Mail, ";
-				if (!check[6])
-					messaggio += "Codice Fiscale " + messaggioCf +", ";
-				messaggio = messaggio.substring(0, messaggio.length() - 2);
-				messaggio += ".";
-				final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
-				alert.setTitle("Errore");
-				alert.setMessage(messaggio);
-				alert.setButton("OK", new DialogInterface.OnClickListener() 
-				{		
-					@Override
-					public void onClick(DialogInterface dialog, int which) 
-					{
-						alert.dismiss();
-			        }
-				});
-				alert.show();
-			}
+			progress = ProgressDialog.show(Registrazione.this, "", "Controllo dei dati in corso..",true,true);
+			progress.show();
+			new Thread(this).start();
 		}
 	}
 	
@@ -191,7 +132,78 @@ public class Registrazione extends Base implements OnClickListener, Runnable
         public void handleMessage(Message msg) 
         {
                 String message = (String) msg.obj;
-                if (message.equalsIgnoreCase("DUP_EMAIL"))
+                if (message.equalsIgnoreCase("DATI_CORRETTI"))
+				{
+                	progress.dismiss();
+                	final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
+    				alert.setTitle("Registrazione");
+    				alert.setMessage("Dati corretti. Procedere con la registrazione?");
+    				alert.setButton("Conferma", new DialogInterface.OnClickListener() 
+    				{		
+    					@Override
+    					public void onClick(DialogInterface dialog, int which) 
+    					{
+    						confirmed = true;
+    						alert.dismiss();
+    						synchronized (Registrazione.this) 
+    						{
+    							Registrazione.this.notify();
+							}
+    						
+    			        }
+    				});
+    				alert.setButton2("Annulla", new DialogInterface.OnClickListener()
+    				{
+    					@Override
+    					public void onClick(DialogInterface dialog, int which) 
+    					{
+    						confirmed = false;
+    						alert.dismiss();
+    						synchronized (Registrazione.this) 
+    						{
+    							Registrazione.this.notify();
+							}
+    					}
+    				});
+    				alert.show();
+				}
+                else if (message.equalsIgnoreCase("DATI_NON_CORRETTI"))
+                {
+                	progress.dismiss();
+                	String messaggio = "<html>Alcuni dati non sono corretti!<br>Per favore correggi i dati nei campi seguenti:<br>";
+    				if (!check[1])
+    					messaggio += "+ Nome<br>";
+    				if (!check[2])
+    					messaggio += "+ Cognome<br>";
+    				if (!check[3])
+    					messaggio += "+ Data di Nascita<br>";
+    				if (!check[4])
+    					messaggio += "+ Luogo di Nascita<br>";
+    				if (!check[5])
+    					messaggio += "+ E-Mail<br>";
+    				if (!check[6])
+    					messaggio += "+ Codice Fiscale<br>";
+    				messaggio = messaggio.substring(0, messaggio.length() - 2);
+    				messaggio += ".</html>";
+    				final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
+    				alert.setTitle("Errore");
+    				alert.setMessage(Html.fromHtml(messaggio));
+    				alert.setButton("OK", new DialogInterface.OnClickListener() 
+    				{		
+    					@Override
+    					public void onClick(DialogInterface dialog, int which) 
+    					{
+    						alert.dismiss();
+    			        }
+    				});
+    				alert.show();
+                }
+                else if (message.equalsIgnoreCase("INVIO_DATI"))
+                {
+                	progress = ProgressDialog.show(Registrazione.this, "", "Invio dei dati al server..",true,true);
+        			progress.show();
+                }
+                else if (message.equalsIgnoreCase("DUP_EMAIL"))
 				{
                 	progress.dismiss();
 					Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata è stata registrata nel database.", Toast.LENGTH_SHORT);
@@ -202,6 +214,13 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 				{
                 	progress.dismiss();
 					Toast t = Toast.makeText(getApplicationContext(), "Un utente col medesimo codice fiscale è già registrato al sistema.", Toast.LENGTH_SHORT);
+					t.show();
+					return;
+				}
+                else if (message.equalsIgnoreCase("WRONG_CF"))
+				{
+                	progress.dismiss();
+					Toast t = Toast.makeText(getApplicationContext(), "Il codice fiscale inserito non è corretto per i dati forniti.", Toast.LENGTH_SHORT);
 					t.show();
 					return;
 				}
@@ -239,59 +258,91 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 	@Override
 	public void run() 
 	{
-		if (tipoThread.equals("controllo"))
+		nuovoCliente = creaBeanCliente();
+		check = ControlloDati.checkBeanCliente(nuovoCliente);
+		
+		Message msg = handler.obtainMessage();
+		if (check[0])
 		{
-			
-			check = ControlloDati.checkBeanCliente(nuovoCliente);
-			messaggioCf = ControlloDati.getMessaggioCf();
-			progress.dismiss();
+			msg.obj = "DATI_CORRETTI";
+			handler.sendMessage(msg);
 		}
 		else
 		{
-			Socket socket = null;
-			String response = null;
-			try
-			{
-				socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
-				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-				output.writeObject(nuovoCliente);
-				output.flush();
-				response = (String) input.readObject();
-				Message msg = handler.obtainMessage();
-				msg.obj = response;
-				handler.sendMessage(msg);
-				if (!response.equalsIgnoreCase("OK"))
-					return;
-				Thread.sleep(10000);
-				int abilitazione = input.readInt();
-				msg = handler.obtainMessage();
-				if (abilitazione == 0)
-				{
-					msg.obj = new String("DISABILITATO");
-				}
-				else if (abilitazione == 1)
-				{
-					msg.obj = new String("ABILITATO");
-				}
-				Thread.sleep(1000);
-				handler.sendMessage(msg);
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			}
-			finally
-			{
-				if (socket != null)
-					try 
-					{
-						socket.close();
-					} catch (IOException e) 
-					{
-						e.printStackTrace();
-					}
-			}
+			msg.obj = "DATI_NON_CORRETTI";
+			handler.sendMessage(msg);
+			return;
 		}
+		
+		try 
+		{
+			synchronized (this) 
+			{
+				wait();
+			}
+			
+		} catch (InterruptedException e1) 
+		{
+			e1.printStackTrace();
+		}
+		
+		if (!confirmed)
+			return;
+		msg = handler.obtainMessage();
+		msg.obj = "INVIO_DATI";
+		handler.sendMessage(msg);
+		try 
+		{
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) 
+		{
+			e1.printStackTrace();
+		}
+		
+		Socket socket = null;
+		String response = null;
+		try
+		{
+			socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
+			ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+			output.writeObject(nuovoCliente);
+			output.flush();
+			response = (String) input.readObject();
+			msg = handler.obtainMessage();
+			msg.obj = response;
+			handler.sendMessage(msg);
+			if (!response.equalsIgnoreCase("OK"))
+				return;
+			Thread.sleep(10000);
+			int abilitazione = input.readInt();
+			msg = handler.obtainMessage();
+			if (abilitazione == 0)
+			{
+				msg.obj = new String("DISABILITATO");
+			}
+			else if (abilitazione == 1)
+			{
+				msg.obj = new String("ABILITATO");
+			}
+			Thread.sleep(1000);
+			handler.sendMessage(msg);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			if (socket != null)
+				try 
+				{
+					socket.close();
+				} catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
+		}
+		
 	}
 }

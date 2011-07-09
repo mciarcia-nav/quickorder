@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Cliente implements Serializable
 {
+	private static final long serialVersionUID = 2201493727905319319L;
 	private String nome, cognome, IMEI, codiceFiscale, luogoNascita, email;
 	private char sesso;
 	private Date dataNascita;
