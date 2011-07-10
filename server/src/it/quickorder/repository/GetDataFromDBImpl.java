@@ -15,10 +15,10 @@ import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.TypedValue;
 
-public class DataRecoveryImpl implements DataRecovery
+public class GetDataFromDBImpl implements GetDataFromDB
 {
 	private Session session;
-	public DataRecoveryImpl()
+	public GetDataFromDBImpl()
 	{
 		session = HibernateUtil.getSessionFactory().getCurrentSession();
         
@@ -31,7 +31,7 @@ public class DataRecoveryImpl implements DataRecovery
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		session.beginTransaction();
-		Query query = session.createQuery("select distinct cliente from Cliente cliente");
+		Query query = session.createQuery("from Cliente cliente");
         return query.list();
 	}
 

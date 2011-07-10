@@ -4,7 +4,7 @@ import it.quickorder.domain.Cliente;
 
 import java.util.List;
 
-public interface DataRecovery 
+public interface GetDataFromDB 
 {
 	public List<Cliente> getClienti();
 	

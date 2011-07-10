@@ -1,8 +1,8 @@
 package it.quickorder.gui.table;
 
 import it.quickorder.domain.Cliente;
-import it.quickorder.repository.DataRecovery;
-import it.quickorder.repository.DataRecoveryImpl;
+import it.quickorder.repository.GetDataFromDB;
+import it.quickorder.repository.GetDataFromDBImpl;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -23,12 +23,12 @@ public class ClienteModel extends AbstractTableModel
 	private static final String[] headers = {"Codice Fiscale", "Indirizzo e-mail", "Nome", "Cognome", "Sesso", "Data di Nascita", "Luogo di nascita", "IMEI", "Stato Abilitazione"};
 	private static final Class[] columnClasses = { String.class, String.class, String.class, String.class, Character.class, Timestamp.class, String.class, String.class, Boolean.class};
 	private ArrayList<Object[]> data;
-	private DataRecovery dataRecovery;
+	private GetDataFromDB dataRecovery;
 	
 	public ClienteModel()
 	{
 		data = new ArrayList<Object[]>();
-		dataRecovery = new DataRecoveryImpl();
+		dataRecovery = new GetDataFromDBImpl();
 	}
 	
 	@Override
@@ -102,6 +102,16 @@ public class ClienteModel extends AbstractTableModel
 		cliente.setAbilitato((Boolean)data.get(row)[8]);
 		
 		return cliente;
+	}
+	
+	public List<Cliente> aggiornaClienti()
+	{
+		//Per far funzionare l'aggiornamento, l'arcano è che devi prima disabilitare(abilitare un altro cliente e poi premere Aggiorna.
+		//Hai detto di fare la commit e la faccio.
+		List<Cliente> nuoviClienti = dataRecovery.getClienti();
+		data=new ArrayList<Object[]>();
+		caricaClienti(nuoviClienti);
+		return nuoviClienti;
 	}
 	
 	public void modificaAbilitazioneCliente(int row, boolean abilitazione)
