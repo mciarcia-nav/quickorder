@@ -5,21 +5,16 @@ import it.quickorder.gui.table.AbilitazioneTableCellRenderer;
 import it.quickorder.gui.table.ClienteModel;
 import it.quickorder.gui.table.ScrollableTable;
 import it.quickorder.gui.table.SessoTableCellRenderer;
-import it.quickorder.helpers.HibernateUtil;
-import it.quickorder.repository.DataRecovery;
-import it.quickorder.repository.DataRecoveryImpl;
+import it.quickorder.repository.GetDataFromDB;
+import it.quickorder.repository.GetDataFromDBImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -41,6 +36,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.plaf.SliderUI;
 import javax.swing.table.*;
 
 @SuppressWarnings("serial")
@@ -48,7 +44,7 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 {
 	private ScrollableTable clienti;
 	private JPanel jContentPane;
-	private DataRecovery dataRecovery;
+	private GetDataFromDB dataRecovery;
 	private JToolBar toolbar;
 	public static String URL_IMAGES = "/it/quickorder/gui/images/";
 	private JButton abilitaButton, disabilitaButton, eliminaButton, aggiornaButton;
@@ -68,7 +64,7 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
         setFrameIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers24.png")));
         toolbar = new JToolBar();
         toolbar.setLayout(new GridLayout(1, 2));
-        dataRecovery = new DataRecoveryImpl();
+        dataRecovery = new GetDataFromDBImpl();
         rigaSelezionata = -1;
        
         jContentPane = new JPanel();
@@ -108,27 +104,31 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 		jContentPane.add(clienti, BorderLayout.CENTER);
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		getContentPane().add(jContentPane, BorderLayout.CENTER);
-		abilitaButton = new JButton("Abilita", new ImageIcon(getClass().getResource(URL_IMAGES+"yesIcon.png")));
+		abilitaButton = new JButton("Abilita", new ImageIcon(getClass().getResource(URL_IMAGES+"yesIcon.gif")));
 		abilitaButton.addActionListener(this);
-	    disabilitaButton = new JButton("Disabilita", new ImageIcon(getClass().getResource(URL_IMAGES+"noIcon.png")));
+	    disabilitaButton = new JButton("Disabilita", new ImageIcon(getClass().getResource(URL_IMAGES+"noIcon.gif")));
 	    disabilitaButton.addActionListener(this);
 	    eliminaButton = new JButton("Elimina", new ImageIcon(getClass().getResource(URL_IMAGES+"delete.png")));
 	    eliminaButton.addActionListener(this);
+	    aggiornaButton = new JButton("Aggiorna", new ImageIcon(getClass().getResource(URL_IMAGES+"refresh.png")));
+	    aggiornaButton.addActionListener(this);
 	    abilitaButton.setEnabled(false);
 	    disabilitaButton.setEnabled(false);
 	    eliminaButton.setEnabled(false);
+	    aggiornaButton.setEnabled(true);
 	    toolbar.add(abilitaButton);
 	    toolbar.add(disabilitaButton);
 	    toolbar.add(eliminaButton);
+	    toolbar.add(aggiornaButton);
 	    clientiTableModel.addTableModelListener(new TableModelListener() {
 			
 			@Override
 			public void tableChanged(TableModelEvent e) 
 			{
+				System.out.println("tasto aggiornamtento");
+				System.out.println(e.getType());
 				int row = e.getFirstRow();
-				System.out.println("riga "+row);
 		        int col = e.getColumn();
-		        System.out.println("colonna "+col);
 		        if(col!=-1)
 		        {
 		        	boolean abilitazione = (Boolean)clientiTableModel.getValueAt(row, col);
@@ -184,7 +184,7 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 			}
 		});
 		
-		getContentPane().add(toolbar, BorderLayout.SOUTH);
+		getContentPane().add(toolbar, BorderLayout.NORTH);
 	    setVisible(false);
 		
 	}
@@ -206,6 +206,13 @@ public class ClientiIFrame extends JInternalFrame implements ActionListener
 		{
 			dataRecovery.eliminaCliente(clienteSelezionato);
 			clientiTableModel.fireTableRowsDeleted(rigaSelezionata, rigaSelezionata+1);
+		}
+		else if(evt.getSource().equals(aggiornaButton))
+		{
+			List<Cliente> clientiDaAggiornare = clientiTableModel.aggiornaClienti();
+			System.out.println(clientiDaAggiornare.size());
+			clienti.setModel(clientiTableModel);
+			clienti.repaint();
 		}
 		
 	}
