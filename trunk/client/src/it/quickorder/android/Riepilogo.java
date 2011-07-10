@@ -1,5 +1,6 @@
 package it.quickorder.android;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -11,9 +12,12 @@ import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.android.R;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,7 +34,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Riepilogo extends Base implements OnClickListener, OnItemSelectedListener
+public class Riepilogo extends Base implements OnClickListener, OnItemSelectedListener, Runnable
 {
 	private ImageButton inviaOrdinazione;
 	private ImageButton cancella;
@@ -44,6 +48,53 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	private Spinner spinner;
 	private String[] tavoli;
 	private DecimalFormat formatoPrezzo;
+	private ProgressDialog progress;
+	private Handler handler = new Handler()
+	{
+		@Override
+        public void handleMessage(Message msg) 
+        {
+			progress.dismiss();
+			if (msg.what == 0)
+			{
+				final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
+				alert.setTitle("Ordinazione inviata!");
+				alert.setIcon(R.drawable.okicon);
+				String messaggio = "<html>L'ordinazione è stata inoltrata alla cucina!<br>Mettiti comodo!<br>Un cameriere ti porterà quanto prima i prodotti che hai appena ordinato.<br><br>" +
+						"Puoi chiudure l'applicazione oppure effettuare una nuova ordinazione.<br>Cosa vuoi fare?</html>";
+				TextView text = new TextView(Riepilogo.this);
+				text.setGravity(Gravity.CENTER_HORIZONTAL);
+				text.setText(Html.fromHtml(messaggio));
+				alert.setView(text);
+				alert.setButton("Nuova Ordinazione", new DialogInterface.OnClickListener() 
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						alert.dismiss();
+						nuovaOrdinazione();
+						finish();
+					}					
+				});
+				alert.setButton2("Esci",new DialogInterface.OnClickListener()
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which) 
+					{
+						alert.dismiss();
+						finish();
+					}
+				});
+				alert.show();
+			}
+			else
+			{
+				Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito. Riprovare tra un pò di tempo.", Toast.LENGTH_LONG);
+				t.show();
+				return;
+			}
+        }
+	};
 	
 	@Override
 	public void onResume()
@@ -73,62 +124,12 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	@Override
 	public void onClick(View v) 
 	{
-		
 		if (v.getId() == 100)
 		{
-			try
-			{
-				
-				ordinazione.setNumeroTavolo(numeroTavolo);
-				Socket socket = new Socket(SRV_ADDRESS, ORDERS_PORT);
-				ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-				output.writeObject(ordinazione);
-				output.flush();
-				int response = input.readInt();
-				
-				if (response == 0)
-				{
-					final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
-					alert.setTitle("Ordinazione");
-					alert.setMessage("Ordinazione inviata con successo! Cosa vuoi fare?");
-					alert.setButton("Nuova Ordinazione", new DialogInterface.OnClickListener() 
-					{
+			progress = ProgressDialog.show(this, "", "Invio dell'ordinazione in corso..", true, false);
+			progress.show();
+			new Thread(this).start();
 						
-						@Override
-						public void onClick(DialogInterface dialog, int which) 
-						{
-							alert.dismiss();
-							nuovaOrdinazione();
-							finish();
-						}
-
-						
-					});
-					alert.setButton2("Esci",new DialogInterface.OnClickListener()
-					{
-						@Override
-						public void onClick(DialogInterface dialog, int which) 
-						{
-							alert.dismiss();
-							finish();
-						}
-					});
-					alert.show();
-				}
-				else
-				{
-					Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito.", Toast.LENGTH_SHORT);
-					t.show();
-					return;
-				}
-				
-			}
-			catch (Exception ex)
-			{
-				ex.printStackTrace();
-			}
-			
 		}
 		else //BOTTONE CANCELLA
 		{
@@ -317,6 +318,41 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	public void onNothingSelected(AdapterView<?> arg0) 
 	{
 		
+	}
+
+	@Override
+	public void run() 
+	{
+		ordinazione.setNumeroTavolo(numeroTavolo);
+		Socket socket = null;
+		int response = -1;
+		try
+		{
+			socket = new Socket(SRV_ADDRESS, ORDERS_PORT);
+			ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+			output.writeObject(ordinazione);
+			output.flush();
+			response = input.readInt();
+			Thread.sleep(1500);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			if (socket != null)
+				try 
+				{
+					socket.close();
+				} catch (IOException e) 
+				{
+					e.printStackTrace();
+				}
+		}
+		Message msg = handler.obtainMessage(response);
+		handler.sendMessage(msg);
 	}
 	
 }
