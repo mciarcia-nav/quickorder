@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SceltaProdotto extends Base implements OnClickListener
 {	
@@ -149,6 +150,24 @@ public class SceltaProdotto extends Base implements OnClickListener
 			labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
 			aggiungi.setImageResource(R.drawable.aggiornaprodottoicon);
 			nota.setEnabled(true);
+			
+			Toast t;
+			if (esistente != null && q < esistente.getQuantita())
+			{
+				int diff = esistente.getQuantita() - q;
+				if (diff == 1)
+					t = Toast.makeText(SceltaProdotto.this, "" + diff + " " + selezionato.getNome() + " rimosso dal carrello.", Toast.LENGTH_SHORT);
+				else
+					t = Toast.makeText(SceltaProdotto.this, "" + diff + " " + selezionato.getNome() + " rimossi dal carrello.", Toast.LENGTH_SHORT);
+			}
+			else
+			{
+				if (q == 1)
+					t = Toast.makeText(SceltaProdotto.this, "" + q + " " + selezionato.getNome() + " aggiunto al carrello.", Toast.LENGTH_SHORT);
+				else
+					t = Toast.makeText(SceltaProdotto.this, "" + q + " " + selezionato.getNome() + " aggiunti al carrello.", Toast.LENGTH_SHORT);
+			}
+			t.show();
 		}
 		else if (v.getId() == R.id.nota)
 		{

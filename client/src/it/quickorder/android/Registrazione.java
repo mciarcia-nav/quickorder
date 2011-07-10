@@ -17,12 +17,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Registrazione extends Base implements OnClickListener, Runnable
@@ -136,8 +138,9 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 				{
                 	progress.dismiss();
                 	final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
-    				alert.setTitle("Registrazione");
+    				alert.setTitle("Conferma Registrazione");
     				alert.setMessage("Dati corretti. Procedere con la registrazione?");
+    				alert.setIcon(R.drawable.questionicon);
     				alert.setButton("Conferma", new DialogInterface.OnClickListener() 
     				{		
     					@Override
@@ -239,10 +242,26 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 				{
 					dbAdapter.registraCliente(nuovoCliente);
 					progress.dismiss();
-					Toast t = Toast.makeText(getApplicationContext(), "Registrazione completata con successo.", Toast.LENGTH_SHORT);
-					t.show();
-					main(nuovoCliente);
-		        	finish();
+					final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
+					alert.setTitle("Registrazione completata!");
+					alert.setIcon(R.drawable.okicon);
+					String messaggio = "<html>La registrazione è stata completata con successo.<br><br>Ora puoi effettuare le tue ordinazioni direttamente seduto al tavolo.<br></html>";
+					TextView text = new TextView(Registrazione.this);
+					text.setGravity(Gravity.CENTER_HORIZONTAL);
+					text.setText(Html.fromHtml(messaggio));
+					alert.setView(text);
+					alert.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() 
+					{
+						@Override
+						public void onClick(DialogInterface dialog, int which) 
+						{
+							alert.dismiss();
+							main(nuovoCliente);
+							finish();
+						}					
+					});
+					alert.show();
+					
 				}
 				else if (message.equalsIgnoreCase("DISABILITATO"))
 				{
