@@ -32,7 +32,7 @@ public class Main extends JFrame implements ActionListener
 	private JDesktopPane jDesktopPane;
 	private JLabel sfondo;
 	private StackIFrame stackFrame;
-	private ClientiIFrame clientiFrame;
+	private GestioneClientiIFrame clientiFrame;
 	protected static Font plainFont, bigFont;
 	private StackOrdinazioni stack;
 	private CodaNotifiche codaNotifiche;
@@ -44,6 +44,9 @@ public class Main extends JFrame implements ActionListener
 	private JInternalFrame chiusura;
 	private JButton btnGestioneClienti, btnChiusura;
 	private NotificaButton btnNotificheRegistrazione;
+	private JDialog exitDialog;
+	private JOptionPane optionPane;
+	private JButton[] options;
 	
 	{
 		inizializzaFonts();
@@ -114,7 +117,7 @@ public class Main extends JFrame implements ActionListener
 			{
 				if (clientiFrame == null)
 				{
-					clientiFrame = new ClientiIFrame();
+					clientiFrame = new GestioneClientiIFrame();
 					jDesktopPane.add(clientiFrame, Integer.MAX_VALUE-1);
 				}
 				if(!clientiFrame.isVisible())
@@ -305,10 +308,70 @@ public class Main extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent a) 
 	{
-		int choice = JOptionPane.showInternalConfirmDialog(jDesktopPane, "Vuoi davvero uscire da questa amazing applicazione?", "Quick Order", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (choice == JOptionPane.OK_OPTION)
+		confermaChiusura();
+	}
+	
+	private void confermaChiusura()
+	{
+		if (exitDialog == null)
+		{
+			optionPane = new JOptionPane();
+			exitDialog = optionPane.createDialog(this, "QuickOrder");
+			JPanel nuovo = new JPanel(new GridLayout(2,1));
+			JLabel message = new JLabel("Vuoi davvero chiudere la sessione di lavoro corrente?");
+			message.setFont(new Font("Dialog", Font.BOLD, 14));
+			JLabel avviso = new JLabel("I clienti del fast-food non potranno accedere più al servizio!");
+			avviso.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "warning16.png")));
+			nuovo.add(message);
+			nuovo.add(avviso);
+			options = new JButton[2];
+			options[0] = new JButton("Conferma");
+			options[0].setPreferredSize(new Dimension(140, 36));
+			options[0].setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "close.png")));
+			options[0]
+					.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			options[0].addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent arg0)
+				{
+					optionPane.setValue(options[0]);
+
+				}
+			});
+			options[1] = new JButton("Indietro");
+			options[1].setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "back.png")));
+			options[1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			options[1].setPreferredSize(new Dimension(140, 36));
+			options[1].addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent arg0)
+				{
+					optionPane.setValue(options[1]);
+
+				}
+			});
+			optionPane.setMessage(nuovo);
+			optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+			optionPane.setOptions(options);
+			optionPane.setInitialValue(options[1]);
+			optionPane.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "help48.png")));
+			exitDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+			exitDialog.pack();
+
+		}
+		exitDialog.setVisible(true);
+		Point loc = new Point();
+		loc.x = (jDesktopPane.getWidth() - exitDialog.getWidth()) / 2;
+		loc.y = (jDesktopPane.getHeight() - exitDialog.getHeight()) / 2;
+		exitDialog.setLocation(loc);
+		if (optionPane.getValue().equals(options[0]))
+		{
 			System.exit(0);
-		
+		}
+		else if (optionPane.getValue().equals(options[1]))
+		{
+			exitDialog.setVisible(false);
+		}
 	}
 	
 }
