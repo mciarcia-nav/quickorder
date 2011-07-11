@@ -24,6 +24,7 @@ public class GetDataFromDBImpl implements GetDataFromDB
         
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Cliente> getClienti() 
 	{
@@ -31,8 +32,10 @@ public class GetDataFromDBImpl implements GetDataFromDB
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 
 		session.beginTransaction();
-		Query query = session.createQuery("from Cliente cliente");
-        return query.list();
+		Query query = session.createQuery("from Cliente");
+        List<Cliente> clienti = (List<Cliente>) query.list();
+        session.getTransaction().rollback();
+        return clienti;
 	}
 
 	@Override

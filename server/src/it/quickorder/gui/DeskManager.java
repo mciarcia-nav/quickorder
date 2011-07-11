@@ -86,7 +86,7 @@ public class DeskManager extends DefaultDesktopManager
 			JInternalFrame[] jj = jDesktop.getAllFrames();
 			boolean sottrai = (f.getX() == 30);
 			for (int i = 0; i < jj.length; i++)
-				if (jj[i] instanceof OrdinazioneIFrame || jj[i] instanceof ClientiIFrame)
+				if (jj[i] instanceof OrdinazioneIFrame || jj[i] instanceof GestioneClientiIFrame)
 				{
 					Point loc = jj[i].getLocation();
 					loc.x = sottrai ? loc.x - 30 - stackWidth : loc.x + 30 + stackWidth;
@@ -124,7 +124,7 @@ public class DeskManager extends DefaultDesktopManager
 			}
 			chiusura.setLocation(chiusuraLoc);
 		}
-		else if (pComponent instanceof OrdinazioneIFrame || pComponent instanceof ClientiIFrame)
+		else if (pComponent instanceof OrdinazioneIFrame || pComponent instanceof GestioneClientiIFrame)
 		{
 			cercaStackFrame();
 			Point stackLoc = stackFrame.getLocation();
