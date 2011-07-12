@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.*;
 
@@ -39,9 +41,8 @@ public class Main extends JFrame implements ActionListener
 	private OrdersServer orderServer;
 	private SignupServer signupServer;
 	private UpdateServer updateServer;
-	private JInternalFrame notificaRegistrazione;
-	private JInternalFrame gestioneClienti;
-	private JInternalFrame chiusura;
+	private JInternalFrame notificaRegistrazione, gestioneClienti,chiusura;
+	private PannelloDataOra pannelloDataOra;
 	private JButton btnGestioneClienti, btnChiusura;
 	private NotificaButton btnNotificheRegistrazione;
 	private JDialog exitDialog;
@@ -86,6 +87,14 @@ public class Main extends JFrame implements ActionListener
 		// Creazione dello stack frame.
 		stackFrame = new StackIFrame(jDesktopPane, NUMERO_PANNELLI);
 
+		// Creazione del pannello data e ora
+		pannelloDataOra = new PannelloDataOra();
+		new Thread(pannelloDataOra).start();
+		jDesktopPane.add(pannelloDataOra, Integer.MAX_VALUE - 1);
+		pannelloDataOra.setVisible(true);
+
+		
+		
 		// Creazione del bottone per la gestione delle notifiche di registrazione.
 		notificaRegistrazione = new TransparentJInternalFrame();
 		btnNotificheRegistrazione = new NotificaButton(jDesktopPane,8);
@@ -93,6 +102,7 @@ public class Main extends JFrame implements ActionListener
 		btnNotificheRegistrazione.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "notifica32.png")));
 		btnNotificheRegistrazione.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNotificheRegistrazione.setBackground(Color.WHITE);
+		btnNotificheRegistrazione.setFont(plainFont);
 		codaNotifiche.aggiungiListener(btnNotificheRegistrazione);
 		notificaRegistrazione.add(btnNotificheRegistrazione);
 		notificaRegistrazione.pack();
@@ -104,6 +114,7 @@ public class Main extends JFrame implements ActionListener
 		btnGestioneClienti = new JButton("Gestione Clienti");
 		btnGestioneClienti.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers.png")));
 		btnGestioneClienti.setBackground(Color.WHITE);
+		btnGestioneClienti.setFont(plainFont);
 		btnGestioneClienti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		gestioneClienti.add(btnGestioneClienti);
 		gestioneClienti.pack();
@@ -165,6 +176,7 @@ public class Main extends JFrame implements ActionListener
 		btnChiusura.setBackground(Color.WHITE);
 		btnChiusura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnChiusura.addActionListener(this);
+		btnChiusura.setFont(plainFont);
 		chiusura.add(btnChiusura);
 		chiusura.pack();
 		jDesktopPane.add(chiusura, Integer.MAX_VALUE - 1);
@@ -279,18 +291,24 @@ public class Main extends JFrame implements ActionListener
 		max = new Dimension(Math.max(size1.width, size2.width + 10), Math.max(size2.height,size1.height));
 		btnGestioneClienti.setPreferredSize(max);
 		btnNotificheRegistrazione.setPreferredSize(max);
+		pannelloDataOra.setDataSize(max);
 		gestioneClienti.pack();
 		notificaRegistrazione.pack();
 		
 		Point stackLoc = stackFrame.getLocation();
-		Point gestioneClientiLoc = new Point();
-		gestioneClientiLoc.x = 30;
+		Point dataLoc = new Point();
+		dataLoc.x = 30;
 		int space = jDesktopPane.getHeight() - stackLoc.y - stackFrame.getHeight() - gestioneClienti.getHeight();
-		gestioneClientiLoc.y = stackLoc.y + stackFrame.getHeight() + (int) space/2;
-		gestioneClienti.setLocation(gestioneClientiLoc);
+		dataLoc.y = stackLoc.y + stackFrame.getHeight() + (int) space/2;
+		pannelloDataOra.setLocation(dataLoc);
+		Point clientiLoc = new Point();
+		clientiLoc.x = 30 + pannelloDataOra.getWidth() + 20;
+		clientiLoc.y = dataLoc.y;
+		gestioneClienti.setLocation(clientiLoc);
+		
 		Point notificheLoc = new Point();
-		notificheLoc.x = 30 + gestioneClienti.getWidth() + 20;
-		notificheLoc.y = gestioneClientiLoc.y;
+		notificheLoc.x = 30 + gestioneClienti.getWidth() + pannelloDataOra.getWidth() + 40;
+		notificheLoc.y = dataLoc.y;
 		notificaRegistrazione.setLocation(notificheLoc);
 		
 		Dimension chiusuraSize = new Dimension();
@@ -372,6 +390,53 @@ public class Main extends JFrame implements ActionListener
 		{
 			exitDialog.setVisible(false);
 		}
+	}
+	
+	@SuppressWarnings("serial")
+	class PannelloDataOra extends TransparentJInternalFrame implements Runnable
+	{
+		private SimpleDateFormat dataFormat, orarioFormat;
+		private JLabel data;
+		
+		public PannelloDataOra()
+		{
+			dataFormat = new SimpleDateFormat("dd MMMMM yyyy");
+			orarioFormat = new SimpleDateFormat("hh:mm");
+			Date corrente = new Date(System.currentTimeMillis());
+			data = new JLabel("  " + dataFormat.format(corrente) + "  " + orarioFormat.format(corrente));
+			data.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "date32.png")));
+			data.setHorizontalAlignment(SwingConstants.CENTER);
+			data.setBackground(Color.WHITE);
+			data.setFont(plainFont);	
+			getContentPane().add(data);
+			pack();
+		}
+
+		public void setDataSize(Dimension size)
+		{
+			data.setPreferredSize(size);
+			this.pack();
+		}
+		
+		@Override
+		public void run() 
+		{
+			while(true)
+			{
+				Date corrente = new Date(System.currentTimeMillis());
+				data.setText("  " + dataFormat.format(corrente) + "  " + orarioFormat.format(corrente));
+				try 
+				{
+					Thread.sleep(60000);
+				} catch (InterruptedException e) 
+				{
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+		
 	}
 	
 }
