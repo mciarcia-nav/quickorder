@@ -99,12 +99,16 @@ public class GestioneClientiIFrame extends JInternalFrame implements ActionListe
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		getContentPane().add(jContentPane, BorderLayout.CENTER);
 		abilitaButton = new JButton("Abilita", new ImageIcon(getClass().getResource(URL_IMAGES+"yesIcon.gif")));
+		abilitaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		abilitaButton.addActionListener(this);
 	    disabilitaButton = new JButton("Disabilita", new ImageIcon(getClass().getResource(URL_IMAGES+"noIcon.gif")));
+	    disabilitaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    disabilitaButton.addActionListener(this);
 	    eliminaButton = new JButton("Elimina", new ImageIcon(getClass().getResource(URL_IMAGES+"delete.png")));
+	    eliminaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    eliminaButton.addActionListener(this);
 	    aggiornaButton = new JButton("Aggiorna", new ImageIcon(getClass().getResource(URL_IMAGES+"refresh.png")));
+	    aggiornaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    aggiornaButton.addActionListener(this);
 	    abilitaButton.setEnabled(false);
 	    disabilitaButton.setEnabled(false);

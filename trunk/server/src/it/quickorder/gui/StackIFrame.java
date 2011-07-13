@@ -20,8 +20,8 @@ public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 	private Dimension size;
 	private Point location;
 	private ArrayList<StackPanel> pannelli;
-	public static Color verde_scuro = new Color(51,153,102);
-	public static Color giallo_scuro = new Color(255,204,51);
+	public static Color verde_scuro = new Color(51,170,102);
+	public static Color giallo_scuro = new Color(255,161,67);
 	private JPanel contentPane;	
 	private JDesktopPane desktop;
 	private int dimY, numeroPannelli;
