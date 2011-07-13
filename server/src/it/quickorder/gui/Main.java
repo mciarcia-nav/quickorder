@@ -35,7 +35,7 @@ public class Main extends JFrame implements ActionListener
 	private JLabel sfondo;
 	private StackIFrame stackFrame;
 	private GestioneClientiIFrame clientiFrame;
-	protected static Font plainFont, bigFont;
+	protected static Font boldFont14, boldFont12, plainFont12, plainFont14, bigFont, boldFont16;
 	private StackOrdinazioni stack;
 	private CodaNotifiche codaNotifiche;
 	private OrdersServer orderServer;
@@ -78,7 +78,7 @@ public class Main extends JFrame implements ActionListener
 		
 		// Creazione del desktop pane.
 		jDesktopPane = new JDesktopPane();		
-		jDesktopPane.setBackground(new Color(165,18,64));
+		jDesktopPane.setBackground(new Color(150,190,215));
 		jDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 		jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane, stack, NUMERO_PANNELLI));
 		jDesktopPane.add(sfondo, Integer.MIN_VALUE);
@@ -102,7 +102,7 @@ public class Main extends JFrame implements ActionListener
 		btnNotificheRegistrazione.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "notifica32.png")));
 		btnNotificheRegistrazione.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNotificheRegistrazione.setBackground(Color.WHITE);
-		btnNotificheRegistrazione.setFont(plainFont);
+		btnNotificheRegistrazione.setFont(boldFont14);
 		codaNotifiche.aggiungiListener(btnNotificheRegistrazione);
 		notificaRegistrazione.add(btnNotificheRegistrazione);
 		notificaRegistrazione.pack();
@@ -114,7 +114,7 @@ public class Main extends JFrame implements ActionListener
 		btnGestioneClienti = new JButton("Gestione Clienti");
 		btnGestioneClienti.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "customers.png")));
 		btnGestioneClienti.setBackground(Color.WHITE);
-		btnGestioneClienti.setFont(plainFont);
+		btnGestioneClienti.setFont(boldFont14);
 		btnGestioneClienti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		gestioneClienti.add(btnGestioneClienti);
 		gestioneClienti.pack();
@@ -176,7 +176,7 @@ public class Main extends JFrame implements ActionListener
 		btnChiusura.setBackground(Color.WHITE);
 		btnChiusura.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnChiusura.addActionListener(this);
-		btnChiusura.setFont(plainFont);
+		btnChiusura.setFont(boldFont14);
 		chiusura.add(btnChiusura);
 		chiusura.pack();
 		jDesktopPane.add(chiusura, Integer.MAX_VALUE - 1);
@@ -196,16 +196,22 @@ public class Main extends JFrame implements ActionListener
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		String[] fonts = ge.getAvailableFontFamilyNames();
 		
+		String family;
 		if (isFontPresente("Tahoma", fonts))
 		{
-			plainFont = new Font("Tahoma", Font.BOLD, 14);
-			bigFont = new Font("Tahoma", Font.BOLD, 20);
+			family = "Tahoma";
 		}	
 		else
 		{
-			plainFont = new Font("Sans-Serif", Font.BOLD, 14);
-			bigFont = new Font("Sans-Serif", Font.BOLD, 20);
+			family = "Sans-Serif";
 		}
+
+		plainFont12 = new Font(family, Font.PLAIN, 12);
+		plainFont14 = new Font(family, Font.PLAIN, 12);
+		boldFont12 = new Font(family, Font.BOLD, 12);
+		boldFont14 = new Font(family, Font.BOLD, 14);
+		boldFont16 = new Font(family, Font.BOLD, 16);
+		bigFont = new Font(family, Font.BOLD, 20);
 		
 	}
 	
@@ -230,8 +236,8 @@ public class Main extends JFrame implements ActionListener
 		{
 			Dimension imageSfondo = sfondo.getSize();
 			sfondo.setLocation(
-					(jDesktopPane.getWidth() - imageSfondo.width) / 2,
-					(jDesktopPane.getHeight() - imageSfondo.height) / 2);
+					(int) ((jDesktopPane.getWidth() - imageSfondo.width) / 3),
+					(int) ((jDesktopPane.getHeight() - imageSfondo.height) / 2));
 			jDesktopPane.repaint();
 		}
 	}
@@ -244,6 +250,7 @@ public class Main extends JFrame implements ActionListener
 		stackFrame.costruisciInterfaccia();
 		stackFrame.setVisible(true);
 		posizionaFrames();
+		setBackgroundImage();
 		
 	}
 		
@@ -407,15 +414,16 @@ public class Main extends JFrame implements ActionListener
 			data.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "date32.png")));
 			data.setHorizontalAlignment(SwingConstants.CENTER);
 			data.setBackground(Color.WHITE);
-			data.setFont(plainFont);	
+			data.setFont(boldFont14);	
 			getContentPane().add(data);
+			getContentPane().setBackground(Color.WHITE);
 			pack();
 		}
 
 		public void setDataSize(Dimension size)
 		{
 			data.setPreferredSize(size);
-			this.pack();
+			pack();
 		}
 		
 		@Override

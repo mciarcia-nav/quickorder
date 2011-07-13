@@ -2,6 +2,7 @@ package it.quickorder.gui;
 
 import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.domain.Ordinazione;
+import it.quickorder.domain.Prodotto;
 import it.quickorder.gui.table.OrdinazioneModel;
 import it.quickorder.gui.table.PrezzoEuroCellRenderer;
 import it.quickorder.gui.table.ScrollableTable;
@@ -135,7 +136,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		dati.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		
 		JLabel labelCliente = new JLabel("Cliente");
-		labelCliente.setFont(Main.plainFont);
+		labelCliente.setFont(Main.boldFont12);
 		ImageIcon icoCliente = new ImageIcon(getClass().getResource(Main.URL_IMAGES + "customers48.png"));
 		labelCliente.setIcon(icoCliente);
 		labelCliente.setHorizontalAlignment(SwingConstants.CENTER);
@@ -144,8 +145,8 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		GridBagConstraints g = new GridBagConstraints();
 		g.gridx = 0;
 		g.gridy = 0;
+		g.gridheight = 3;
 		g.weightx = 0.2;
-		g.anchor = GridBagConstraints.NORTHWEST;
 		g.insets = new Insets(10,10,10,10);
 		dati.add(labelCliente,g);
 		JLabel nomeCliente = new JLabel(ordinazione.getCliente().getNome() + " " + ordinazione.getCliente().getCognome());
@@ -153,11 +154,12 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		g = new GridBagConstraints();
 		g.gridx = 1;
 		g.gridy = 0;
+		g.gridheight = 3;
 		g.weightx = 0.2;
 		g.insets = new Insets(10,10,10,10);
 		dati.add(nomeCliente,g);
 		JLabel labelTavolo = new JLabel("<html><p align=\"center\">Numero<br>Tavolo</html>");
-		labelTavolo.setFont(Main.plainFont);
+		labelTavolo.setFont(Main.boldFont12);
 		ImageIcon icoTavolo = new ImageIcon(getClass().getResource(Main.URL_IMAGES + "table.png"));
 		labelTavolo.setIcon(icoTavolo);
 		labelTavolo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -166,19 +168,23 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		g = new GridBagConstraints();
 		g.gridx = 2;
 		g.gridy = 0;
+		g.gridheight = 3;
 		g.weightx = 0.2;
 		g.insets = new Insets(10,10,10,10);
 		dati.add(labelTavolo,g);
-		JLabel numeroTavolo = new JLabel("" + ordinazione.getNumeroTavolo());
-		numeroTavolo.setFont(Main.bigFont);
+		JLabel numeroTavolo = new JLabel();
+		int numTavolo = ordinazione.getNumeroTavolo();
+		numeroTavolo.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "glass_numbers_" + numTavolo + ".png")));
+		numeroTavolo.setHorizontalAlignment(SwingConstants.LEFT);
 		g = new GridBagConstraints();
 		g.gridx = 3;
 		g.gridy = 0;
+		g.gridheight = 3;
 		g.weightx = 0.2;
 		g.insets = new Insets(10,10,10,10);
 		dati.add(numeroTavolo,g);
 		JLabel labelNumero = new JLabel("<html><p align=\"center\">Numero<br>Prodotti</html>");
-		labelNumero.setFont(Main.plainFont);
+		labelNumero.setFont(Main.boldFont12);
 		ImageIcon ico = new ImageIcon(getClass().getResource(Main.URL_IMAGES + "numeroProdotti48.png"));
 		labelNumero.setIcon(ico);
 		labelNumero.setHorizontalAlignment(SwingConstants.CENTER);
@@ -187,18 +193,50 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		g = new GridBagConstraints();
 		g.gridx = 4;
 		g.gridy = 0;
+		g.gridheight = 3;
 		g.weightx = 0.2;
-		g.insets = new Insets(10,10,10,10);
+		//g.insets = new Insets(10,10,10,10);
 		dati.add(labelNumero,g);
-		JLabel numero = new JLabel("" + ordinazione.getNumeroProdotti() + " prodotti" );
+		JLabel numero = new JLabel();
+		int numeroProdotti = ordinazione.getNumeroProdotti();
+		if (numeroProdotti == 1)
+		{
+			numero.setText("Un prodotto di cui:");
+		}
+		else
+		{
+			numero.setText("" + numeroProdotti + " prodotti di cui:");
+		}
 		g = new GridBagConstraints();
 		g.gridx = 5;
 		g.gridy = 0;
+		g.gridheight = 1;
 		g.weightx = 0.2;
-		g.insets = new Insets(10,10,10,10);
+		g.insets = new Insets(15,5,5,5);
 		dati.add(numero,g);
+		JLabel numeroPanini = new JLabel("x " + ordinazione.getNumeroProdotto(Prodotto.PANINO));
+		numeroPanini.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+		g = new GridBagConstraints();
+		g.gridx = 5;
+		g.gridy = 1;
+		g.anchor = GridBagConstraints.CENTER;
+		g.gridheight = 1;
+		g.weightx = 0.2;
+		//g.insets = new Insets(10,10,10,10);
+		dati.add(numeroPanini,g);
+		JLabel numeroBibite = new JLabel("x " + ordinazione.getNumeroProdotto(Prodotto.BEVANDA));
+		numeroBibite.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "bevanda24.png")));
+		g = new GridBagConstraints();
+		g.gridx = 5;
+		g.gridy = 2;
+		g.anchor = GridBagConstraints.CENTER;
+		g.gridheight = 1;
+		g.weightx = 0.2;
+		//g.insets = new Insets(10,10,10,10);
+		dati.add(numeroBibite,g);
+		
 		JLabel labelTempo = new JLabel("<html><p align=\"center\">Orario di<br>Arrivo</html>");
-		labelTempo.setFont(Main.plainFont);
+		labelTempo.setFont(Main.boldFont12);
 		ImageIcon icotempo = new ImageIcon(getClass().getResource(Main.URL_IMAGES + "clock48.png"));
 		labelTempo.setIcon(icotempo);
 		labelTempo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -208,13 +246,15 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		g.gridx = 6;
 		g.gridy = 0;
 		g.weightx = 0.2;
-		g.insets = new Insets(10,10,10,10);
+		g.gridheight = 3;
+		g.insets = new Insets(10,20,10,10);
 		dati.add(labelTempo,g);
 		JLabel tempoArrivo = new JLabel(DateFormat.getTimeInstance(DateFormat.SHORT).format(ordinazione.getArrivo()));
-		tempoArrivo.setFont(Main.plainFont);
+		tempoArrivo.setFont(Main.boldFont12);
 		g = new GridBagConstraints();
 		g.gridx = 7;
 		g.gridy = 0;
+		g.gridheight = 3;
 		g.weightx = 0.2;
 		g.insets = new Insets(10,10,10,10);
 		dati.add(tempoArrivo,g);	
@@ -223,16 +263,16 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		// Pannello pulsanti
 		JPanel pulsanti = new JPanel(new GridBagLayout());
 		emettiScontrino = new JButton("Emetti scontrino");
-		emettiScontrino.setBackground(new Color(51,153,102));
+		emettiScontrino.setBackground(new Color(18,180,18));
 		emettiScontrino.setForeground(Color.WHITE);
-		emettiScontrino.setFont(Main.plainFont);
+		emettiScontrino.setFont(Main.boldFont14);
 		emettiScontrino.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "receipt.png")));
 		emettiScontrino.addActionListener(this);
 		
 		eliminaOrdinazione = new JButton("Elimina Ordinazione");
 		eliminaOrdinazione.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "delete.png")));
-		eliminaOrdinazione.setBackground(Color.RED);
-		eliminaOrdinazione.setFont(Main.plainFont);
+		eliminaOrdinazione.setBackground(new Color(224,0,5));
+		eliminaOrdinazione.setFont(Main.boldFont14);
 		eliminaOrdinazione.setForeground(Color.WHITE);
 		eliminaOrdinazione.addActionListener(this);
 		
@@ -268,14 +308,16 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		// Impostazione Renderer
-		prodotti.getColumnModel().getColumn(1).setCellRenderer(new TipologiaTableCellRenderer());
-		prodotti.getColumnModel().getColumn(2).setCellRenderer(new PrezzoEuroCellRenderer());
+		prodotti.getColumnModel().getColumn(0).setCellRenderer(new TipologiaTableCellRenderer());
+		prodotti.getColumnModel().getColumn(3).setCellRenderer(new PrezzoEuroCellRenderer());
 		prodotti.getColumnModel().getColumn(4).setCellRenderer(new PrezzoEuroCellRenderer());
 		
-		prodotti.getColumnModel().getColumn(0).setPreferredWidth(180);
-		prodotti.getColumnModel().getColumn(1).setPreferredWidth(30);
+		prodotti.getColumnModel().getColumn(0).setPreferredWidth(30);
+		prodotti.getColumnModel().getColumn(1).setPreferredWidth(90);
 		prodotti.getColumnModel().getColumn(2).setPreferredWidth(30);
 		prodotti.getColumnModel().getColumn(3).setPreferredWidth(30);
+		prodotti.getColumnModel().getColumn(4).setPreferredWidth(30);
+		prodotti.getColumnModel().getColumn(5).setPreferredWidth(100);
 		
 		pannelloProdotti.add(jScrollPane, BorderLayout.CENTER);
 		
@@ -284,7 +326,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		// Pannello Totale
 		JPanel totale = new JPanel(new GridLayout(1,2,10,0));
 		JLabel labelDesc = new JLabel("Totale");
-		labelDesc.setFont(Main.plainFont);
+		labelDesc.setFont(Main.boldFont14);
 		ImageIcon icot = new ImageIcon(getClass().getResource(Main.URL_IMAGES + "totale48.png"));
 		labelDesc.setIcon(icot);
 		labelDesc.setHorizontalAlignment(SwingConstants.CENTER);
@@ -293,7 +335,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		DecimalFormat formato = new DecimalFormat("##.00");
 		labelTotale = new JLabel("€ " + formato.format(ordinazione.getTotale()));
 		labelTotale.setHorizontalTextPosition(SwingConstants.TRAILING);	
-		labelTotale.setFont(Main.plainFont);
+		labelTotale.setFont(Main.boldFont16);
 		totale.add(labelDesc);
 		totale.add(labelTotale);	
 		
@@ -303,10 +345,9 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		gb.gridy = 0;
 		gb.gridwidth = 3;
 		gb.weightx = 0.8;
-		gb.weighty = 0.1;
-		gb.insets = new Insets(10,10,0,10);
-		gb.fill = GridBagConstraints.BOTH;
-		gb.ipady = 10;
+		gb.weighty = 0;
+		gb.insets = new Insets(0,5,0,5);
+		gb.fill = GridBagConstraints.HORIZONTAL;
 		jContentPane.add(dati,gb);
 		gb = new GridBagConstraints();
 		gb.gridx = 3;
@@ -320,7 +361,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		gb.gridx = 0;
 		gb.gridwidth = 3;
 		gb.gridy = 1;
-		gb.insets = new Insets(10,10,0,10);
+		gb.insets = new Insets(0,5,0,5);
 		gb.weightx = 0.8;
 		gb.weighty = 0.8;
 		gb.fill = GridBagConstraints.BOTH;

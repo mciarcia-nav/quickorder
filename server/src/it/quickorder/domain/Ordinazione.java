@@ -139,4 +139,15 @@ public class Ordinazione implements Serializable
 		}
 		return null;
 	}
+	
+	public int getNumeroProdotto(int tipologia)
+	{
+		int prodotti = 0;
+		for (Articolo a : articoli)
+		{
+			if (a.getProdotto().getTipologia() == tipologia)
+				prodotti += a.getQuantita();
+		}
+		return prodotti;
+	}
 }
