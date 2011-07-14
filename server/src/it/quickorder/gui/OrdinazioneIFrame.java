@@ -34,6 +34,9 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 	private StackOrdinazioni stackOrdinazioni;
 	private Ordinazione ordinazione;
 	private JDesktopPane desktop;
+	private JDialog eliminaDialog;
+	private JButton[] options;
+	private JOptionPane optionPane;
 	
 	public OrdinazioneIFrame (StackOrdinazioni stackOrdinazioni, Ordinazione ordinazione)
 	{
@@ -95,13 +98,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 	{
 		if (e.getSource().equals(eliminaOrdinazione))
 		{
-			int choice = JOptionPane.showInternalConfirmDialog(this, "Sei sicuro di voler eliminare l'ordinazione corrente?", 
-					"Conferma Eliminazione Ordinazione", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (choice == JOptionPane.YES_OPTION)
-			{
-				getDesktopPane().getDesktopManager().closeFrame(this);
-				stackOrdinazioni.rimuoviOrdinazione(ordinazione);
-			}
+			confermaEliminazione();
 		}
 		else if (e.getSource().equals(emettiScontrino))
 		{
@@ -121,6 +118,67 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		sessione.save(ordinazione);
 		sessione.getTransaction().commit();
 		
+	}
+	
+	private void confermaEliminazione()
+	{
+		if (eliminaDialog == null)
+		{
+			optionPane = new JOptionPane();
+			eliminaDialog = optionPane.createDialog(this, "QuickOrder");
+			JPanel nuovo = new JPanel(new GridLayout(2,1));
+			JLabel message = new JLabel("Vuoi davvero eliminare l'ordinazione corrente?");
+			message.setFont(new Font("Dialog", Font.BOLD, 14));
+			JLabel avviso = new JLabel("Il cliente non potrà essere avvertito dell'eliminazione dell'ordinazione.");
+			avviso.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "warning16.png")));
+			nuovo.add(message);
+			nuovo.add(avviso);
+			options = new JButton[2];
+			options[0] = new JButton("Conferma");
+			options[0].setPreferredSize(new Dimension(140, 36));
+			options[0].setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "delete32.png")));
+			options[0].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			options[0].addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent arg0)
+				{
+					optionPane.setValue(options[0]);
+				}
+			});
+			options[1] = new JButton("Indietro");
+			options[1].setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "back.png")));
+			options[1].setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			options[1].setPreferredSize(new Dimension(140, 36));
+			options[1].addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent arg0)
+				{
+					optionPane.setValue(options[1]);
+				}
+			});
+			optionPane.setMessage(nuovo);
+			optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+			optionPane.setOptions(options);
+			optionPane.setInitialValue(options[1]);
+			optionPane.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "help48.png")));
+			eliminaDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+			eliminaDialog.pack();
+		}
+		eliminaDialog.setVisible(true);
+		Point loc = new Point();
+		loc.x = (desktop.getWidth() - eliminaDialog.getWidth()) / 2;
+		loc.y = (desktop.getHeight() - eliminaDialog.getHeight()) / 2;
+		eliminaDialog.setLocation(loc);
+		if (optionPane.getValue().equals(options[0]))
+		{
+			eliminaDialog.setVisible(false);
+			getDesktopPane().getDesktopManager().closeFrame(this);
+			stackOrdinazioni.rimuoviOrdinazione(ordinazione);
+		}
+		else if (optionPane.getValue().equals(options[1]))
+		{
+			eliminaDialog.setVisible(false);
+		}
 	}
 
 	private void costruisciInterfaccia()
@@ -298,9 +356,9 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		prodotti = new ScrollableTable(tableModel);
 		prodotti.setRowHeight(32);
 		prodotti.setAutoCreateColumnsFromModel(true);
-		prodotti.setColumnSelectionAllowed(true);
-		prodotti.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		prodotti.setSelectionForeground(Color.RED);
+		prodotti.setColumnSelectionAllowed(false);
+		prodotti.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		prodotti.setSelectionForeground(Color.BLACK);
 		prodotti.setSelectionBackground(Color.white);
 		prodotti.setShowVerticalLines(false);
 		JScrollPane jScrollPane = new JScrollPane(prodotti);
