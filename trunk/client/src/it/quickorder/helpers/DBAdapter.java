@@ -180,7 +180,7 @@ public class DBAdapter
 		ArrayList<Prodotto> listaProdotti = new ArrayList<Prodotto>();
 		String selection = "tipologia = ?";
 		String[] selectionArgs = { "" + tipologia };
-		Cursor cursor = db.query("prodotti", null, selection, selectionArgs, null, null, null);
+		Cursor cursor = db.query("prodotti", null, selection, selectionArgs, null, null, "nome");
 		while(cursor.moveToNext())
 		{
 			Prodotto p = new Prodotto();
