@@ -130,9 +130,9 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		{
 			
 			final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
-			alert.setTitle("Invia Ordinazione");
-			alert.setIcon(R.drawable.alert);
-			String messaggio = "<html>Sei sicuro di voler inviare l'ordinazione?</html>";
+			alert.setTitle("Invio Ordinazione");
+			alert.setIcon(R.drawable.questionicon);
+			String messaggio = "<html>Sei sicuro di voler inviare l'ordinazione?<br>N.B. L'operazione <b>non</b> potrà essere più annullata.</html>";
 			TextView text = new TextView(Riepilogo.this);
 			text.setGravity(Gravity.CENTER_HORIZONTAL);
 			text.setText(Html.fromHtml(messaggio));
