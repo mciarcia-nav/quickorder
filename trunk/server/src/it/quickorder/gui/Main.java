@@ -78,7 +78,7 @@ public class Main extends JFrame implements ActionListener
 		
 		// Creazione del desktop pane.
 		jDesktopPane = new JDesktopPane();		
-		jDesktopPane.setBackground(new Color(150,190,215));
+		jDesktopPane.setBackground(new Color(84,127,172));
 		jDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
 		jDesktopPane.setDesktopManager(new DeskManager(jDesktopPane, stack, NUMERO_PANNELLI));
 		jDesktopPane.add(sfondo, Integer.MIN_VALUE);
@@ -225,7 +225,7 @@ public class Main extends JFrame implements ActionListener
 
 	private void setBackgroundImage()
 	{
-		ImageIcon nuova = new ImageIcon(getClass().getResource(URL_IMAGES + "logo.png"));
+		ImageIcon nuova = new ImageIcon(getClass().getResource(URL_IMAGES + "logoQuickOrder.png"));
 		sfondo.setIcon(nuova);
 		sfondo.setSize(nuova.getIconWidth(), nuova.getIconHeight());
 		if (jDesktopPane == null)
