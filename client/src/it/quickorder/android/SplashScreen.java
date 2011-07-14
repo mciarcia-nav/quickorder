@@ -10,6 +10,7 @@ import it.quickorder.domain.Aggiornamento;
 import it.quickorder.domain.Cliente;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,13 +80,14 @@ public class SplashScreen extends Base
 	public void onCreate(Bundle savedInstanceState) 
 	{	
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.splash);
-		ImageView i = (ImageView) findViewById(R.id.imageView1);
-		i.setAdjustViewBounds(true);
+		setContentView(R.layout.splashscreen);
+//		ImageView i = (ImageView) findViewById(R.id.imageView1);
+//		i.setAdjustViewBounds(true);
 		progressBar1 = (ProgressBar) findViewById(R.id.progressBarIniziale);
 		labelStato = (TextView) findViewById(R.id.download);
 		labelStato.setText("Caricamento dati applicazione in corso...");
-		labelStato.setTextSize(10);
+		labelStato.setTextSize(14);
+		labelStato.setTextColor(Color.rgb(13,51,147));
 		progressBar1.setProgress(0);
 		progressBar1.setMax(100);
 		Thread background = new Thread (new Runnable() 
