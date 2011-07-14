@@ -160,10 +160,18 @@ public class SceltaProdotto extends Base implements OnClickListener
 				else
 					t = Toast.makeText(SceltaProdotto.this, "" + diff + " " + selezionato.getNome() + " rimossi dal carrello.", Toast.LENGTH_SHORT);
 			}
-			else
+			else if (esistente != null && q > esistente.getQuantita())
+			{
+				int diff = q - esistente.getQuantita();
+				if (diff == 1)
+					t = Toast.makeText(SceltaProdotto.this, "Un altro " + selezionato.getNome() + " aggiunto al carrello.", Toast.LENGTH_SHORT);
+				else
+					t = Toast.makeText(SceltaProdotto.this, "Altri " + diff + " " + selezionato.getNome() + " aggiunti al carrello.", Toast.LENGTH_SHORT);
+			}	
+			else	
 			{
 				if (q == 1)
-					t = Toast.makeText(SceltaProdotto.this, "" + q + " " + selezionato.getNome() + " aggiunto al carrello.", Toast.LENGTH_SHORT);
+					t = Toast.makeText(SceltaProdotto.this, "Un " + selezionato.getNome() + " aggiunto al carrello.", Toast.LENGTH_SHORT);
 				else
 					t = Toast.makeText(SceltaProdotto.this, "" + q + " " + selezionato.getNome() + " aggiunti al carrello.", Toast.LENGTH_SHORT);
 			}

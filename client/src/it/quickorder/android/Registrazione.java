@@ -20,10 +20,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +51,11 @@ public class Registrazione extends Base implements OnClickListener, Runnable
     {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.registrazione);
+       TextView welcome = (TextView) findViewById(R.id.welcomereg);
+       String messaggio = "<html>Per utilizzare il servizio è <b>necessario</b> registrarsi<br>al sistema. Per favore, compila tutti i campi qui<br>sotto e quindi clicca su <i>Registrati</i>.</html>"; 
+       welcome.setTextSize(14);
+       welcome.setText(Html.fromHtml(messaggio));
+       welcome.setGravity(Gravity.CENTER);
        nomeForm = (EditText) findViewById(R.id.nome);
        cognomeForm = (EditText) findViewById(R.id.cognome);
        luogoForm = (EditText) findViewById(R.id.luogo);
