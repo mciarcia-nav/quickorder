@@ -10,6 +10,7 @@ import java.util.Set;
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
+import it.quickorder.domain.Prodotto;
 import it.quickorder.android.R;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -26,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -126,10 +128,31 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	{
 		if (v.getId() == 100)
 		{
-			progress = ProgressDialog.show(this, "", "Invio dell'ordinazione in corso..", true, false);
-			progress.show();
-			new Thread(this).start();
-						
+			
+			final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
+			alert.setTitle("Invia Ordinazione");
+			String messaggio = "<html>Sei sicuro di voler inviare l'ordinazione?</html>";
+			TextView text = new TextView(Riepilogo.this);
+			text.setGravity(Gravity.CENTER_HORIZONTAL);
+			text.setText(Html.fromHtml(messaggio));
+			alert.setView(text);
+			alert.setButton("Invia", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+					invio();
+					alert.dismiss();
+					
+				}		
+			});
+			alert.setButton2("Annulla", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int whichButton) 
+				{
+					alert.dismiss();
+				}
+			});
+			alert.show();		
 		}
 		else //BOTTONE CANCELLA
 		{
@@ -304,6 +327,13 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row.addView(text);
 		tl.addView(row);
 		scroll.addView(tl);
+	}
+	
+	public void invio() 
+	{
+		progress = ProgressDialog.show(this, "", "Invio dell'ordinazione in corso..", true, false);
+		progress.show();
+		new Thread(this).start();
 	}
 
 	@Override
