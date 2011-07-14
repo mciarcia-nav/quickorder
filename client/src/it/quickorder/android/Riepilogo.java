@@ -5,7 +5,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Cliente;
@@ -106,7 +108,10 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		if (ordinazione.getArticoli().size()==0)
 			vuoto();
 		else
+		{
+			ordinaLista();
 			creaTabella();
+		}	
 	}
 	
 	@Override
@@ -120,7 +125,10 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		if (ordinazione.getArticoli().size()==0)
 			vuoto();
 		else
+		{
+			this.ordinaLista();
 			creaTabella();
+		}	
 	}
 	
 	@Override
@@ -192,6 +200,30 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		
 	}
 	
+	private void ordinaLista()
+	{
+		Iterator<Articolo> articoli = ordinazione.getArticoli().iterator();
+		Set<Articolo> bibite = new LinkedHashSet();
+		Set<Articolo> panini = new LinkedHashSet();
+		while (articoli.hasNext())
+		{
+			Articolo a = articoli.next();
+			if (a.getProdotto().getTipologia() == Prodotto.PANINO)
+				panini.add(a);
+			else
+				bibite.add(a);
+		}
+		Set<Articolo> finale = new LinkedHashSet();		
+		articoli = panini.iterator();
+		while (articoli.hasNext())
+			finale.add(articoli.next());
+		articoli = bibite.iterator();
+		while (articoli.hasNext())
+			finale.add(articoli.next());
+		ordinazione.setArticoli(finale);
+		
+	}
+	
 	private void nuovaOrdinazione() 
 	{
 		Cliente cliente = ordinazione.getCliente();
@@ -238,26 +270,29 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		int index = 0;
 		while (articoli.hasNext())
 		{
+			
 			Articolo corrente = articoli.next();
+			Log.i("tipologia",Integer.toString(corrente.getProdotto().getTipologia()));
 			row = new TableRow(this);
 			row.setGravity(Gravity.LEFT);
 			text = new TextView(this);
-			text.setText(Integer.toString(corrente.getQuantita()) + "     "+corrente.getProdotto().getNome());
-			row.addView(text);
-			text = new TextView(this);
-			text.setText(formatoPrezzo.format(corrente.getSubTotale()) + " €");
-			row.addView(text);
-			
-			cancella = new ImageButton(this);
-			cancella.setImageResource(R.drawable.deleteicon);
-			cancella.setPadding(0, 0, 3, 10);
-			cancella.setOnClickListener(this);
-			cancella.setId(200 + index);
-			cancella.setBackgroundColor(android.R.color.transparent);
-			row.addView(cancella);
-			tl.addView(row);
-			index++;
+				text.setText(Integer.toString(corrente.getQuantita()) + "     "+corrente.getProdotto().getNome());
+				row.addView(text);
+				text = new TextView(this);
+				text.setText(formatoPrezzo.format(corrente.getSubTotale()) + " €");
+				row.addView(text);	
+				cancella = new ImageButton(this);
+				cancella.setImageResource(R.drawable.deleteicon);
+				cancella.setPadding(0, 0, 3, 10);
+				cancella.setOnClickListener(this);
+				cancella.setId(200 + index);
+				cancella.setBackgroundColor(android.R.color.transparent);
+				row.addView(cancella);
+				tl.addView(row);
+				index++;
 		}
+
+		
 		
 		//PREZZO FINALE
 		row = new TableRow(this);
