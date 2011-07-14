@@ -3,17 +3,10 @@ package it.quickorder.repository;
 import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.helpers.HibernateUtil;
-
 import java.util.List;
-
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.CriteriaQuery;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.engine.TypedValue;
 
 public class GetDataFromDBImpl implements GetDataFromDB
 {

@@ -52,9 +52,9 @@ public class NotificheIFrame extends TransparentJInternalFrame
 				g.weightx = 1;
 				g.weighty = 1;
 				contentPane.add(pannelliNotifiche.get(corrente), g);
-				contentPane.doLayout();
-				pannelliNotifiche.get(corrente).doLayout();
-				
+				contentPane.validate();
+				contentPane.repaint();
+				pannelliNotifiche.get(corrente).repaint();
 			}
 		});
 		GridBagConstraints g = new GridBagConstraints();
@@ -87,8 +87,9 @@ public class NotificheIFrame extends TransparentJInternalFrame
 				g.weightx = 1;
 				g.weighty = 1;
 				contentPane.add(pannelliNotifiche.get(corrente), g);
-				contentPane.doLayout();
-				pannelliNotifiche.get(corrente).doLayout();
+				contentPane.validate();
+				contentPane.repaint();
+				pannelliNotifiche.get(corrente).repaint();
 			}
 		});
 		g = new GridBagConstraints();
