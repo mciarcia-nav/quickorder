@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.swing.*;
 
 public class Main extends JFrame implements ActionListener 
@@ -223,7 +222,7 @@ public class Main extends JFrame implements ActionListener
 		return false;
 	}
 
-	private void setBackgroundImage()
+	protected void setBackgroundImage()
 	{
 		ImageIcon nuova = new ImageIcon(getClass().getResource(URL_IMAGES + "logoQuickOrder.png"));
 		sfondo.setIcon(nuova);
@@ -408,7 +407,7 @@ public class Main extends JFrame implements ActionListener
 		public PannelloDataOra()
 		{
 			dataFormat = new SimpleDateFormat("dd MMMMM yyyy");
-			orarioFormat = new SimpleDateFormat("hh:mm");
+			orarioFormat = new SimpleDateFormat("HH:mm");
 			Date corrente = new Date(System.currentTimeMillis());
 			data = new JLabel("  " + dataFormat.format(corrente) + "  " + orarioFormat.format(corrente));
 			data.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "date32.png")));

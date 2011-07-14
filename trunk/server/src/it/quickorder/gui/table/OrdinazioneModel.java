@@ -2,6 +2,8 @@ package it.quickorder.gui.table;
 
 import it.quickorder.domain.Articolo;
 import it.quickorder.domain.Ordinazione;
+import it.quickorder.domain.Prodotto;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.table.AbstractTableModel;
@@ -65,6 +67,7 @@ public class OrdinazioneModel extends AbstractTableModel
 			throw new IllegalArgumentException("Il bean fornito non può essere null!");
 		}
 		Iterator<Articolo> aa = ord.getArticoli().iterator();
+		ArrayList<Object[]> bevande = new ArrayList<Object[]>();
 		while (aa.hasNext())
 		{
 			Articolo a = aa.next();
@@ -75,8 +78,16 @@ public class OrdinazioneModel extends AbstractTableModel
 			aRow[2] = a.getQuantita();
 			aRow[4] = a.getSubTotale();
 			aRow[5] = a.getNote();
-			data.add(aRow);
+			if (a.getProdotto().getTipologia() == Prodotto.PANINO)
+			{
+				data.add(aRow);
+			}
+			else
+			{
+				bevande.add(aRow);
+			}
 		}
+		data.addAll(bevande);
 	}
 	
 }
