@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,7 +28,6 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -203,8 +201,8 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	private void ordinaLista()
 	{
 		Iterator<Articolo> articoli = ordinazione.getArticoli().iterator();
-		Set<Articolo> bibite = new LinkedHashSet();
-		Set<Articolo> panini = new LinkedHashSet();
+		Set<Articolo> bibite = new LinkedHashSet<Articolo>();
+		Set<Articolo> panini = new LinkedHashSet<Articolo>();
 		while (articoli.hasNext())
 		{
 			Articolo a = articoli.next();
@@ -213,7 +211,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			else
 				bibite.add(a);
 		}
-		Set<Articolo> finale = new LinkedHashSet();		
+		Set<Articolo> finale = new LinkedHashSet<Articolo>();		
 		articoli = panini.iterator();
 		while (articoli.hasNext())
 			finale.add(articoli.next());
