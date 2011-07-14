@@ -60,6 +60,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
        registra.setOnClickListener(this);
        sessoFormM.setOnClickListener(this);
        sessoFormF.setOnClickListener(this);
+       
     }
 	
 	@Override
