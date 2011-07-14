@@ -1,10 +1,15 @@
 package it.quickorder.gui;
 
 import it.quickorder.control.NotificheListener;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.*;
 import it.quickorder.domain.Notifica;
 
@@ -60,11 +65,28 @@ public class NotificaButton extends JButton implements NotificheListener, Action
 	{
 		synchronized (notifiche) 
 		{
-			numeroNotifiche++;
-			notifiche.add((Notifica) event.arg);
+			
+			try {
+				numeroNotifiche++;
+				playSound();
+				notifiche.add((Notifica) event.arg);
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		repaint();
 		
+	}
+	
+	private void playSound() throws Throwable
+	{
+		File file = new File(".\\nuova_ordinazione_sound.wav");
+		AudioInputStream in = AudioSystem.getAudioInputStream(file);
+		Clip clip = AudioSystem.getClip();
+		clip.open(in);
+		clip.start();
 	}
 
 	@Override
