@@ -3,7 +3,7 @@
 # Server version:               5.5.13
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2011-07-07 20:09:22
+# Date/time:                    2011-07-15 10:23:46
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -34,10 +34,18 @@ CREATE TABLE IF NOT EXISTS `clienti` (
   UNIQUE KEY `IMEI` (`IMEI`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-# Dumping data for table quickorder.clienti: ~5 rows (approximately)
+# Dumping data for table quickorder.clienti: ~9 rows (approximately)
 /*!40000 ALTER TABLE `clienti` DISABLE KEYS */;
 REPLACE INTO `clienti` (`COD_FISCALE`, `EMAIL`, `NOME`, `COGNOME`, `SESSO`, `DATA_NASCITA`, `LUOGO_NASCITA`, `IMEI`, `ABILITAZIONE`) VALUES
-	('GLLMRA83H23H703Z', 'mario.gallo@quickorder.com', 'Mario', 'Gallo', 'M', '1983-05-23 19:58:10', 'Salerno', '535801-18-753703-8', '');
+	('BGGRRT67B18B403U', 'Roberto@baggio.it', 'Roberto', 'Baggio', 'M', '1967-02-18 20:36:59', 'Caldogno', '682074-45-115245-5', ''),
+	('BRRSLV85M07A717G', 'barra.silvio@gmail.com', 'Silvio', 'Barra', 'M', '1985-08-07 17:12:35', 'Battipaglia', '535771-31-556342-2', ''),
+	('GLDGNR85A05H703P', 'gennaro.galdi@gmail.com', 'Gennaro', 'Galdi', 'M', '1985-01-05 16:13:02', 'Salerno', '132413-42-761847-2', ''),
+	('GLDMRA83H23H703C', 'mario.galdo@alice.it', 'Mario', 'Galdo', 'M', '1983-06-23 17:21:41', 'Salerno', '743134-42-663000-7', ''),
+	('GLLMRA83H23H703Z', 'mario.gallo@quickorder.com', 'Mario', 'Gallo', 'M', '1983-06-23 16:46:35', 'Salerno', '352544-18-454148-8', ''),
+	('GLLNPL78D62H703B', 'annagi@email.it', 'Annapaola', 'Gallo', 'F', '1978-04-22 18:17:14', 'Salerno', '101286-72-447877-0', ''),
+	('GNNMHL86A51A269V', 'giannetti@alice.it', 'Michela', 'Giannetti', 'F', '1986-01-11 02:17:51', 'Anagni', '480331-72-851480-4', ''),
+	('PNNMHL80A01H647J', 'panino@alice.it', 'Michele', 'Panino', 'M', '1980-01-01 02:08:42', 'Sabaudia', '854602-42-451762-1', ''),
+	('VSCPLA84L18H703A', 'paolovisconti84@gmail.com', 'Paolo', 'Visconti', 'M', '1984-07-18 21:07:05', 'Salerno', '673070-81-144073-0', '');
 /*!40000 ALTER TABLE `clienti` ENABLE KEYS */;
 
 
@@ -55,14 +63,24 @@ CREATE TABLE IF NOT EXISTS `ordinazione_prodotto` (
   CONSTRAINT `FK16B29B9A81FF21FA` FOREIGN KEY (`ORDINAZIONE_ID`) REFERENCES `ordinazioni` (`ORDINAZIONE_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-# Dumping data for table quickorder.ordinazione_prodotto: ~0 rows (approximately)
+# Dumping data for table quickorder.ordinazione_prodotto: ~15 rows (approximately)
 /*!40000 ALTER TABLE `ordinazione_prodotto` DISABLE KEYS */;
 REPLACE INTO `ordinazione_prodotto` (`ORDINAZIONE_ID`, `QUANTITA`, `SUBTOTALE`, `NOTE`, `PRODOTTO_ID`) VALUES
-	(6, 1, 2.5, '', 'P0006'),
-	(6, 1, 2.5, '', 'B0007'),
-	(6, 1, 2, '', 'B0002'),
-	(6, 1, 1.2, '', 'B0001'),
-	(6, 1, 5, '', 'P0007');
+	(9, 2, 7, '', 'P0001'),
+	(10, 3, 12, '1 sconosciuto senza insalata', 'P0009'),
+	(10, 1, 5, '', 'P0007'),
+	(10, 2, 1.6, '', 'B0004'),
+	(10, 1, 4, '', 'B0009'),
+	(10, 2, 5, '1 tonnarello con maionese', 'P0004'),
+	(11, 2, 2.4, '', 'B0001'),
+	(11, 1, 3, '', 'P0002'),
+	(12, 2, 5, '', 'P0004'),
+	(12, 2, 4, '', 'B0002'),
+	(13, 1, 1.2, '', 'B0001'),
+	(13, 1, 3.5, '', 'P0003'),
+	(14, 3, 3.6, '', 'B0001'),
+	(14, 2, 5, '', 'P0004'),
+	(14, 1, 4, '', 'P0009');
 /*!40000 ALTER TABLE `ordinazione_prodotto` ENABLE KEYS */;
 
 
@@ -75,12 +93,17 @@ CREATE TABLE IF NOT EXISTS `ordinazioni` (
   PRIMARY KEY (`ORDINAZIONE_ID`),
   KEY `FKC5A46040334C4D15` (`FKID_CLIENTE`),
   CONSTRAINT `FKC5A46040334C4D15` FOREIGN KEY (`FKID_CLIENTE`) REFERENCES `clienti` (`COD_FISCALE`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
-# Dumping data for table quickorder.ordinazioni: ~0 rows (approximately)
+# Dumping data for table quickorder.ordinazioni: ~6 rows (approximately)
 /*!40000 ALTER TABLE `ordinazioni` DISABLE KEYS */;
 REPLACE INTO `ordinazioni` (`ORDINAZIONE_ID`, `FKID_CLIENTE`, `DATA`) VALUES
-	(6, 'GLLMRA83H23H703Z', '2011-07-07 20:04:24');
+	(9, 'GNNMHL86A51A269V', '2011-07-10 03:32:19'),
+	(10, 'VSCPLA84L18H703A', '2011-07-12 21:10:37'),
+	(11, 'VSCPLA84L18H703A', '2011-07-12 21:18:08'),
+	(12, 'VSCPLA84L18H703A', '2011-07-12 21:19:37'),
+	(13, 'PNNMHL80A01H647J', '2011-07-13 19:02:45'),
+	(14, 'PNNMHL80A01H647J', '2011-07-13 19:03:59');
 /*!40000 ALTER TABLE `ordinazioni` ENABLE KEYS */;
 
 
@@ -97,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `prodotti` (
   UNIQUE KEY `NOME` (`NOME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-# Dumping data for table quickorder.prodotti: ~13 rows (approximately)
+# Dumping data for table quickorder.prodotti: ~20 rows (approximately)
 /*!40000 ALTER TABLE `prodotti` DISABLE KEYS */;
 REPLACE INTO `prodotti` (`CODICE`, `NOME`, `PREZZO`, `TIPOLOGIA`, `DESCRIZIONE`, `VERSIONE`) VALUES
 	('B0001', 'Coca-Cola 33cc', 1.2, 1, 'Nulla ti rinfresca di più di una bella coca-cola ghiacciata. Un classico!', 1),
@@ -124,4 +147,3 @@ REPLACE INTO `prodotti` (`CODICE`, `NOME`, `PREZZO`, `TIPOLOGIA`, `DESCRIZIONE`,
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-`quickorder``clienti`
