@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class OrdinazioneModel extends AbstractTableModel
 {
-	private static final String[] headers = { "Tipologia", "Prodotto", "Quantità","Prezzo","Subtotale", "Note"};
+	private static final String[] headers = { "Tipologia", "Prodotto", "Quantitï¿½","Prezzo","Subtotale", "Note"};
 	@SuppressWarnings("rawtypes")
 	private static final Class[] columnClasses = { Integer.class, String.class, Integer.class, Double.class, Double.class, String.class};
 	private ArrayList<Object[]> data;
@@ -64,7 +64,7 @@ public class OrdinazioneModel extends AbstractTableModel
 	{
 		if (ord == null)
 		{
-			throw new IllegalArgumentException("Il bean fornito non può essere null!");
+			throw new IllegalArgumentException("Il bean fornito non puï¿½ essere null!");
 		}
 		Iterator<Articolo> aa = ord.getArticoli().iterator();
 		ArrayList<Object[]> bevande = new ArrayList<Object[]>();
@@ -78,7 +78,10 @@ public class OrdinazioneModel extends AbstractTableModel
 			aRow[2] = a.getQuantita();
 			aRow[4] = a.getSubTotale();
 			aRow[5] = a.getNote();
-			if (a.getProdotto().getTipologia() == Prodotto.PANINO)
+			if (a.getProdotto().getTipologia() == Prodotto.Primi ||
+					a.getProdotto().getTipologia() == Prodotto.Antipasto ||
+					a.getProdotto().getTipologia() == Prodotto.Secondi ||
+					a.getProdotto().getTipologia() == Prodotto.Dessert)
 			{
 				data.add(aRow);
 			}

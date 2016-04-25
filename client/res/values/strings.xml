@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Benvenuto!</string>
-    <string name="app_name">QuickOrder</string>
+    <string name="app_name">QuickOrder - Bagno Sauro</string>
     <string name="seleziona">Seleziona</string>
     <string name="elimina">Elimina</string>
     <string name="nuova">Nuova Ordinazione</string>

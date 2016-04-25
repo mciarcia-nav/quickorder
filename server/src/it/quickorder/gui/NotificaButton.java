@@ -68,8 +68,9 @@ public class NotificaButton extends JButton implements NotificheListener, Action
 			
 			try {
 				numeroNotifiche++;
-				playSound();
 				notifiche.add((Notifica) event.arg);
+				playSound();
+				
 			} catch (Throwable e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -82,7 +83,7 @@ public class NotificaButton extends JButton implements NotificheListener, Action
 	
 	private void playSound() throws Throwable
 	{
-		File file = new File(".\\nuova_ordinazione_sound.wav");
+		File file = new File("/Users/mciarcia/angelo/quickorder/quickorder/server/nuova_ordinazione_sound.wav");
 		AudioInputStream in = AudioSystem.getAudioInputStream(file);
 		Clip clip = AudioSystem.getClip();
 		clip.open(in);

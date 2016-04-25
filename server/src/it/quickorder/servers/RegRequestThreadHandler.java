@@ -47,9 +47,9 @@ public class RegRequestThreadHandler implements Runnable
 				Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 				String result;
 				
-				boolean check = CodiceFiscaleUtil.isValid(nuovoCliente.getCodiceFiscale(), nuovoCliente.getNome(), 
+				boolean check = true;/*CodiceFiscaleUtil.isValid(nuovoCliente.getCodiceFiscale(), nuovoCliente.getNome(), 
 						nuovoCliente.getCognome(), nuovoCliente.getDataNascita(), nuovoCliente.getSesso(), nuovoCliente.getLuogoNascita());
-				
+				*/ 
 				if (check)
 					try
 					{

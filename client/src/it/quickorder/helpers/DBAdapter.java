@@ -187,7 +187,7 @@ public class DBAdapter
 			p.setCodice(cursor.getString(0));
 			p.setNome(cursor.getString(1));
 			p.setTipologia(tipologia);
-			p.setPrezzo(Double.parseDouble(cursor.getString(3)));
+			p.setPrezzo (Double.parseDouble(cursor.getString(3)));
 			p.setDescrizione(cursor.getString(cursor.getColumnIndex("descrizione")));
 			listaProdotti.add(p);
 		}

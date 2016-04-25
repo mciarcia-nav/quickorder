@@ -8,7 +8,8 @@ public class Prodotto implements Serializable
 	private String nome, codice, descrizione;
 	private int tipologia, versione;
 	private double prezzo;
-	public static final int PANINO = 0, BEVANDA = 1;
+	public static final int Antipasto = 0, Primi = 1, Secondi = 2, Dessert = 3, Bevande = 4;
+
 
 	public String getDescrizione() 
 	{

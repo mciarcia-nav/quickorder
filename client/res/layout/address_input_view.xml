@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:paddingBottom="15dp" >
+
+   <RelativeLayout
+        android:id="@+id/user_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp" >
+
+        <TextView
+            android:id="@+id/how_to_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verifica indirizzo server"
+            android:textColor="@android:color/white" />
+        
+        <TextView
+            android:id="@+id/first_path"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/how_to_connect"
+            android:layout_centerHorizontal="true"
+            android:text="Controlla sul server"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ip_address_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/user_message"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <LinearLayout
+            android:id="@+id/ip_address_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_message"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <EditText
+                android:id="@+id/byte_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="192"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minWidth="55dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="7dp"
+                android:text="."
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/byte_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="168"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minWidth="55dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="7dp"
+                android:text="."
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/byte_three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="0"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minWidth="55dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="7dp"
+                android:text="."
+                android:textColor="@android:color/white" />
+
+            <EditText
+                android:id="@+id/byte_four"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="10"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minWidth="55dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

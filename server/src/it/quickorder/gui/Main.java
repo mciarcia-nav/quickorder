@@ -22,9 +22,9 @@ public class Main extends JFrame implements ActionListener
 	private static final int NUMERO_PANNELLI = 10;
 	
 	// Porte di ascolto per i server.
-	private static final int ORDERS_PORT = 4444;
-	private static final int UPD_PORT = 4445;
-	private static final int SIGNUP_PORT = 4446;
+	private static final int ORDERS_PORT = 24444;
+	private static final int UPD_PORT = 24445;
+	private static final int SIGNUP_PORT = 24446;
 	private static final int SCOSTAMENTO_ORIZZONTALE = 15, SCOSTAMENTO_VERTICALE = 30;
 	private final static int MAX_WIDTH = 1100;
 	private final static int MAX_HEIGHT = 600;
@@ -57,6 +57,7 @@ public class Main extends JFrame implements ActionListener
 	{
 		super("QuickOrder");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		screenSize.setSize(screenSize.width, screenSize.height -200);
 		setUndecorated(true);
 		setSize(screenSize);
 		setMinimumSize(screenSize);
@@ -280,7 +281,7 @@ public class Main extends JFrame implements ActionListener
 				} 
 				catch (IOException e) 
 				{
-					System.err.append("Impossibile avviare uno o più server. L'applicazione non può essere avviata.");
+					System.err.append("Impossibile avviare uno o piÃ¹ server. L'applicazione non puï¿½ essere avviata.");
 					System.exit(-1);
 				}
 				main.setVisible(true);
@@ -344,7 +345,7 @@ public class Main extends JFrame implements ActionListener
 			JPanel nuovo = new JPanel(new GridLayout(2,1));
 			JLabel message = new JLabel("Vuoi davvero chiudere la sessione di lavoro corrente?");
 			message.setFont(new Font("Dialog", Font.BOLD, 14));
-			JLabel avviso = new JLabel("I clienti del fast-food non potranno accedere più al servizio!");
+			JLabel avviso = new JLabel("I clienti del fast-food non potranno accedere piï¿½ al servizio!");
 			avviso.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "warning16.png")));
 			nuovo.add(message);
 			nuovo.add(avviso);

@@ -2,9 +2,11 @@ package it.quickorder.servers;
 
 import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.domain.Ordinazione;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -70,9 +72,12 @@ class OrderRequestThreadHandler implements Runnable
 				
 				// Ricevo il bean della nuova ordinazione effettuata dal client.
 				nuova = (Ordinazione) input.readObject();
-				
+				if (nuova == null)
+					return;
+						
+				stack.aggiungiOrdinazione(nuova);
 				// Invio l'esito dell'operazione al client.
-				output.writeInt(0);
+				output.writeInt((int) nuova.getId());
 				output.flush();	
 				
 			}
@@ -80,10 +85,7 @@ class OrderRequestThreadHandler implements Runnable
 			{
 				socket.close();
 			}
-			if (nuova == null)
-				return;
-					
-			stack.aggiungiOrdinazione(nuova);
+			
 		}
 		catch (IOException ex)
 		{

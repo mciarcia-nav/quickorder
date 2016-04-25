@@ -86,7 +86,7 @@ class UpdateRequestThreadHandler implements Runnable
 				{
 					Aggiornamento nuovo = new Aggiornamento();
 					nuovo.setProdotto(p);
-					BufferedImage img = ImageIO.read(new File(".\\immagini\\" + p.getCodice() + ".jpg"));
+					BufferedImage img = ImageIO.read(new File("/Users/mciarcia/angelo/quickorder/quickorder/server/immagini/" + p.getCodice() + ".jpg"));
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(img, "jpg", baos);
 					nuovo.setImage(baos.toByteArray());

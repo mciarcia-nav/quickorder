@@ -13,6 +13,7 @@ import it.quickorder.domain.Cliente;
 import it.quickorder.domain.Ordinazione;
 import it.quickorder.domain.Prodotto;
 import it.quickorder.android.R;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -57,12 +58,12 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
         public void handleMessage(Message msg) 
         {
 			progress.dismiss();
-			if (msg.what == 0)
+			if (msg.what >= 0)
 			{
 				final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
-				alert.setTitle("Ordinazione inviata!");
+				alert.setTitle("Ordinazione numero:" + msg.what + " inviata!");
 				alert.setIcon(R.drawable.okicon);
-				String messaggio = "<html>L'ordinazione è stata inoltrata alla cucina!<br>Mettiti comodo!<br>Un cameriere ti porterà quanto prima i prodotti che hai appena ordinato.<br><br>" +
+				String messaggio = "<html>L'ordinazione ï¿½ stata inoltrata alla cucina!<br>Mettiti comodo!<br>Un cameriere ti porterï¿½ quanto prima i prodotti che hai appena ordinato.<br><br>" +
 						"Puoi chiudure l'applicazione oppure effettuare una nuova ordinazione.<br>Cosa vuoi fare?</html>";
 				TextView text = new TextView(Riepilogo.this);
 				text.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -91,7 +92,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			}
 			else
 			{
-				Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito. Riprovare tra un pò di tempo.", Toast.LENGTH_LONG);
+				Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito. Riprovare tra un pï¿½ di tempo.", Toast.LENGTH_LONG);
 				t.show();
 				return;
 			}
@@ -138,7 +139,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
 			alert.setTitle("Invio Ordinazione");
 			alert.setIcon(R.drawable.questionicon);
-			String messaggio = "<html>Sei sicuro di voler inviare l'ordinazione?<br>N.B. L'operazione <b>non</b> potrà essere più annullata.</html>";
+			String messaggio = "<html>Sei sicuro di voler inviare l'ordinazione?<br>N.B. L'operazione <b>non</b> potrï¿½ essere piï¿½ annullata.</html>";
 			TextView text = new TextView(Riepilogo.this);
 			text.setGravity(Gravity.CENTER_HORIZONTAL);
 			text.setText(Html.fromHtml(messaggio));
@@ -202,23 +203,33 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 	{
 		Iterator<Articolo> articoli = ordinazione.getArticoli().iterator();
 		Set<Articolo> bibite = new LinkedHashSet<Articolo>();
-		Set<Articolo> panini = new LinkedHashSet<Articolo>();
+		Set<Articolo> antipasti = new LinkedHashSet<Articolo>();
+		Set<Articolo> primi = new LinkedHashSet<Articolo>();
+		Set<Articolo> secondi = new LinkedHashSet<Articolo>();
+		Set<Articolo> dessert = new LinkedHashSet<Articolo>();
 		while (articoli.hasNext())
 		{
 			Articolo a = articoli.next();
-			if (a.getProdotto().getTipologia() == Prodotto.PANINO)
-				panini.add(a);
-			else
+			switch (a.getProdotto().getTipologia()) {
+			case Prodotto.Antipasto:
+				antipasti.add(a);
+				break;
+			case Prodotto.Primi:
+				primi.add(a);
+				break;
+			case Prodotto.Secondi:
+				secondi.add(a);
+				break;
+			case Prodotto.Dessert:
+				dessert.add(a);
+				break;
+			case Prodotto.Bevande:
 				bibite.add(a);
+				break;
+			}
 		}
-		Set<Articolo> finale = new LinkedHashSet<Articolo>();		
-		articoli = panini.iterator();
-		while (articoli.hasNext())
-			finale.add(articoli.next());
-		articoli = bibite.iterator();
-		while (articoli.hasNext())
-			finale.add(articoli.next());
-		ordinazione.setArticoli(finale);
+		
+		ordinazione.setArticoli(ordinazione.getArticoli());
 		
 	}
 	
@@ -232,6 +243,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		finish();
 	}
 	
+	@SuppressLint("ResourceAsColor")
 	private void creaTabella()
 	{	
 		scroll.removeAllViews();
@@ -277,7 +289,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 				text.setText(Integer.toString(corrente.getQuantita()) + "     "+corrente.getProdotto().getNome());
 				row.addView(text);
 				text = new TextView(this);
-				text.setText(formatoPrezzo.format(corrente.getSubTotale()) + " €");
+				text.setText(formatoPrezzo.format(corrente.getSubTotale()) + " ï¿½");
 				row.addView(text);	
 				cancella = new ImageButton(this);
 				cancella.setImageResource(R.drawable.deleteicon);
@@ -296,7 +308,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row = new TableRow(this);
 		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		text = new TextView(this);
-		String html = "<html>Importo totale da pagare:<br>" + formatoPrezzo.format(ordinazione.getTotale()) + " €</html>";
+		String html = "<html>Importo totale da pagare:<br>" + formatoPrezzo.format(ordinazione.getTotale()) + " ï¿½</html>";
 		text.setText(Html.fromHtml(html));
 		text.setGravity(Gravity.CENTER);
 		text.setTextAppearance(this, android.R.style.TextAppearance_Medium);

@@ -18,16 +18,25 @@ public class TipologiaTableCellRenderer extends DefaultTableCellRenderer
 			boolean isSelected, boolean hasFocus, int row, int column) 
 	{
 		if (!(value instanceof Integer))
-			throw new IllegalArgumentException("Il renderer non può essere applicato sul dato selezionato.");
+			throw new IllegalArgumentException("Il renderer non puÃ² essere applicato sul dato selezionato.");
 		Integer valore = (Integer) value;
 		JLabel nuova = new JLabel();
 		nuova.setHorizontalAlignment(SwingConstants.CENTER);
 		switch(valore)
 		{
-			case Prodotto.PANINO:
+			case Prodotto.Primi:
 				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
 				break;
-			case Prodotto.BEVANDA:
+			case Prodotto.Antipasto:
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				break;
+			case Prodotto.Secondi:
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				break;
+			case Prodotto.Dessert:
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				break;
+			case Prodotto.Bevande:
 				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "bevanda24.png")));
 				break;
 			default:

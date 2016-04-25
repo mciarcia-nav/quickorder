@@ -6,10 +6,11 @@ import android.os.Bundle;
 
 public class Base extends Activity 
 {
-	public static final String SRV_ADDRESS = "192.168.1.2";
-	public static final int UPD_PORT = 4445;
-	public static final int SIGNUP_PORT = 4446;
-	public static final int ORDERS_PORT = 4444;
+	
+	public static String SRV_ADDRESS = "192.168.1.4";
+	public static final int UPD_PORT = 24445;
+	public static final int SIGNUP_PORT = 24446;
+	public static final int ORDERS_PORT = 24444;
 	protected DBAdapter dbAdapter;
 	
 	@Override

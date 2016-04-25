@@ -55,7 +55,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 	public void onResume()
 	{
 		super.onResume();
-		labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
+		labelTotale.setText("ï¿½ " + formatoPrezzo.format(ordinazione.getTotale()));
 	}
 	
 	@Override
@@ -90,17 +90,21 @@ public class SceltaProdotto extends Base implements OnClickListener
             nota.setOnClickListener(this);
             ordinazione = ((NuovaOrdinazione)this.getParent()).getOrdinazione();
             listaProdotti = dbAdapter.caricaDatiProdotti(tipologia);
-            if (tipologia != 0)
-            	nota.setVisibility(4);
+            
+            nota.setVisibility(View.VISIBLE);
             posizione = 0;
             aggiornaInformazioniProdotto(posizione);
-            labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
+            labelTotale.setText("ï¿½ " + formatoPrezzo.format(ordinazione.getTotale()));
     }
 
 
 	@Override
 	public void onClick(View v) 
 	{
+		if (listaProdotti == null || listaProdotti.isEmpty()) {
+			Toast.makeText(this, "Nessun prodotto", Toast.LENGTH_LONG);
+			return;
+		}
 		if (v.getId() == R.id.next) // Prodotto SUCCESSIVO
 		{
 			posizione = (posizione + 1) % listaProdotti.size();
@@ -147,7 +151,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			nuovo.setQuantita(q);
 			nuovo.setNote(new String());
 			ordinazione.aggiungiArticolo(nuovo);
-			labelTotale.setText("€ " + formatoPrezzo.format(ordinazione.getTotale()));
+			labelTotale.setText("ï¿½ " + formatoPrezzo.format(ordinazione.getTotale()));
 			aggiungi.setImageResource(R.drawable.aggiornaprodottoicon);
 			nota.setEnabled(true);
 			
@@ -218,10 +222,13 @@ public class SceltaProdotto extends Base implements OnClickListener
 		
 	private void aggiornaInformazioniProdotto(int posizioneLista)
 	{
+		if (listaProdotti == null || listaProdotti.isEmpty()) {
+			return;
+		}
 		Prodotto corrente = listaProdotti.get(posizioneLista);
 		nomeProdotto.setText(corrente.getNome());
 		descrizioneProdotto.setText(corrente.getDescrizione());
-		prezzoProdotto.setText("Prezzo: € "+ formatoPrezzo.format(corrente.getPrezzo()));
+		prezzoProdotto.setText("Prezzo: ï¿½ "+ formatoPrezzo.format(corrente.getPrezzo()));
 		if (ordinazione.containsProdotto(corrente))
 		{
 			aggiungi.setImageResource(R.drawable.aggiornaprodottoicon);
