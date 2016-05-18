@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class SplashScreen extends Base 
 {
+	protected static final String TAG = SplashScreen.class.getSimpleName();
 	private ProgressBar progressBar1;
 	private TextView labelStato;
 	private int downloadCounter, downloadTotal;
@@ -64,7 +67,7 @@ public class SplashScreen extends Base
 					progressBar1.setProgress(100);
 					break;
 				case 5:
-					// Se il cliente � gi� registrato si passa a nuova Ordinazione.
+					// Se il cliente è già registrato si passa a nuova Ordinazione.
 					if (cliente != null)
 					{
 						Intent intent = new Intent(SplashScreen.this, NuovaOrdinazione.class);
@@ -179,6 +182,16 @@ public class SplashScreen extends Base
 		           	   Socket socket = null;
 		           	   try
 		           	   {
+		           		boolean isAvailable = false;
+		           		try {
+		           		    isAvailable = InetAddress.getByName(SRV_ADDRESS).isReachable(UPD_PORT);
+		           		    if (isAvailable == true) {
+		           		       //host is reachable
+		           		       Log.e(TAG, "reachable!");
+		           		    }
+		           		} catch (Exception e) {
+
+		           		}
 			           	   socket = new Socket(SRV_ADDRESS, UPD_PORT);
 			           	   ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			           	   out.writeInt(versione);

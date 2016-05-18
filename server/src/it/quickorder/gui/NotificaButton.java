@@ -6,11 +6,14 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URL;
 import java.util.*;
+
 import it.quickorder.domain.Notifica;
 
 @SuppressWarnings("serial")
@@ -83,7 +86,8 @@ public class NotificaButton extends JButton implements NotificheListener, Action
 	
 	private void playSound() throws Throwable
 	{
-		File file = new File("/Users/mciarcia/angelo/quickorder/quickorder/server/nuova_ordinazione_sound.wav");
+		URL sound = getClass().getResource(Main.audioPath + "nuova_ordinazione_sound.wav");
+		File file = new File(sound.toURI());
 		AudioInputStream in = AudioSystem.getAudioInputStream(file);
 		Clip clip = AudioSystem.getClip();
 		clip.open(in);

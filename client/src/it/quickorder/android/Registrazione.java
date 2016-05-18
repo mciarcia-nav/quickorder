@@ -49,7 +49,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
        super.onCreate(savedInstanceState);
        setContentView(R.layout.registrazione);
        TextView welcome = (TextView) findViewById(R.id.welcomereg);
-       String messaggio = "<html>Per utilizzare il servizio � <b>necessario</b> registrarsi<br>al sistema. Per favore, compila tutti i campi qui<br>sotto e quindi clicca su <i>Registrati</i>.</html>"; 
+       String messaggio = "<html>Per utilizzare il servizio è <b>necessario</b> registrarsi<br>al sistema. Per favore, compila tutti i campi qui<br>sotto e quindi clicca su <i>Registrati</i>.</html>"; 
        welcome.setTextSize(14);
        welcome.setText(Html.fromHtml(messaggio));
        welcome.setGravity(Gravity.CENTER);
@@ -215,21 +215,21 @@ public class Registrazione extends Base implements OnClickListener, Runnable
                 else if (message.equalsIgnoreCase("DUP_EMAIL"))
 				{
                 	progress.dismiss();
-					Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata � stata registrata nel database.", Toast.LENGTH_SHORT);
+					Toast t = Toast.makeText(getApplicationContext(), "L'email selezionata è stata registrata nel database.", Toast.LENGTH_SHORT);
 					t.show();
 					return;
 				}
                 else if (message.equalsIgnoreCase("DUP_CF"))
 				{
                 	progress.dismiss();
-					Toast t = Toast.makeText(getApplicationContext(), "Un utente col medesimo codice fiscale � gi� registrato al sistema.", Toast.LENGTH_SHORT);
+					Toast t = Toast.makeText(getApplicationContext(), "Un utente col medesimo codice fiscale è già registrato al sistema.", Toast.LENGTH_SHORT);
 					t.show();
 					return;
 				}
                 else if (message.equalsIgnoreCase("WRONG_CF"))
 				{
                 	progress.dismiss();
-					Toast t = Toast.makeText(getApplicationContext(), "Il codice fiscale inserito non � corretto per i dati forniti.", Toast.LENGTH_SHORT);
+					Toast t = Toast.makeText(getApplicationContext(), "Il codice fiscale inserito non è corretto per i dati forniti.", Toast.LENGTH_SHORT);
 					t.show();
 					return;
 				}
@@ -251,7 +251,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 					final AlertDialog alert = new AlertDialog.Builder(Registrazione.this).create();
 					alert.setTitle("Registrazione completata!");
 					alert.setIcon(R.drawable.okicon);
-					String messaggio = "<html>La registrazione � stata completata con successo.<br><br>Ora puoi effettuare le tue ordinazioni direttamente seduto al tavolo.<br></html>";
+					String messaggio = "<html>La registrazione è stata completata con successo.<br><br>Ora puoi effettuare le tue ordinazioni direttamente seduto al tavolo.<br></html>";
 					TextView text = new TextView(Registrazione.this);
 					text.setGravity(Gravity.CENTER_HORIZONTAL);
 					text.setText(Html.fromHtml(messaggio));
@@ -272,7 +272,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 				else if (message.equalsIgnoreCase("DISABILITATO"))
 				{
 					progress.dismiss();
-					Toast t = Toast.makeText(getApplicationContext(), "Il cliente non � stato abilitato. Correggere i dati o parlare col cassiere.", Toast.LENGTH_SHORT);
+					Toast t = Toast.makeText(getApplicationContext(), "Il cliente non è stato abilitato. Correggere i dati o parlare col cassiere.", Toast.LENGTH_SHORT);
 					t.show();
 					return;
 				}
@@ -330,6 +330,7 @@ public class Registrazione extends Base implements OnClickListener, Runnable
 		try
 		{
 			socket = new Socket(SRV_ADDRESS, SIGNUP_PORT);
+			
 			ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 			output.writeObject(nuovoCliente);

@@ -1,7 +1,10 @@
 package it.quickorder.servers;
 
 import it.quickorder.control.CodaNotifiche;
+import it.quickorder.gui.Main;
+
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -15,7 +18,7 @@ public class SignupServer implements Runnable
 	
 	public SignupServer(int port, CodaNotifiche coda) throws IOException
 	{
-		srvSocket = new ServerSocket(port);
+		srvSocket = new ServerSocket(port ,50, InetAddress.getByName(Main.ip_address));
 		formato = new SimpleDateFormat("hh:mm.ss");
 		this.coda = coda;
 	}

@@ -129,7 +129,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 			JPanel nuovo = new JPanel(new GridLayout(2,1));
 			JLabel message = new JLabel("Vuoi davvero eliminare l'ordinazione corrente?");
 			message.setFont(new Font("Dialog", Font.BOLD, 14));
-			JLabel avviso = new JLabel("Il cliente non potr� essere avvertito dell'eliminazione dell'ordinazione.");
+			JLabel avviso = new JLabel("Il cliente non potrà essere avvertito dell'eliminazione dell'ordinazione.");
 			avviso.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "warning16.png")));
 			nuovo.add(message);
 			nuovo.add(avviso);
@@ -188,6 +188,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		setLayout(new BorderLayout());
 		jContentPane = new JPanel();
 		jContentPane.setLayout(new GridBagLayout());
+		
 		
 		// Pannello dati
 		JPanel dati = new JPanel(new GridBagLayout());
@@ -272,19 +273,17 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		g.weightx = 0.2;
 		g.insets = new Insets(15,5,5,5);
 		dati.add(numero,g);
-		JLabel numeroOrdini = new JLabel("x " + ordinazione.getNumeroProdotto(Prodotto.Primi)
-				+ ordinazione.getNumeroProdotto(Prodotto.Antipasto) 
-				+ ordinazione.getNumeroProdotto(Prodotto.Secondi
-				+ ordinazione.getNumeroProdotto(Prodotto.Dessert)));
-		numeroOrdini.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+		JLabel numeroPrimi = new JLabel("piatti x " + ordinazione.getPiatti());
+	//	numeroPrimi.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "primi.png")));
 		g = new GridBagConstraints();
 		g.gridx = 5;
 		g.gridy = 1;
 		g.anchor = GridBagConstraints.CENTER;
 		g.gridheight = 1;
 		g.weightx = 0.2;
-		//g.insets = new Insets(10,10,10,10);
-		dati.add(numeroOrdini,g);
+		dati.add(numeroPrimi,g);
+		
+	
 		JLabel numeroBibite = new JLabel("x " + ordinazione.getNumeroProdotto(Prodotto.Bevande));
 		numeroBibite.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "bevanda24.png")));
 		g = new GridBagConstraints();
@@ -357,7 +356,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		OrdinazioneModel tableModel = new OrdinazioneModel();
 		tableModel.caricaProdotti(ordinazione);
 		prodotti = new ScrollableTable(tableModel);
-		prodotti.setRowHeight(32);
+		prodotti.setRowHeight(50);
 		prodotti.setAutoCreateColumnsFromModel(true);
 		prodotti.setColumnSelectionAllowed(false);
 		prodotti.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -394,7 +393,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		labelDesc.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelDesc.setVerticalTextPosition(SwingConstants.BOTTOM);
 		DecimalFormat formato = new DecimalFormat("##.00");
-		labelTotale = new JLabel("� " + formato.format(ordinazione.getTotale()));
+		labelTotale = new JLabel("Tot: " + formato.format(ordinazione.getTotale()));
 		labelTotale.setHorizontalTextPosition(SwingConstants.TRAILING);	
 		labelTotale.setFont(Main.boldFont16);
 		totale.add(labelDesc);
@@ -442,6 +441,7 @@ public class OrdinazioneIFrame extends JInternalFrame implements InternalFrameLi
 		
 		jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		getContentPane().add(jContentPane, BorderLayout.CENTER);
+		getContentPane().setSize(getContentPane().getWidth(), getContentPane().getHeight() +100);
 		
 	}
 }

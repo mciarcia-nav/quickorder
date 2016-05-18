@@ -2,10 +2,12 @@ package it.quickorder.servers;
 
 import it.quickorder.domain.Aggiornamento;
 import it.quickorder.domain.Prodotto;
+import it.quickorder.gui.Main;
 import it.quickorder.helpers.HibernateUtil;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -26,7 +28,7 @@ public class UpdateServer implements Runnable
 	public UpdateServer(int port) throws IOException
 	{
 		formato = new SimpleDateFormat("hh:mm.ss");
-		srvSocket = new ServerSocket(port);
+		srvSocket = new ServerSocket(port, 50,  InetAddress.getByName(Main.ip_address));//getByAddress(new byte[] {0x00,0x00,0x00,0x00}));
 	}
 	
 	@Override

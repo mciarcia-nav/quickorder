@@ -63,7 +63,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 				final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
 				alert.setTitle("Ordinazione numero:" + msg.what + " inviata!");
 				alert.setIcon(R.drawable.okicon);
-				String messaggio = "<html>L'ordinazione � stata inoltrata alla cucina!<br>Mettiti comodo!<br>Un cameriere ti porter� quanto prima i prodotti che hai appena ordinato.<br><br>" +
+				String messaggio = "<html>L'ordinazione è stata inoltrata alla cucina!<br>Mettiti comodo!<br>Un cameriere ti porterà quanto prima i prodotti che hai appena ordinato.<br><br>" +
 						"Puoi chiudure l'applicazione oppure effettuare una nuova ordinazione.<br>Cosa vuoi fare?</html>";
 				TextView text = new TextView(Riepilogo.this);
 				text.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -92,7 +92,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			}
 			else
 			{
-				Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito. Riprovare tra un p� di tempo.", Toast.LENGTH_LONG);
+				Toast t = Toast.makeText(getApplicationContext(), "Invio dell'ordinazione fallito. Riprovare tra un pò di tempo.", Toast.LENGTH_LONG);
 				t.show();
 				return;
 			}
@@ -139,7 +139,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 			final AlertDialog alert = new AlertDialog.Builder(Riepilogo.this).create();
 			alert.setTitle("Invio Ordinazione");
 			alert.setIcon(R.drawable.questionicon);
-			String messaggio = "<html>Sei sicuro di voler inviare l'ordinazione?<br>N.B. L'operazione <b>non</b> potr� essere pi� annullata.</html>";
+			String messaggio = "<html>Sei sicuro di voler inviare l'ordinazione?<br>N.B. L'operazione <b>non</b> potrà essere più annullata.</html>";
 			TextView text = new TextView(Riepilogo.this);
 			text.setGravity(Gravity.CENTER_HORIZONTAL);
 			text.setText(Html.fromHtml(messaggio));
@@ -289,7 +289,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 				text.setText(Integer.toString(corrente.getQuantita()) + "     "+corrente.getProdotto().getNome());
 				row.addView(text);
 				text = new TextView(this);
-				text.setText(formatoPrezzo.format(corrente.getSubTotale()) + " �");
+				text.setText(formatoPrezzo.format(corrente.getSubTotale()) + " :");
 				row.addView(text);	
 				cancella = new ImageButton(this);
 				cancella.setImageResource(R.drawable.deleteicon);
@@ -308,7 +308,7 @@ public class Riepilogo extends Base implements OnClickListener, OnItemSelectedLi
 		row = new TableRow(this);
 		row.setGravity(Gravity.CENTER_HORIZONTAL);
 		text = new TextView(this);
-		String html = "<html>Importo totale da pagare:<br>" + formatoPrezzo.format(ordinazione.getTotale()) + " �</html>";
+		String html = "<html>Importo totale da pagare:<br>" + formatoPrezzo.format(ordinazione.getTotale()) + " :</html>";
 		text.setText(Html.fromHtml(html));
 		text.setGravity(Gravity.CENTER);
 		text.setTextAppearance(this, android.R.style.TextAppearance_Medium);

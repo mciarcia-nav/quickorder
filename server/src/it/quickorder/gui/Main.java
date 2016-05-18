@@ -5,12 +5,14 @@ import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.servers.OrdersServer;
 import it.quickorder.servers.SignupServer;
 import it.quickorder.servers.UpdateServer;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.swing.*;
 
 public class Main extends JFrame implements ActionListener 
@@ -35,6 +37,10 @@ public class Main extends JFrame implements ActionListener
 	private StackIFrame stackFrame;
 	private GestioneClientiIFrame clientiFrame;
 	protected static Font boldFont14, boldFont12, plainFont12, plainFont14, bigFont, boldFont16;
+
+	public static String ip_address = "0.0.0.0";
+
+	public static String audioPath = "/";
 	private StackOrdinazioni stack;
 	private CodaNotifiche codaNotifiche;
 	private OrdersServer orderServer;
@@ -51,8 +57,22 @@ public class Main extends JFrame implements ActionListener
 	{
 		inizializzaFonts();
 	}
-	
-	
+//	 private String getLocalIpAddress() {
+//		    try {
+//		        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+//		            NetworkInterface intf = en.nextElement();
+//		            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+//		                InetAddress inetAddress = enumIpAddr.nextElement();
+//		                if (!inetAddress.isLoopbackAddress()
+//		                        && InetAddressUtils.isIPv4Address(inetAddress.getHostAddress())) { return inetAddress.getHostAddress().toString(); }
+//		            }
+//		        }
+//		    } catch (SocketException ex) {
+//		        Log.e("ServerActivity", ex.toString());
+//		    }
+//		    return null;
+//		}
+//	
 	public Main()throws IOException
 	{
 		super("QuickOrder");
@@ -281,7 +301,7 @@ public class Main extends JFrame implements ActionListener
 				} 
 				catch (IOException e) 
 				{
-					System.err.append("Impossibile avviare uno o più server. L'applicazione non pu� essere avviata.");
+					System.err.append("Impossibile avviare uno o più server. L'applicazione non può essere avviata.");
 					System.exit(-1);
 				}
 				main.setVisible(true);
@@ -345,7 +365,7 @@ public class Main extends JFrame implements ActionListener
 			JPanel nuovo = new JPanel(new GridLayout(2,1));
 			JLabel message = new JLabel("Vuoi davvero chiudere la sessione di lavoro corrente?");
 			message.setFont(new Font("Dialog", Font.BOLD, 14));
-			JLabel avviso = new JLabel("I clienti del fast-food non potranno accedere pi� al servizio!");
+			JLabel avviso = new JLabel("I clienti del fast-food non potranno accedere più al servizio!");
 			avviso.setIcon(new ImageIcon(getClass().getResource(URL_IMAGES + "warning16.png")));
 			nuovo.add(message);
 			nuovo.add(avviso);

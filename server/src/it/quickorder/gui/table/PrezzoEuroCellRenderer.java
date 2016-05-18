@@ -16,12 +16,12 @@ public class PrezzoEuroCellRenderer extends DefaultTableCellRenderer
 	{
 
 		if (!(value instanceof Double))
-			throw new IllegalArgumentException("Il renderer non può essere applicato sul dato selezionato.");
+			throw new IllegalArgumentException("Il renderer non puÃ² essere applicato sul dato selezionato.");
 		Double valore = (Double) value;
 		JLabel nuova = new JLabel();
 		nuova.setHorizontalAlignment(SwingConstants.CENTER);
 		DecimalFormat f = new DecimalFormat("##.00");
-		nuova.setText("€ " + f.format(valore));
+		nuova.setText("Euro: " + f.format(valore));
 		return nuova;
 	}
 }

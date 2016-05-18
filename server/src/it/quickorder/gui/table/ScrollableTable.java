@@ -5,7 +5,7 @@
  *
  * 21/05/2007
  *
- * � 2007 eTour Project - Copyright by SE@SA Lab - DMI � University of Salerno
+ * 
  */
 package it.quickorder.gui.table;
 
@@ -63,7 +63,7 @@ public class ScrollableTable extends JTable implements Scrollable
 		if (direction < 0)
 		{
 			/*
-			 *	La nuova posizione � data dalla corrente meno il numero di
+			 *	La nuova posizione è data dalla corrente meno il numero di
 			 *	posizioni per l'incremento unitario.
 			 * 
 			 */

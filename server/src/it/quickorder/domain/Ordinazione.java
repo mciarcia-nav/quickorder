@@ -20,9 +20,17 @@ public class Ordinazione implements Serializable
 	{
 		totale = 0;
 		articoli = new LinkedHashSet<Articolo>();
-		numeroProdotti = 0;
 	}
 	
+	public int getPiatti(){
+		int result = 0;
+		for (Articolo a: articoli) {
+			if (a.getProdotto().getTipologia() != Prodotto.Bevande ) {
+				result += a.getQuantita();
+			}
+		}
+		return result;
+	}
 	public long getId() 
 	{
 		return id;

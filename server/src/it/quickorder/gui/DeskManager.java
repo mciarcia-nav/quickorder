@@ -180,12 +180,12 @@ public class DeskManager extends DefaultDesktopManager
 	public void openOrdinazione(Ordinazione ordinazione) 
 	{
 		long id = ordinazione.getId();
-		// Il frame dell'ordinazione corrente Ë stato gi‡ creato.
+		// Il frame dell'ordinazione corrente √® stato gi√† creato.
 		if (ordinazioni.containsKey(id))
 		{
 			
 			OrdinazioneIFrame nuova = ordinazioni.get(id);
-			// Il frame dell'ordinazione corrente non Ë correntemente visualizzato.
+			// Il frame dell'ordinazione corrente non √® correntemente visualizzato.
 			if (!ordinazioniAttive.contains(nuova))
 			{
 				jDesktop.add(nuova, Integer.MAX_VALUE - 1);

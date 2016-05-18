@@ -2,11 +2,12 @@ package it.quickorder.servers;
 
 import it.quickorder.control.StackOrdinazioni;
 import it.quickorder.domain.Ordinazione;
+import it.quickorder.gui.Main;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetSocketAddress;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -22,7 +23,7 @@ public class OrdersServer implements Runnable
 	{
 		this.stack = stack;
 		formato = new SimpleDateFormat("hh:mm.ss");
-		srvSocket = new ServerSocket(port);
+		srvSocket = new ServerSocket(port, 50, InetAddress.getByName(Main.ip_address));
 	}
 	
 	@Override

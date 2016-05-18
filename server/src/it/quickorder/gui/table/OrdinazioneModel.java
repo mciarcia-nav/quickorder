@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class OrdinazioneModel extends AbstractTableModel
 {
-	private static final String[] headers = { "Tipologia", "Prodotto", "Quantit�","Prezzo","Subtotale", "Note"};
+	private static final String[] headers = { "Tipologia", "Prodotto", "Quantità","Prezzo","Subtotale", "Note"};
 	@SuppressWarnings("rawtypes")
 	private static final Class[] columnClasses = { Integer.class, String.class, Integer.class, Double.class, Double.class, String.class};
 	private ArrayList<Object[]> data;
@@ -64,7 +64,7 @@ public class OrdinazioneModel extends AbstractTableModel
 	{
 		if (ord == null)
 		{
-			throw new IllegalArgumentException("Il bean fornito non pu� essere null!");
+			throw new IllegalArgumentException("Il bean fornito non può essere null!");
 		}
 		Iterator<Articolo> aa = ord.getArticoli().iterator();
 		ArrayList<Object[]> bevande = new ArrayList<Object[]>();

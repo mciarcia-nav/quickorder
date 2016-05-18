@@ -9,6 +9,7 @@ import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -190,7 +191,8 @@ public class StackIFrame extends JInternalFrame implements OrdinazioniListener
 	
 	private void playSound() throws Throwable
 	{
-		File file = new File(".\\nuovo_cliente_sound.wav");
+		URL sound = getClass().getResource(Main.audioPath + "nuovo_cliente_sound.wav");
+		File file = new File(sound.toURI());
 		AudioInputStream in = AudioSystem.getAudioInputStream(file);
 		Clip clip = AudioSystem.getClip();
 		clip.open(in);

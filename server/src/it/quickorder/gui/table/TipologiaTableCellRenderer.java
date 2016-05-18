@@ -25,16 +25,16 @@ public class TipologiaTableCellRenderer extends DefaultTableCellRenderer
 		switch(valore)
 		{
 			case Prodotto.Primi:
-				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "primi.png")));
 				break;
 			case Prodotto.Antipasto:
-				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "antipasti.png")));
 				break;
 			case Prodotto.Secondi:
-				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "secondi.png")));
 				break;
 			case Prodotto.Dessert:
-				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "panino24.png")));
+				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "dolci.png")));
 				break;
 			case Prodotto.Bevande:
 				nuova.setIcon(new ImageIcon(getClass().getResource(Main.URL_IMAGES + "bevanda24.png")));

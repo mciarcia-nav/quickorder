@@ -55,7 +55,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 	public void onResume()
 	{
 		super.onResume();
-		labelTotale.setText("� " + formatoPrezzo.format(ordinazione.getTotale()));
+		labelTotale.setText(": " + formatoPrezzo.format(ordinazione.getTotale()));
 	}
 	
 	@Override
@@ -94,7 +94,7 @@ public class SceltaProdotto extends Base implements OnClickListener
             nota.setVisibility(View.VISIBLE);
             posizione = 0;
             aggiornaInformazioniProdotto(posizione);
-            labelTotale.setText("� " + formatoPrezzo.format(ordinazione.getTotale()));
+            labelTotale.setText(": " + formatoPrezzo.format(ordinazione.getTotale()));
     }
 
 
@@ -151,7 +151,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 			nuovo.setQuantita(q);
 			nuovo.setNote(new String());
 			ordinazione.aggiungiArticolo(nuovo);
-			labelTotale.setText("� " + formatoPrezzo.format(ordinazione.getTotale()));
+			labelTotale.setText(": " + formatoPrezzo.format(ordinazione.getTotale()));
 			aggiungi.setImageResource(R.drawable.aggiornaprodottoicon);
 			nota.setEnabled(true);
 			
@@ -228,7 +228,7 @@ public class SceltaProdotto extends Base implements OnClickListener
 		Prodotto corrente = listaProdotti.get(posizioneLista);
 		nomeProdotto.setText(corrente.getNome());
 		descrizioneProdotto.setText(corrente.getDescrizione());
-		prezzoProdotto.setText("Prezzo: � "+ formatoPrezzo.format(corrente.getPrezzo()));
+		prezzoProdotto.setText("Prezzo:Euro "+ formatoPrezzo.format(corrente.getPrezzo()));
 		if (ordinazione.containsProdotto(corrente))
 		{
 			aggiungi.setImageResource(R.drawable.aggiornaprodottoicon);
